@@ -47,14 +47,8 @@ const LoginPage=({loading,error,...props})=>{
             else{
                 props.loginFailure('Something Wrong!Please Try Again');
             }
-                
-
-            
 
         });
-        //console.log("Loading again",loading);
-
-        
     }
 
     const handleChange = (e) => {
@@ -127,12 +121,7 @@ const LoginPage=({loading,error,...props})=>{
                                             aria-hidden="true"
                                           />
                                         )}
-                                        {/* <ClipLoader
-                                        //css={override}
-                                        size={20}
-                                        color={"#123abc"}
-                                        loading={loading}
-                                        /> */}
+
                                     </button>
                                 </div>
                             </form>
