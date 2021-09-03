@@ -9,7 +9,7 @@ const getToken=()=>{
 
 export const userLogin=(authRequest)=>{
     console.log(settings)
-    let urlRequest = `https://${settings.backendUrl}.herokuapp.com/api/v1/auth/login`
+    let urlRequest = `${settings.backendUrl}/api/v1/auth/login`
     console.log(urlRequest)
     return axios({
         'method':'POST',
@@ -19,7 +19,7 @@ export const userLogin=(authRequest)=>{
 }
 
 export const fetchUserData=(authRequest)=>{
-    let urlRequest = `https://${settings.backendUrl}.herokuapp.com/api/v1/auth/userinfo`
+    let urlRequest = `${settings.backendUrl}/api/v1/auth/userinfo`
     console.log(urlRequest)
     return axios({
         method:'GET',
