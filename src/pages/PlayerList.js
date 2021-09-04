@@ -1,5 +1,7 @@
 import {Component} from "react";
-import react,{useState} from 'react';
+import {Link} from "react-router-dom";
+import {Button, ButtonGroup, Container, Table} from "reactstrap";
+import AppNavbar from "./AppNavbar";
 class PlayerList extends Component {
 
     constructor(props) {
@@ -14,7 +16,7 @@ class PlayerList extends Component {
             .then(data => this.setState({players: data}));
     }
     async remove(id) {
-        await fetch(`/players/${id}`, {
+        await fetch(`/player/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
@@ -26,19 +28,45 @@ class PlayerList extends Component {
         });
     }
     render() {
-        const {players} = this.state;
+        const {players, isLoading} = this.state;
+
+        if (isLoading) {
+            return <p>Loading...</p>;
+        }
+
+        const clientList = players.map(player => {
+            return <tr key={player.playerUuid}>
+                <td style={{whiteSpace: 'nowrap'}}>{player.nickName}</td>
+                <td>{player.points}</td>
+                <td>
+                    <ButtonGroup>
+                        <Button size="sm" color="primary" tag={Link} to={"/player/" + player.playerUuid}>Edit</Button>
+                        <Button size="sm" color="danger" onClick={() => this.remove(player.playerUuid)}>Delete</Button>
+                    </ButtonGroup>
+                </td>
+            </tr>
+        });
         return (
-            <div className="App">
-                <header className="App-header">
-                    <div className="App-intro">
-                        <h2>Clients</h2>
-                        {players.map(player =>
-                            <div key={player.uuid}>
-                                {player.nickName} ({player.points})
-                            </div>
-                        )}
+            <div>
+                <AppNavbar/>
+                <Container fluid>
+                    <div className="float-right">
+                        <Button color="success" tag={Link} to="/player/new">Add Client</Button>
                     </div>
-                </header>
+                    <h3>Players</h3>
+                    <Table className="mt-4">
+                        <thead>
+                        <tr>
+                            <th width="30%">Name</th>
+                            <th width="30%">Email</th>
+                            <th width="40%">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {clientList}
+                        </tbody>
+                    </Table>
+                </Container>
             </div>
         );
     }

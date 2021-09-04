@@ -9,6 +9,7 @@ import {
 import  LoginPage from './pages/LoginPage';
 import { Dashboard } from './pages/dashboard/dashboard';
 import PlayerList from "./pages/PlayerList";
+import PlayerEdit from "./pages/PlayerEdit";
 
 
 function App() {
@@ -17,8 +18,8 @@ function App() {
         <Switch>
           <Route exact path="/" component={LoginPage}/>
           <Route exact path="/dashboard" component={Dashboard}/>
-          <Route exact path="/players" component={PlayerList}/>
-          {/*<Route exact path="/players/:id" component={PlayerEdit}/>*/}
+          <Route  path='/players' exact={true} component={PlayerList}/>
+          <Route  path='/player/:id' component={PlayerEdit}/>
 
         </Switch>
       </BrowserRouter>
