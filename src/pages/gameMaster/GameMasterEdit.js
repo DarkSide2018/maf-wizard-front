@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import AppNavbar from '../AppNavbar';
+import {getToken} from "../../api/authenticationService";
 
 
 class GameMasterEdit extends Component {
@@ -49,11 +50,12 @@ class GameMasterEdit extends Component {
             method: (queryItem.gameMasterUuid) ? 'PUT' : 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+getToken()
             },
             body: JSON.stringify(queryItem),
         });
-        this.props.history.push('/game/master');
+        this.props.history.push('/game/master/all');
     }
 
     render() {

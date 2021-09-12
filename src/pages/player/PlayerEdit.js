@@ -65,7 +65,7 @@ class PlayerEdit extends Component {
             },
             body: JSON.stringify(queryItem),
         });
-        this.props.history.push('/players');
+        this.props.history.push('/player/all');
     }
 
     render() {

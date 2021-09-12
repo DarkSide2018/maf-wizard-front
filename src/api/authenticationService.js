@@ -3,7 +3,7 @@ import axios from 'axios';
 
 
 let settings = require('./../settings.json');
-const getToken=()=>{
+export const getToken=()=>{
     return localStorage.getItem('USER_KEY');
 }
 

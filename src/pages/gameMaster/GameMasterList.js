@@ -2,6 +2,7 @@ import {Component} from "react";
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import AppNavbar from "../AppNavbar";
+import {getToken} from "../../api/authenticationService";
 class GameMasterList extends Component {
 
     constructor(props) {
@@ -11,9 +12,16 @@ class GameMasterList extends Component {
     }
 
     componentDidMount() {
-        fetch('/game/master/all')
+        fetch('/game/master/all',{
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+getToken()
+            }
+        })
             .then(response => response.json())
-            .then(data => this.setState({gameMasters: data}));
+            .then(data => this.setState({gameMasters: data.gameMasters}));
     }
     async remove(id) {
         await fetch(`/game/master/${id}`, {
@@ -52,7 +60,7 @@ class GameMasterList extends Component {
                     <div className="float-right">
                         <Button color="success" tag={Link} to="/game/master/new">Add Client</Button>
                     </div>
-                    <h3>Players</h3>
+                    <h3>Ведущие</h3>
                     <Table className="mt-4">
                         <thead>
                         <tr>

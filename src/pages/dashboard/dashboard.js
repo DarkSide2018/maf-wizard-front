@@ -1,8 +1,9 @@
-import React,{useState} from 'react';
+import React,{useState,useEffect} from 'react';
 import { Button, Container } from 'react-bootstrap';
 import { useDispatch } from 'react-redux';
 import styled from 'styled-components';
 import {fetchUserData} from '../../api/authenticationService';
+
 
 
 const MainWrapper=styled.div`
@@ -15,7 +16,7 @@ export const Dashboard=(props)=>{
     const [loading,setLoading]=useState(false);
     const [data,setData]=useState({});
 
-    React.useEffect(()=>{
+    useEffect(()=>{
         fetchUserData().then((response)=>{
             setData(response.data);
         }).catch((e)=>{
@@ -30,6 +31,12 @@ export const Dashboard=(props)=>{
         props.history.push('/');
 
     }
+    const callPlayers=()=>{
+        props.history.push('/player/all');
+    }
+    const callGameMasters=()=>{
+        props.history.push('/game/master/all');
+    }
 
     return (
         <Container>
@@ -38,7 +45,8 @@ export const Dashboard=(props)=>{
                 <br></br>
                 {data && data.roles && data.roles.filter(value => value.roleCode==='ADMIN').length>0 && <Button type="variant">Add User</Button> }
                 <br></br>
-
+                <Button style={{marginTop:'5px'}} onClick={() =>callPlayers()}>Edit players</Button>
+                <Button style={{marginTop:'5px'}} onClick={() =>callGameMasters()}>Edit gameMasters</Button>
                 <Button style={{marginTop:'5px'}} onClick={() =>logOut()}>Logout</Button>
             </MainWrapper>
         </Container>

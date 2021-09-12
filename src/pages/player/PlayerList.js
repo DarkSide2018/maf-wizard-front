@@ -53,7 +53,7 @@ class PlayerList extends Component {
                     <div className="float-right">
                         <Button color="success" tag={Link} to="/player/new">Add Client</Button>
                     </div>
-                    <h3>Players</h3>
+                    <h3>Игроки</h3>
                     <Table className="mt-4">
                         <thead>
                         <tr>
