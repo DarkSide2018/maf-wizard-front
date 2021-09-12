@@ -23,7 +23,7 @@ class PlayerList extends Component {
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            let updatedPlayers = [...this.state.players].filter(i => i.id !== id);
+            let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== id);
             this.setState({players: updatedPlayers});
         });
     }
@@ -34,7 +34,7 @@ class PlayerList extends Component {
             return <p>Loading...</p>;
         }
 
-        const clientList = players.map(player => {
+        const playerList = players.map(player => {
             return <tr key={player.playerUuid}>
                 <td style={{whiteSpace: 'nowrap'}}>{player.nickName}</td>
                 <td>{player.points}</td>
@@ -58,12 +58,12 @@ class PlayerList extends Component {
                         <thead>
                         <tr>
                             <th width="30%">Name</th>
-                            <th width="30%">Email</th>
+                            <th width="30%">Очки</th>
                             <th width="40%">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {clientList}
+                        {playerList}
                         </tbody>
                     </Table>
                 </Container>

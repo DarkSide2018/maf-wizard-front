@@ -1,6 +1,6 @@
 import React from 'react';
 import axios from 'axios';
-import {readFile, readFileSync} from "fs";
+
 
 let settings = require('./../settings.json');
 const getToken=()=>{
