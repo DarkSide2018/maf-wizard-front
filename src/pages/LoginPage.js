@@ -4,6 +4,9 @@ import { authenticate, authFailure, authSuccess } from '../redux/authActions';
 import './loginpage.css';
 import {userLogin} from '../api/authenticationService';
 import {Alert,Spinner} from 'react-bootstrap';
+import {Link} from "react-router-dom";
+import {Button} from "reactstrap";
+import React from "react";
 
 const LoginPage=({loading,error,...props})=>{
 
@@ -107,22 +110,29 @@ const LoginPage=({loading,error,...props})=>{
                                         <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
                                      </div>
                                 </div>
-                                
+                                <div className="row">
+                                    <div className="col-md-3">
+                                        <div className="form-group m-0">
+                                            <button type="submit" className="btn btn-primary">
+                                                Login
+                                                {loading && (
+                                                    <Spinner
+                                                        as="span"
+                                                        animation="border"
+                                                        size="sm"
+                                                        role="status"
+                                                        aria-hidden="true"
+                                                    />
+                                                )}
 
-                                <div className="form-group m-0">
-                                    <button type="submit" className="btn btn-primary">
-                                        Login
-                                        {loading && (
-                                            <Spinner
-                                            as="span"
-                                            animation="border"
-                                            size="sm"
-                                            role="status"
-                                            aria-hidden="true"
-                                          />
-                                        )}
-
-                                    </button>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div className="col-md-6">
+                                        <div className="form-group m-0">
+                                            <Button color="secondary" tag={Link} to="/register">Register</Button>
+                                        </div>
+                                    </div>
                                 </div>
                             </form>
                             { error &&
@@ -131,8 +141,6 @@ const LoginPage=({loading,error,...props})=>{
                                 </Alert>
 
                             }
-                            
-        
                         </div>
                     </div>
                 </div>
