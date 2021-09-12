@@ -1,47 +1,46 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
-import AppNavbar from "./AppNavbar";
-class PlayerList extends Component {
+import AppNavbar from "../AppNavbar";
+class GameMasterList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {players: []};
+        this.state = {gameMasters: []};
         this.remove = this.remove.bind(this);
     }
 
     componentDidMount() {
-        fetch('/players')
+        fetch('/game/master/all')
             .then(response => response.json())
-            .then(data => this.setState({players: data}));
+            .then(data => this.setState({gameMasters: data}));
     }
     async remove(id) {
-        await fetch(`/player/${id}`, {
+        await fetch(`/game/master/${id}`, {
             method: 'DELETE',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json'
             }
         }).then(() => {
-            let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== id);
-            this.setState({players: updatedPlayers});
+            let updatedGameMasters = [...this.state.gameMasters].filter(i => i.gameMasterUuid !== id);
+            this.setState({gameMasters: updatedGameMasters});
         });
     }
     render() {
-        const {players, isLoading} = this.state;
+        const {gameMasters, isLoading} = this.state;
 
         if (isLoading) {
             return <p>Loading...</p>;
         }
 
-        const playerList = players.map(player => {
-            return <tr key={player.playerUuid}>
-                <td style={{whiteSpace: 'nowrap'}}>{player.nickName}</td>
-                <td>{player.points}</td>
+        const gameMasterList = gameMasters.map(gameMaster => {
+            return <tr key={gameMaster.gameMasterUuid}>
+                <td style={{whiteSpace: 'nowrap'}}>{gameMaster.nickName}</td>
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/player/" + player.playerUuid}>Edit</Button>
-                        <Button size="sm" color="danger" onClick={() => this.remove(player.playerUuid)}>Delete</Button>
+                        <Button size="sm" color="primary" tag={Link} to={"/game/master/" + gameMaster.gameMasterUuid}>Edit</Button>
+                        <Button size="sm" color="danger" onClick={() => this.remove(gameMaster.gameMasterUuid)}>Delete</Button>
                     </ButtonGroup>
                 </td>
             </tr>
@@ -51,19 +50,18 @@ class PlayerList extends Component {
                 <AppNavbar/>
                 <Container fluid>
                     <div className="float-right">
-                        <Button color="success" tag={Link} to="/player/new">Add Client</Button>
+                        <Button color="success" tag={Link} to="/game/master/new">Add Client</Button>
                     </div>
                     <h3>Players</h3>
                     <Table className="mt-4">
                         <thead>
                         <tr>
                             <th width="30%">Name</th>
-                            <th width="30%">Очки</th>
                             <th width="40%">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
-                        {playerList}
+                        {gameMasterList}
                         </tbody>
                     </Table>
                 </Container>
@@ -71,5 +69,5 @@ class PlayerList extends Component {
         );
     }
 }
-export default PlayerList;
+export default GameMasterList;
 

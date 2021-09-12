@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
-import AppNavbar from './AppNavbar';
+import AppNavbar from '../AppNavbar';
 
 
 class PlayerEdit extends Component {
@@ -146,7 +146,7 @@ class PlayerEdit extends Component {
 
                     <FormGroup>
                         <Button color="primary" type="submit">Save</Button>{' '}
-                        <Button color="secondary" tag={Link} to="/players">Cancel</Button>
+                        <Button color="secondary" tag={Link} to="/player/all">Cancel</Button>
                     </FormGroup>
                 </Form>
             </Container>
