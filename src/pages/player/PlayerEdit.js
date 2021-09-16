@@ -52,7 +52,7 @@ class PlayerEdit extends Component {
         event.preventDefault();
         let item = this.state;
         let queryItem = item.item;
-        if(queryItem.playerUuid == null){
+        if(queryItem.playerUuid === ''){
             queryItem.messageType = 'CreatePlayerRequest'
         }else{
             queryItem.messageType =  'UpdatePlayerRequest'

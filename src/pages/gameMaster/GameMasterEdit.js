@@ -41,7 +41,7 @@ class GameMasterEdit extends Component {
         event.preventDefault();
         let item = this.state;
         let queryItem = item.item;
-        if (queryItem.gameMasterUuid == null) {
+        if (queryItem.gameMasterUuid === '') {
             queryItem.messageType = 'CreateGameMasterRequest'
         } else {
             queryItem.messageType = 'UpdateGameMasterRequest'
