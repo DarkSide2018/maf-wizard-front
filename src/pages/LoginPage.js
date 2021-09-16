@@ -130,7 +130,7 @@ const LoginPage=({loading,error,...props})=>{
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group m-0">
-                                            <Button color="secondary" tag={Link} to="/register">Register</Button>
+                                            <Button color="secondary" tag={Link} to="/user/new">Register</Button>
                                         </div>
                                     </div>
                                 </div>
