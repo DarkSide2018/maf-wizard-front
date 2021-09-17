@@ -37,6 +37,9 @@ export const Dashboard = (props) => {
     const callGameMasters = () => {
         props.history.push('/game/master/all');
     }
+    const callGames = () => {
+        props.history.push('/game/all');
+    }
 
     return (
         <Container>
@@ -52,6 +55,9 @@ export const Dashboard = (props) => {
                     </Row>
                     <Row>
                         <Button style={{marginTop: '5px'}} onClick={() => callGameMasters()}>Edit gameMasters</Button>
+                    </Row>
+                    <Row>
+                        <Button style={{marginTop: '5px'}} onClick={() => callGames()}>Edit games</Button>
                     </Row>
                     <Row>
                         <Button style={{marginTop: '5px'}} onClick={() => logOut()}>Logout</Button>

@@ -12,6 +12,8 @@ import PlayerEdit from "./pages/player/PlayerEdit";
 import GameMasterList from "./pages/gameMaster/GameMasterList";
 import GameMasterEdit from "./pages/gameMaster/GameMasterEdit";
 import UserEdit from "./pages/user/UserEdit";
+import GameList from "./pages/game/GameList";
+import GameEdit from "./pages/game/GameEdit";
 
 
 function App() {
@@ -25,6 +27,8 @@ function App() {
           <Route  path='/game/master/all' exact={true} component={GameMasterList}/>
           <Route  path='/game/master/:id' component={GameMasterEdit}/>
           <Route  path='/user/:id' component={UserEdit}/>
+          <Route  path='/game/all' component={GameList}/>
+          <Route  path='/game/:id' component={GameEdit}/>
         </Switch>
       </BrowserRouter>
   );
