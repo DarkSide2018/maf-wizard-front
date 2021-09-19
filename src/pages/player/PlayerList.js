@@ -2,19 +2,44 @@ import {Component} from "react";
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import AppNavbar from "../AppNavbar";
+import axios from "axios";
+import {FormControl, InputGroup} from "react-bootstrap";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {
+    faSearch,
+    faTimes,
+} from "@fortawesome/free-solid-svg-icons";
+
 class PlayerList extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {players: []};
+        this.state = {
+            players: [],
+            search: ""
+        };
         this.remove = this.remove.bind(this);
     }
 
     componentDidMount() {
+        this.findAllPlayers()
+    }
+
+    findAllPlayers() {
         fetch('/player/all')
             .then(response => response.json())
             .then(data => this.setState({players: data}));
     }
+
+    searchData = () => {
+        fetch("/player/like/?nick=" + this.state.search)
+            .then(response => response.json())
+            .then((data) => {
+                this.setState({players: data.players,
+                });
+            });
+    };
+
     async remove(id) {
         await fetch(`/player/${id}`, {
             method: 'DELETE',
@@ -27,8 +52,20 @@ class PlayerList extends Component {
             this.setState({players: updatedPlayers});
         });
     }
+
+    searchChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+        });
+    };
+    cancelSearch = () => {
+        this.setState({search: ""});
+        this.findAllPlayers();
+    };
+
+
     render() {
-        const {players, isLoading} = this.state;
+        const {players, search, isLoading} = this.state;
 
         if (isLoading) {
             return <p>Loading...</p>;
@@ -49,6 +86,35 @@ class PlayerList extends Component {
         return (
             <div>
                 <AppNavbar/>
+                <div style={{float: "right"}}>
+                    <InputGroup size="sm">
+                        <FormControl
+                            placeholder="Search"
+                            name="search"
+                            value={search}
+                            className={"info-border bg-dark text-white"}
+                            onChange={this.searchChange}
+                        />
+                        <InputGroup.Append>
+                            <Button
+                                size="sm"
+                                variant="outline-info"
+                                type="button"
+                                onClick={this.searchData}
+                            >
+                                <FontAwesomeIcon icon={faSearch}/>
+                            </Button>
+                            <Button
+                                size="sm"
+                                variant="outline-danger"
+                                type="button"
+                                onClick={this.cancelSearch}
+                            >
+                                <FontAwesomeIcon icon={faTimes}/>
+                            </Button>
+                        </InputGroup.Append>
+                    </InputGroup>
+                </div>
                 <Container fluid>
                     <div className="float-right">
                         <Button color="success" tag={Link} to="/player/new">Add Client</Button>
@@ -71,5 +137,6 @@ class PlayerList extends Component {
         );
     }
 }
+
 export default PlayerList;
 
