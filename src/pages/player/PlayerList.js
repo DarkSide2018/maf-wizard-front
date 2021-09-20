@@ -2,7 +2,6 @@ import {Component} from "react";
 import {Link} from "react-router-dom";
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import AppNavbar from "../AppNavbar";
-import axios from "axios";
 import {FormControl, InputGroup} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
@@ -16,23 +15,45 @@ class PlayerList extends Component {
         super(props);
         this.state = {
             players: [],
-            search: ""
+            search: "",
+            pageNumber: 0,
+            pageSize: 5,
+            sortBy:"nickName",
+            sortDir: "asc",
         };
         this.remove = this.remove.bind(this);
     }
 
     componentDidMount() {
-        this.findAllPlayers()
+        this.findAllPlayers(this.state.pageNumber)
     }
 
-    findAllPlayers() {
+    findAllPlayers(currentPage) {
+        currentPage -= 1;
+
         fetch('/player/all')
             .then(response => response.json())
             .then(data => this.setState({players: data}));
     }
 
     searchData = () => {
-        fetch("/player/like/?nick=" + this.state.search)
+        fetch("/player/like",{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    messageType:"SearchPlayerRequest",
+                    nickName:this.state.search,
+                    pageSize:this.state.pageSize,
+                    pageNumber:this.state.pageNumber,
+                    sortBy:this.state.sortBy,
+                    sortDir: this.state.sortDir
+            }
+            )
+        })
             .then(response => response.json())
             .then((data) => {
                 this.setState({players: data.players,
@@ -62,8 +83,25 @@ class PlayerList extends Component {
         this.setState({search: ""});
         this.findAllPlayers();
     };
-
-
+    // changePage = (event) => {
+    //     let targetPage = parseInt(event.target.value);
+    //     if (this.state.search) {
+    //         this.searchData(targetPage);
+    //     } else {
+    //         this.findAllPlayers(targetPage);
+    //     }
+    //     this.setState({
+    //         [event.target.name]: targetPage,
+    //     });
+    // };
+    sortData = () => {
+        setTimeout(() => {
+            this.state.sortDir === "asc"
+                ? this.setState({ sortDir: "desc" })
+                : this.setState({ sortDir: "asc" });
+            this.findAllBooks(this.state.currentPage);
+        }, 500);
+    };
     render() {
         const {players, search, isLoading} = this.state;
 
@@ -117,7 +155,7 @@ class PlayerList extends Component {
                 </div>
                 <Container fluid>
                     <div className="float-right">
-                        <Button color="success" tag={Link} to="/player/new">Add Client</Button>
+                        <Button color="success" tag={Link} to="/player/new">Add Player</Button>
                     </div>
                     <h3>Игроки</h3>
                     <Table className="mt-4">
