@@ -16,7 +16,7 @@ class PlayerList extends Component {
         this.state = {
             players: [],
             search: "",
-            pageNumber: 0,
+            pageNumber: 1,
             pageSize: 5,
             sortBy:"nickName",
             sortDir: "asc",
@@ -31,12 +31,34 @@ class PlayerList extends Component {
     findAllPlayers(currentPage) {
         currentPage -= 1;
 
-        fetch('/player/all')
+        fetch('/player/all',{
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    messageType:"ReadAllPlayersRequest",
+                    nickName:this.state.search,
+                    pageSize:this.state.pageSize,
+                    pageNumber:currentPage,
+                    sortBy:this.state.sortBy,
+                    sortDir: this.state.sortDir
+                }
+            )
+        })
             .then(response => response.json())
-            .then(data => this.setState({players: data}));
+            .then(data => this.setState({players: data.players}));
     }
+    searchChange = (event) => {
+        this.setState({
+            [event.target.name]: event.target.value,
+        });
+    };
 
-    searchData = () => {
+    searchData = (currentPage) => {
+        currentPage -= 1;
         fetch("/player/like",{
             method: 'POST',
             headers: {
@@ -48,7 +70,7 @@ class PlayerList extends Component {
                     messageType:"SearchPlayerRequest",
                     nickName:this.state.search,
                     pageSize:this.state.pageSize,
-                    pageNumber:this.state.pageNumber,
+                    pageNumber:currentPage,
                     sortBy:this.state.sortBy,
                     sortDir: this.state.sortDir
             }
@@ -56,7 +78,11 @@ class PlayerList extends Component {
         })
             .then(response => response.json())
             .then((data) => {
-                this.setState({players: data.players,
+                this.setState({
+                    players: data.players,
+                    totalPages: data.totalPages,
+                    totalElements: data.totalElements,
+                    pageNumber: data.pageNumber + 1,
                 });
             });
     };
@@ -73,27 +99,31 @@ class PlayerList extends Component {
             this.setState({players: updatedPlayers});
         });
     }
-
-    searchChange = (event) => {
-        this.setState({
-            [event.target.name]: event.target.value,
-        });
+    nextPage = () => {
+        if (this.state.pageNumber < Math.ceil(this.state.totalElements / this.state.pageSize)) {
+            if (this.state.search) {
+                this.searchData(this.state.pageNumber + 1);
+            } else {
+                this.findAllPlayers(this.state.pageNumber + 1);
+            }
+        }
     };
+
     cancelSearch = () => {
         this.setState({search: ""});
         this.findAllPlayers();
     };
-    // changePage = (event) => {
-    //     let targetPage = parseInt(event.target.value);
-    //     if (this.state.search) {
-    //         this.searchData(targetPage);
-    //     } else {
-    //         this.findAllPlayers(targetPage);
-    //     }
-    //     this.setState({
-    //         [event.target.name]: targetPage,
-    //     });
-    // };
+    changePage = (event) => {
+        let targetPage = parseInt(event.target.value);
+        if (this.state.search) {
+            this.searchData(targetPage);
+        } else {
+            this.findAllPlayers(targetPage);
+        }
+        this.setState({
+            [event.target.name]: targetPage,
+        });
+    };
     sortData = () => {
         setTimeout(() => {
             this.state.sortDir === "asc"
