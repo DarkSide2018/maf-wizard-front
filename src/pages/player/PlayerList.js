@@ -64,7 +64,8 @@ class PlayerList extends Component {
             .then(data => this.setState({
                 players: data.players,
                 totalPages: data.totalPages,
-                totalElements:data.totalElements
+                totalElements:data.totalElements,
+                pageNumber:data.pageNumber+1
             }));
     }
     async remove(id) {
@@ -81,6 +82,7 @@ class PlayerList extends Component {
     }
 
     changePage = (event) => {
+        console.log("event->" + event.target.value)
         let targetPage = parseInt(event.target.value);
         if (this.state.search) {
             this.searchData(targetPage);
@@ -124,10 +126,17 @@ class PlayerList extends Component {
         }
     };
     nextPage = () => {
-        if (this.state.pageNumber < Math.ceil(this.state.totalElements / this.state.pageSize)) {
+        console.log("nextPage start")
+        console.log("this.state.pageNumber->" + this.state.pageNumber)
+        console.log("this.state.totalElements -> "+this.state.totalElements)
+        console.log("this.state.pageSize -> " +this.state.pageSize)
+        let result = this.state.pageNumber < Math.ceil(this.state.totalElements / this.state.pageSize);
+
+        if (result) {
             if (this.state.search) {
                 this.searchData(this.state.pageNumber + 1);
             } else {
+                console.log("findAllPlayers")
                 this.findAllPlayers(this.state.pageNumber + 1);
             }
         }
@@ -195,7 +204,7 @@ class PlayerList extends Component {
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header>
                         <div style={{ float: "left" }}>
-                            <FontAwesomeIcon icon={faList} /> Book List
+                            <FontAwesomeIcon icon={faList} /> Игроки
                         </div>
                         <div style={{ float: "right" }}>
                             <InputGroup size="sm">
@@ -229,13 +238,13 @@ class PlayerList extends Component {
                     </Card.Header>
                     <Card.Body>
                         <Table bordered hover striped variant="dark">
-                            <thead>
+                            <thead className={"text-white"}>
                             <tr>
-                                <th>Title</th>
-                                <th>Author</th>
+                                <th>Имя</th>
+                                <th>Очки</th>
                             </tr>
                             </thead>
-                            <tbody>
+                            <tbody className={"text-white"}>
                             {players.length === 0 ? (
                                 <tr align="center">
                                     <td colSpan="7">No players Available.</td>
@@ -296,7 +305,6 @@ class PlayerList extends Component {
                                         <FormControl
                                             className={"page-num bg-dark"}
                                             name="currentPage"
-                                            value={pageNumber}
                                             onChange={this.changePage}
                                         />
                                         <InputGroup.Append>
