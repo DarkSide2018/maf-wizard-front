@@ -42,28 +42,28 @@ export const Dashboard = (props) => {
     }
 
     return (
-        <Container>
-            <MainWrapper>
-                <h4>Hello {data && `${data.firstName} ${data.lastName}`}</h4>
-                <br></br>
-                {data && data.roles && data.roles.filter(value => value.roleCode === 'ADMIN').length > 0 &&
-                <Button type="variant">Add User</Button>}
-                <br></br>
-                <Container>
-                    <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Edit players</Button>
-                    </Row>
-                    <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callGameMasters()}>Edit gameMasters</Button>
-                    </Row>
-                    <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callGames()}>Edit games</Button>
-                    </Row>
-                    <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => logOut()}>Logout</Button>
-                    </Row>
-                </Container>
-            </MainWrapper>
-        </Container>
+            <Container>
+                <MainWrapper>
+                    <h4>Hello {data && `${data.firstName} ${data.lastName}`}</h4>
+                    <br></br>
+                    {data && data.roles && data.roles.filter(value => value.roleCode === 'ADMIN').length > 0 &&
+                    <Button type="variant">Add User</Button>}
+                    <br></br>
+                    <Container>
+                        <Row>
+                            <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Edit players</Button>
+                        </Row>
+                        <Row>
+                            <Button style={{marginTop: '5px'}} onClick={() => callGameMasters()}>Edit gameMasters</Button>
+                        </Row>
+                        <Row>
+                            <Button style={{marginTop: '5px'}} onClick={() => callGames()}>Edit games</Button>
+                        </Row>
+                        <Row>
+                            <Button style={{marginTop: '5px'}} onClick={() => logOut()}>Logout</Button>
+                        </Row>
+                    </Container>
+                </MainWrapper>
+            </Container>
     )
 }

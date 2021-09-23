@@ -22,7 +22,7 @@ class PlayerList extends Component {
             players: [],
             search: "",
             pageNumber: 1,
-            pageSize: 5,
+            pageSize: 10,
             sortBy:"nickName",
             sortDir: "asc",
         };
@@ -199,7 +199,7 @@ class PlayerList extends Component {
             </tr>
         });
         return (
-            <div>
+            <div className={"bg-dark"}>
                 <AppNavbar/>
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header>
@@ -242,6 +242,10 @@ class PlayerList extends Component {
                             <tr>
                                 <th>Имя</th>
                                 <th>Очки</th>
+                                <th>Доп.Очки</th>
+                                <th>Штрафы</th>
+                                <th>First Night kill</th>
+                                <th>Количество игр</th>
                             </tr>
                             </thead>
                             <tbody className={"text-white"}>
@@ -254,6 +258,10 @@ class PlayerList extends Component {
                                     <tr key={player.playerUuid}>
                                         <td>{player.nickName}</td>
                                         <td>{player.points}</td>
+                                        <td>{player.additionalPoints}</td>
+                                        <td>{player.penalties}</td>
+                                        <td>{player.wasKilled}</td>
+                                        <td>{player.games}</td>
                                         <td>
                                             <ButtonGroup>
                                                 <Link
