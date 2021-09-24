@@ -126,10 +126,6 @@ class PlayerList extends Component {
         }
     };
     nextPage = () => {
-        console.log("nextPage start")
-        console.log("this.state.pageNumber->" + this.state.pageNumber)
-        console.log("this.state.totalElements -> "+this.state.totalElements)
-        console.log("this.state.pageSize -> " +this.state.pageSize)
         let result = this.state.pageNumber < Math.ceil(this.state.totalElements / this.state.pageSize);
 
         if (result) {
@@ -185,22 +181,10 @@ class PlayerList extends Component {
         if (isLoading) {
             return <p>Loading...</p>;
         }
-
-        const playerList = players.map(player => {
-            return <tr key={player.playerUuid}>
-                <td style={{whiteSpace: 'nowrap'}}>{player.nickName}</td>
-                <td>{player.points}</td>
-                <td>
-                    <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/player/" + player.playerUuid}>Edit</Button>
-                        <Button size="sm" color="danger" onClick={() => this.remove(player.playerUuid)}>Delete</Button>
-                    </ButtonGroup>
-                </td>
-            </tr>
-        });
         return (
             <div className={"bg-dark"}>
                 <AppNavbar/>
+
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header>
                         <div style={{ float: "left" }}>
