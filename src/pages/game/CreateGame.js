@@ -1,16 +1,18 @@
 import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
-import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
+import {Button, Container, Form, FormGroup, Input, Label, Row} from 'reactstrap';
 import {getToken} from "../../api/authenticationService";
 
 
 class CreateGame extends Component {
     async componentDidMount() {
-        const {gameUuid} = this.state.gameUuid;
-        let queryItem = this.state.game;
+        let queryItem = this.state;
         queryItem.messageType = 'CreateGameRequest'
-        if (gameUuid === '') {
+        console.log("gameUUID -> " + this.state.gameUuid)
+        if (this.state.gameUuid === null) {
+            console.log("CreateGameRequest")
             queryItem.name = 'Новый Стол'
+            this.state.name = queryItem.name
             fetch('/game', {
                 method: 'POST',
                 headers: {
@@ -21,24 +23,38 @@ class CreateGame extends Component {
                 body: JSON.stringify(queryItem),
             })
                 .then(response => response.json())
-                .then(data => this.setState({gameUuid: data.entityUuid}));
+                .then((data) => {
+                    this.setState({
+                        gameUuid: data.entityUuid
+                    });
+                });
         } else {
-            
+            fetch('/game/' + this.state.gameUuid, {
+                method: 'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getToken()
+                }
+            })
+                .then(response => response.json())
+                .then(data => this.setState({
+                    gameNumber: data.gameNumber,
+                    gameUuid: data.gameUuid,
+                    players: data.players,
+                    name: data.name
+                }));
         }
 
     }
 
-    emptyItem = {
-        name: '',
-        gameNumber: '',
-        players: ''
-    };
-
     constructor(props) {
         super(props);
         this.state = {
-            gameUuid: '',
-            game: this.emptyItem
+            gameUuid: null,
+            name: 'Новый стол',
+            gameNumber: '',
+            players: []
         };
         this.handleChange = this.handleChange.bind(this);
         this.handleSubmit = this.handleSubmit.bind(this);
@@ -46,6 +62,7 @@ class CreateGame extends Component {
 
     handleChange(event) {
         const target = event.target;
+        console.log("target -> " + target)
         const value = target.value;
         const name = target.name;
         let item = {...this.state.item};
@@ -54,6 +71,8 @@ class CreateGame extends Component {
     }
 
     async handleSubmit(event) {
+
+        console.log("handleSubmit event")
         // event.preventDefault();
         // let item = this.state;
         // let queryItem = item.item;
@@ -75,26 +94,20 @@ class CreateGame extends Component {
     }
 
     render() {
-        const {item} = this.state;
-        const title = <h2>Новая игра</h2>;
-
+        const game = this.state;
         return <div>
             <Container>
-                {title}
+                <Row>
+                    <h3>Название игры : {game.name} : UUID: {this.state.gameUuid}</h3>
+                </Row>
                 <Form onSubmit={this.handleSubmit}>
                     <FormGroup>
-                        <Label for="gameNumber">Номер игры</Label>
-                        <Input type="text" name="gameNumber" id="gameNumber" value={item.gameNumber || ''}
-                               onChange={this.handleChange} autoComplete="gameNumber"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Button color="primary" type="submit">Save</Button>
+                        <Button color="primary" type="submit">Создать игру</Button>
                         {' '}
-                        <Button color="secondary" tag={Link} to="/game/all">Cancel</Button>
+                        <Button color="secondary" tag={Link} to="/dashboard">Cancel</Button>
                     </FormGroup>
                 </Form>
             </Container>
-
         </div>
     }
 }

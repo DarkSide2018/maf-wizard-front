@@ -13,6 +13,7 @@ import {
     faStepForward,
     faTimes, faTrash,
 } from "@fortawesome/free-solid-svg-icons";
+import CreateGame from "../game/CreateGame";
 
 class PlayerList extends Component {
 
@@ -184,7 +185,7 @@ class PlayerList extends Component {
         return (
             <div className={"bg-dark"}>
                 <AppNavbar/>
-
+                <CreateGame/>
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header>
                         <div style={{ float: "left" }}>
