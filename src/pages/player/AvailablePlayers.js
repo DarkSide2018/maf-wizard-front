@@ -1,21 +1,20 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
+import React from 'react';
 import {Button,ButtonGroup, Table} from "reactstrap";
-import AppNavbar from "../AppNavbar";
 import {FormControl,InputGroup,Card,} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faEdit,
     faFastBackward,
-    faFastForward, faList,
+    faFastForward, faList, faPlus,
     faSearch,
     faStepBackward,
     faStepForward,
-    faTimes, faTrash,
+    faTimes
 } from "@fortawesome/free-solid-svg-icons";
-import CreateGame from "../game/CreateGame";
 
-class PlayerList extends Component {
+
+class AvailablePlayers extends React.Component {
 
     constructor(props) {
         super(props);
@@ -27,7 +26,6 @@ class PlayerList extends Component {
             sortBy:"nickName",
             sortDir: "asc",
         };
-        this.remove = this.remove.bind(this);
     }
 
     componentDidMount() {
@@ -41,6 +39,26 @@ class PlayerList extends Component {
             this.findAllPlayers(this.state.pageNumber);
         }, 500);
     };
+    async addPlayerToGame(playerUuid) {
+       await fetch(`/game/player`, {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(
+                {
+                    messageType: "AddPlayerRequest",
+                    playerUuid: playerUuid,
+                    gameUuid: getCurrentGame()
+                }
+            )
+        }).then(() => {
+            let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== playerUuid);
+            this.setState({players: updatedPlayers});
+        });
+
+    }
     findAllPlayers(currentPage) {
         currentPage -= 1;
 
@@ -68,18 +86,6 @@ class PlayerList extends Component {
                 totalElements:data.totalElements,
                 pageNumber:data.pageNumber+1
             }));
-    }
-    async remove(id) {
-        await fetch(`/player/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(() => {
-            let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== id);
-            this.setState({players: updatedPlayers});
-        });
     }
 
 
@@ -185,7 +191,6 @@ class PlayerList extends Component {
         }
         return (
             <div className={"bg-dark"}>
-                <AppNavbar/>
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header>
                         <div style={{ float: "left" }}>
@@ -249,18 +254,12 @@ class PlayerList extends Component {
                                         <td>{player.games}</td>
                                         <td>
                                             <ButtonGroup>
-                                                <Link
-                                                    to={"/player/" + player.playerUuid}
-                                                    className="btn btn-sm btn-outline-primary"
-                                                >
-                                                    <FontAwesomeIcon icon={faEdit} />
-                                                </Link>{" "}
                                                 <Button
                                                     size="sm"
                                                     variant="outline-danger"
-                                                    onClick={() => this.remove(player.playerUuid)}
+                                                    onClick={()=>this.addPlayerToGame(player.playerUuid)}
                                                 >
-                                                    <FontAwesomeIcon icon={faTrash} />
+                                                    <FontAwesomeIcon icon={faPlus} />
                                                 </Button>
                                             </ButtonGroup>
                                         </td>
@@ -271,56 +270,56 @@ class PlayerList extends Component {
                         </Table>
                     </Card.Body>
                     {players.length > 0 ? (
-                            <Card.Footer>
-                                <div style={{ float: "left" }}>
-                                    Showing Page {pageNumber} of {totalPages}
-                                </div>
-                                <div style={{ float: "right" }}>
-                                    <InputGroup size="sm">
-                                        <InputGroup.Prepend>
-                                            <Button
-                                                type="button"
-                                                variant="outline-info"
-                                                disabled={pageNumber === 1}
-                                                onClick={this.firstPage}
-                                            >
-                                                <FontAwesomeIcon icon={faFastBackward} /> First
-                                            </Button>
-                                            <Button
-                                                type="button"
-                                                variant="outline-info"
-                                                disabled={pageNumber === 1}
-                                                onClick={this.prevPage}
-                                            >
-                                                <FontAwesomeIcon icon={faStepBackward} /> Prev
-                                            </Button>
-                                        </InputGroup.Prepend>
-                                        <FormControl
-                                            className={"page-num bg-dark"}
-                                            name="currentPage"
-                                            onChange={this.changePage}
-                                        />
-                                        <InputGroup.Append>
-                                            <Button
-                                                type="button"
-                                                variant="outline-info"
-                                                disabled={pageNumber === totalPages}
-                                                onClick={this.nextPage}
-                                            >
-                                                <FontAwesomeIcon icon={faStepForward} /> Next
-                                            </Button>
-                                            <Button
-                                                type="button"
-                                                variant="outline-info"
-                                                disabled={pageNumber === totalPages}
-                                                onClick={this.lastPage}
-                                            >
-                                                <FontAwesomeIcon icon={faFastForward} /> Last
-                                            </Button>
-                                        </InputGroup.Append>
-                                    </InputGroup>
-                                </div>
-                            </Card.Footer>
+                        <Card.Footer>
+                            <div style={{ float: "left" }}>
+                                Showing Page {pageNumber} of {totalPages}
+                            </div>
+                            <div style={{ float: "right" }}>
+                                <InputGroup size="sm">
+                                    <InputGroup.Prepend>
+                                        <Button
+                                            type="button"
+                                            variant="outline-info"
+                                            disabled={pageNumber === 1}
+                                            onClick={this.firstPage}
+                                        >
+                                            <FontAwesomeIcon icon={faFastBackward} /> First
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="outline-info"
+                                            disabled={pageNumber === 1}
+                                            onClick={this.prevPage}
+                                        >
+                                            <FontAwesomeIcon icon={faStepBackward} /> Prev
+                                        </Button>
+                                    </InputGroup.Prepend>
+                                    <FormControl
+                                        className={"page-num bg-dark"}
+                                        name="currentPage"
+                                        onChange={this.changePage}
+                                    />
+                                    <InputGroup.Append>
+                                        <Button
+                                            type="button"
+                                            variant="outline-info"
+                                            disabled={pageNumber === totalPages}
+                                            onClick={this.nextPage}
+                                        >
+                                            <FontAwesomeIcon icon={faStepForward} /> Next
+                                        </Button>
+                                        <Button
+                                            type="button"
+                                            variant="outline-info"
+                                            disabled={pageNumber === totalPages}
+                                            onClick={this.lastPage}
+                                        >
+                                            <FontAwesomeIcon icon={faFastForward} /> Last
+                                        </Button>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                            </div>
+                        </Card.Footer>
                     ) : null}
                 </Card>
             </div>
@@ -328,5 +327,8 @@ class PlayerList extends Component {
     }
 
 }
-export default PlayerList;
+export default AvailablePlayers;
 
+export const getCurrentGame=()=>{
+    return localStorage.getItem('GAME_UUID');
+}

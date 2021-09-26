@@ -1,10 +1,14 @@
-import React, {Component} from 'react';
+import {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label, Row} from 'reactstrap';
 import {getToken} from "../../api/authenticationService";
 
+import React from 'react';
+import {getCurrentGame} from "../player/AvailablePlayers";
+import {authenticate, authFailure, authSuccess} from "../../redux/authActions";
+import {connect} from "react-redux";
 
-class CreateGame extends Component {
+class CreateGame extends React.Component {
     async componentDidMount() {
         let queryItem = this.state;
         queryItem.messageType = 'CreateGameRequest'
@@ -27,6 +31,7 @@ class CreateGame extends Component {
                     this.setState({
                         gameUuid: data.entityUuid
                     });
+
                 });
         } else {
             fetch('/game/' + this.state.gameUuid, {
@@ -43,16 +48,21 @@ class CreateGame extends Component {
                     gameUuid: data.gameUuid,
                     players: data.players,
                     name: data.name
-                }));
+                })
+                );
         }
 
     }
 
+
+
+
     constructor(props) {
         super(props);
+        console.log("props-> " + props.pageSize)
         this.state = {
             gameUuid: null,
-            name: 'Новый стол',
+            name: 'Новый Стол',
             gameNumber: '',
             players: []
         };
@@ -70,8 +80,10 @@ class CreateGame extends Component {
         this.setState({item});
     }
 
-    async handleSubmit(event) {
 
+
+    async handleSubmit(event) {
+        setGameUuid(this.state.gameUuid)
         console.log("handleSubmit event")
         // event.preventDefault();
         // let item = this.state;
@@ -93,6 +105,7 @@ class CreateGame extends Component {
         // this.props.history.push('/game/all');
     }
 
+
     render() {
         const game = this.state;
         return <div>
@@ -105,11 +118,16 @@ class CreateGame extends Component {
                         <Button color="primary" type="submit">Создать игру</Button>
                         {' '}
                         <Button color="secondary" tag={Link} to="/dashboard">Cancel</Button>
+
                     </FormGroup>
                 </Form>
             </Container>
         </div>
     }
 }
+export const setGameUuid= (content)=>{
+    localStorage.setItem('GAME_UUID',content);
+}
+
 
 export default withRouter(CreateGame);
