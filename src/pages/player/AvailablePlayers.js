@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useContext} from "react";
 import {Button, ButtonGroup, Table} from "reactstrap";
 import {Card, FormControl, InputGroup,} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -12,6 +12,7 @@ import {
     faStepForward,
     faTimes
 } from "@fortawesome/free-solid-svg-icons";
+import PlayersContext from "./PlayersContext";
 
 
 class AvailablePlayers extends React.Component {
@@ -328,7 +329,7 @@ class AvailablePlayers extends React.Component {
 
 }
 export default AvailablePlayers;
-
+AvailablePlayers.contextType = PlayersContext;
 export const getCurrentGame=()=>{
     return localStorage.getItem('GAME_UUID');
 }

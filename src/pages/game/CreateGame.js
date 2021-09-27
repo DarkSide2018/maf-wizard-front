@@ -3,8 +3,10 @@ import {Link, withRouter} from 'react-router-dom';
 import {Button, ButtonGroup, Container, Form, FormGroup, Row} from 'reactstrap';
 import {getToken} from "../../api/authenticationService";
 import {getCurrentGame} from "../player/AvailablePlayers";
+import PlayersContext from "../player/PlayersContext";
 
 class CreateGame extends React.Component {
+
     componentDidMount() {
         fetch('/game/' + getCurrentGame(), {
             method: 'GET',
@@ -22,6 +24,8 @@ class CreateGame extends React.Component {
                     name: data.name
                 })
             );
+
+
     }
 
 
@@ -74,6 +78,7 @@ class CreateGame extends React.Component {
 
     render() {
         let players = this.state.players
+        this.context = players
         const playersList = players.map(player => {
             return <span key={player.playerUuid}>
               {player.nickName}
@@ -92,7 +97,7 @@ class CreateGame extends React.Component {
                 <Form onSubmit={this.handleSubmit}>
                     <FormGroup>
                         <Button color="primary" type="submit">Создать игру</Button>
-                        {' '}  {this.context.toString()}
+                        {' '}
                         <Button color="secondary" tag={Link} to="/dashboard">Cancel</Button>
 
                     </FormGroup>
@@ -101,5 +106,7 @@ class CreateGame extends React.Component {
         </div>
     }
 }
+
+CreateGame.contextType = PlayersContext;
 
 export default withRouter(CreateGame);
