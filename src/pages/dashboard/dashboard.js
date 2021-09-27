@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Button, Container} from 'react-bootstrap';
 import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
-import {fetchUserData} from '../../api/authenticationService';
+import {fetchUserData, getToken} from '../../api/authenticationService';
 import {Row} from "reactstrap";
 
 
@@ -35,7 +35,26 @@ export const Dashboard = (props) => {
         props.history.push('/player/all');
     }
     const newTable = () => {
-
+        let queryItem = {
+            messageType: 'CreateGameRequest',
+            gameUuid: null,
+            name: 'Новый Стол',
+            gameNumber: '',
+            players: []
+        }
+        fetch('/game', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(queryItem),
+        })
+            .then(response => response.json())
+            .then((data) => {
+                setGameUuid(data.entityUuid)
+            });
         props.history.push('/new/table');
     }
     const callGameMasters = () => {
@@ -73,4 +92,8 @@ export const Dashboard = (props) => {
             </MainWrapper>
         </Container>
     )
+}
+
+export const setGameUuid= (content)=>{
+    localStorage.setItem('GAME_UUID',content);
 }

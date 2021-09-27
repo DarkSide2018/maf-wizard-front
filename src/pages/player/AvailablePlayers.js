@@ -1,12 +1,12 @@
-import {Component} from "react";
-import {Link} from "react-router-dom";
-import React from 'react';
-import {Button,ButtonGroup, Table} from "reactstrap";
-import {FormControl,InputGroup,Card,} from "react-bootstrap";
+import React from "react";
+import {Button, ButtonGroup, Table} from "reactstrap";
+import {Card, FormControl, InputGroup,} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faFastBackward,
-    faFastForward, faList, faPlus,
+    faFastForward,
+    faList,
+    faPlus,
     faSearch,
     faStepBackward,
     faStepForward,
@@ -15,6 +15,7 @@ import {
 
 
 class AvailablePlayers extends React.Component {
+
 
     constructor(props) {
         super(props);
@@ -39,8 +40,8 @@ class AvailablePlayers extends React.Component {
             this.findAllPlayers(this.state.pageNumber);
         }, 500);
     };
-    async addPlayerToGame(playerUuid) {
-       await fetch(`/game/player`, {
+     addPlayerToGame(playerUuid) {
+        fetch(`/game/player`, {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -57,7 +58,6 @@ class AvailablePlayers extends React.Component {
             let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== playerUuid);
             this.setState({players: updatedPlayers});
         });
-
     }
     findAllPlayers(currentPage) {
         currentPage -= 1;

@@ -14,6 +14,7 @@ import {
     faTimes, faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import CreateGame from "../game/CreateGame";
+import {getToken} from "../../api/authenticationService";
 
 class PlayerList extends Component {
 
@@ -48,7 +49,8 @@ class PlayerList extends Component {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+getToken()
             },
             body: JSON.stringify(
                 {
