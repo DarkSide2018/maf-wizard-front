@@ -53,9 +53,10 @@ export const Dashboard = (props) => {
         })
             .then(response => response.json())
             .then((data) => {
-                setGameUuid(data.entityUuid)
+                setGameUuid(props,data.entityUuid)
             });
-        props.history.push('/new/table');
+        console.log("game creteed")
+
     }
     const callGameMasters = () => {
         props.history.push('/game/master/all');
@@ -94,6 +95,7 @@ export const Dashboard = (props) => {
     )
 }
 
-export const setGameUuid= (content)=>{
+export const setGameUuid= (props,content)=>{
     localStorage.setItem('GAME_UUID',content);
+    props.history.push('/new/table');
 }

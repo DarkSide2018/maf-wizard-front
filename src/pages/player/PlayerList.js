@@ -13,7 +13,6 @@ import {
     faStepForward,
     faTimes, faTrash,
 } from "@fortawesome/free-solid-svg-icons";
-import CreateGame from "../game/CreateGame";
 import {getToken} from "../../api/authenticationService";
 
 class PlayerList extends Component {

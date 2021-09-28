@@ -1,5 +1,5 @@
 import React, {useContext} from "react";
-import {Button, ButtonGroup, Table} from "reactstrap";
+import {Button, ButtonGroup, Container, Form, FormGroup, Row, Table} from "reactstrap";
 import {Card, FormControl, InputGroup,} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
@@ -13,10 +13,10 @@ import {
     faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import PlayersContext from "./PlayersContext";
+import {getToken} from "../../api/authenticationService";
 
 
 class AvailablePlayers extends React.Component {
-
 
     constructor(props) {
         super(props);
@@ -27,11 +27,39 @@ class AvailablePlayers extends React.Component {
             pageSize: 10,
             sortBy:"nickName",
             sortDir: "asc",
+            gameNumber: null,
+            gameUuid: null,
+            gamePlayers:[],
+            gameName: 'Новый стол'
         };
+
     }
 
     componentDidMount() {
         this.findAllPlayers(this.state.pageNumber)
+        this.getCurrentGame().then(r => {
+            console.log("success promise")
+        })
+    }
+    async getCurrentGame(){
+       await fetch('/game/' + getCurrentGame(), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            }
+        })
+            .then(response => response.json())
+            .then(data => this.setState({
+                    gameNumber: data.gameNumber,
+                    gameUuid: data.gameUuid,
+                    gamePlayers: data.players,
+                    gameName: data.name
+                }
+                )
+            );
+        console.log("gamePlayers -> " + this.state.gamePlayers)
     }
     sortData = () => {
         setTimeout(() => {
@@ -185,13 +213,45 @@ class AvailablePlayers extends React.Component {
             });
     };
     render() {
-        const {players, search, pageNumber, totalPages, isLoading} = this.state;
+        const {
+            players,
+            gamePlayers,
+            search,
+            gameName,
+            pageNumber,
+            totalPages,
+            isLoading
+        } = this.state;
+
+        let gamePlayersList = ''
+        if(gamePlayers !==[] && gamePlayers !== undefined){
+            gamePlayersList = gamePlayers.map(player => {
+                return <span key={player.playerUuid}>
+              | {player.nickName} |
+            </span>
+            });
+        }
 
         if (isLoading) {
             return <p>Loading...</p>;
         }
         return (
             <div className={"bg-dark"}>
+                <div>
+                    <Container>
+                        <Row>
+                            <h3>Название игры : {gameName} : UUID: {this.state.gameUuid}</h3>
+                        </Row>
+                        <Row>
+                            {gamePlayersList}
+                        </Row>
+                        <Form onSubmit={this.handleSubmit}>
+                            <FormGroup>
+
+                            </FormGroup>
+                        </Form>
+                    </Container>
+                </div>
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header>
                         <div style={{ float: "left" }}>

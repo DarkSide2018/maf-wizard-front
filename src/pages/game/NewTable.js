@@ -1,9 +1,7 @@
 
 import AppNavbar from "../AppNavbar";
 import React, {useContext, useState} from 'react';
-import CreateGame from "../game/CreateGame";
 import AvailablePlayers from "../player/AvailablePlayers";
-import PlayersContext from "../player/PlayersContext";
 
 class NewTable extends React.Component {
 
@@ -17,11 +15,8 @@ class NewTable extends React.Component {
 
     render() {
         return( <div className={"bg-dark App"}>
-            <PlayersContext.Provider>
                 <AppNavbar/>
-                <CreateGame/>
                 <AvailablePlayers/>
-            </PlayersContext.Provider>
         </div>);
     }
 
