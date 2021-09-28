@@ -12,7 +12,6 @@ import {
     faStepForward,
     faTimes
 } from "@fortawesome/free-solid-svg-icons";
-import PlayersContext from "./PlayersContext";
 import {getToken} from "../../api/authenticationService";
 
 
@@ -25,11 +24,11 @@ class AvailablePlayers extends React.Component {
             search: "",
             pageNumber: 1,
             pageSize: 10,
-            sortBy:"nickName",
+            sortBy: "nickName",
             sortDir: "asc",
             gameNumber: null,
             gameUuid: null,
-            gamePlayers:[],
+            gamePlayers: [],
             gameName: 'Новый стол'
         };
 
@@ -41,8 +40,9 @@ class AvailablePlayers extends React.Component {
             console.log("success promise")
         })
     }
-    async getCurrentGame(){
-       await fetch('/game/' + getCurrentGame(), {
+
+    async getCurrentGame() {
+        await fetch('/game/' + getCurrentGame(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -52,24 +52,26 @@ class AvailablePlayers extends React.Component {
         })
             .then(response => response.json())
             .then(data => this.setState({
-                    gameNumber: data.gameNumber,
-                    gameUuid: data.gameUuid,
-                    gamePlayers: data.players,
-                    gameName: data.name
-                }
+                        gameNumber: data.gameNumber,
+                        gameUuid: data.gameUuid,
+                        gamePlayers: data.players,
+                        gameName: data.name
+                    }
                 )
             );
         console.log("gamePlayers -> " + this.state.gamePlayers)
     }
+
     sortData = () => {
         setTimeout(() => {
             this.state.sortDir === "asc"
-                ? this.setState({ sortDir: "desc" })
-                : this.setState({ sortDir: "asc" });
+                ? this.setState({sortDir: "desc"})
+                : this.setState({sortDir: "asc"});
             this.findAllPlayers(this.state.pageNumber);
         }, 500);
     };
-     addPlayerToGame(playerUuid) {
+
+    addPlayerToGame(playerUuid) {
         fetch(`/game/player`, {
             method: 'POST',
             headers: {
@@ -84,14 +86,22 @@ class AvailablePlayers extends React.Component {
                 }
             )
         }).then(() => {
+            let addedPlayer = this.state.players.filter(i => i.playerUuid === playerUuid)[0];
+            let oldGamePlayers =  [...this.state.gamePlayers]
+            oldGamePlayers.push(addedPlayer)
             let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== playerUuid);
-            this.setState({players: updatedPlayers});
+            const newGn =  [...new Set(oldGamePlayers)]
+            this.setState({
+                players: updatedPlayers,
+                gamePlayers: newGn
+            });
         });
     }
+
     findAllPlayers(currentPage) {
         currentPage -= 1;
 
-        fetch('/player/all',{
+        fetch('/player/all', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -99,11 +109,11 @@ class AvailablePlayers extends React.Component {
             },
             body: JSON.stringify(
                 {
-                    messageType:"ReadAllPlayersRequest",
-                    nickName:this.state.search,
-                    pageSize:this.state.pageSize,
-                    pageNumber:currentPage,
-                    sortBy:this.state.sortBy,
+                    messageType: "ReadAllPlayersRequest",
+                    nickName: this.state.search,
+                    pageSize: this.state.pageSize,
+                    pageNumber: currentPage,
+                    sortBy: this.state.sortBy,
                     sortDir: this.state.sortDir
                 }
             )
@@ -112,8 +122,8 @@ class AvailablePlayers extends React.Component {
             .then(data => this.setState({
                 players: data.players,
                 totalPages: data.totalPages,
-                totalElements:data.totalElements,
-                pageNumber:data.pageNumber+1
+                totalElements: data.totalElements,
+                pageNumber: data.pageNumber + 1
             }));
     }
 
@@ -185,7 +195,7 @@ class AvailablePlayers extends React.Component {
     };
     searchData = (currentPage) => {
         currentPage -= 1;
-        fetch("/player/like",{
+        fetch("/player/like", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -193,11 +203,11 @@ class AvailablePlayers extends React.Component {
             },
             body: JSON.stringify(
                 {
-                    messageType:"SearchPlayerRequest",
-                    nickName:this.state.search,
-                    pageSize:this.state.pageSize,
-                    pageNumber:currentPage,
-                    sortBy:this.state.sortBy,
+                    messageType: "SearchPlayerRequest",
+                    nickName: this.state.search,
+                    pageSize: this.state.pageSize,
+                    pageNumber: currentPage,
+                    sortBy: this.state.sortBy,
                     sortDir: this.state.sortDir
                 }
             )
@@ -212,6 +222,7 @@ class AvailablePlayers extends React.Component {
                 });
             });
     };
+
     render() {
         const {
             players,
@@ -224,9 +235,9 @@ class AvailablePlayers extends React.Component {
         } = this.state;
 
         let gamePlayersList = ''
-        if(gamePlayers !==[] && gamePlayers !== undefined){
+        if (gamePlayers !== [] && gamePlayers !== undefined) {
             gamePlayersList = gamePlayers.map(player => {
-                return <span key={player.playerUuid}>
+                return <span key={player.playerUuid + "gm"}>
               | {player.nickName} |
             </span>
             });
@@ -254,10 +265,10 @@ class AvailablePlayers extends React.Component {
                 </div>
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header>
-                        <div style={{ float: "left" }}>
-                            <FontAwesomeIcon icon={faList} /> Игроки
+                        <div style={{float: "left"}}>
+                            <FontAwesomeIcon icon={faList}/> Игроки
                         </div>
-                        <div style={{ float: "right" }}>
+                        <div style={{float: "right"}}>
                             <InputGroup size="sm">
                                 <FormControl
                                     placeholder="Search"
@@ -273,7 +284,7 @@ class AvailablePlayers extends React.Component {
                                         type="button"
                                         onClick={this.searchData}
                                     >
-                                        <FontAwesomeIcon icon={faSearch} />
+                                        <FontAwesomeIcon icon={faSearch}/>
                                     </Button>
                                     <Button
                                         size="sm"
@@ -281,7 +292,7 @@ class AvailablePlayers extends React.Component {
                                         type="button"
                                         onClick={this.cancelSearch}
                                     >
-                                        <FontAwesomeIcon icon={faTimes} />
+                                        <FontAwesomeIcon icon={faTimes}/>
                                     </Button>
                                 </InputGroup.Append>
                             </InputGroup>
@@ -318,9 +329,9 @@ class AvailablePlayers extends React.Component {
                                                 <Button
                                                     size="sm"
                                                     variant="outline-danger"
-                                                    onClick={()=>this.addPlayerToGame(player.playerUuid)}
+                                                    onClick={() => this.addPlayerToGame(player.playerUuid)}
                                                 >
-                                                    <FontAwesomeIcon icon={faPlus} />
+                                                    <FontAwesomeIcon icon={faPlus}/>
                                                 </Button>
                                             </ButtonGroup>
                                         </td>
@@ -332,10 +343,10 @@ class AvailablePlayers extends React.Component {
                     </Card.Body>
                     {players.length > 0 ? (
                         <Card.Footer>
-                            <div style={{ float: "left" }}>
+                            <div style={{float: "left"}}>
                                 Showing Page {pageNumber} of {totalPages}
                             </div>
-                            <div style={{ float: "right" }}>
+                            <div style={{float: "right"}}>
                                 <InputGroup size="sm">
                                     <InputGroup.Prepend>
                                         <Button
@@ -344,7 +355,7 @@ class AvailablePlayers extends React.Component {
                                             disabled={pageNumber === 1}
                                             onClick={this.firstPage}
                                         >
-                                            <FontAwesomeIcon icon={faFastBackward} /> First
+                                            <FontAwesomeIcon icon={faFastBackward}/> First
                                         </Button>
                                         <Button
                                             type="button"
@@ -352,7 +363,7 @@ class AvailablePlayers extends React.Component {
                                             disabled={pageNumber === 1}
                                             onClick={this.prevPage}
                                         >
-                                            <FontAwesomeIcon icon={faStepBackward} /> Prev
+                                            <FontAwesomeIcon icon={faStepBackward}/> Prev
                                         </Button>
                                     </InputGroup.Prepend>
                                     <FormControl
@@ -367,7 +378,7 @@ class AvailablePlayers extends React.Component {
                                             disabled={pageNumber === totalPages}
                                             onClick={this.nextPage}
                                         >
-                                            <FontAwesomeIcon icon={faStepForward} /> Next
+                                            <FontAwesomeIcon icon={faStepForward}/> Next
                                         </Button>
                                         <Button
                                             type="button"
@@ -375,7 +386,7 @@ class AvailablePlayers extends React.Component {
                                             disabled={pageNumber === totalPages}
                                             onClick={this.lastPage}
                                         >
-                                            <FontAwesomeIcon icon={faFastForward} /> Last
+                                            <FontAwesomeIcon icon={faFastForward}/> Last
                                         </Button>
                                     </InputGroup.Append>
                                 </InputGroup>
@@ -388,8 +399,8 @@ class AvailablePlayers extends React.Component {
     }
 
 }
+
 export default AvailablePlayers;
-AvailablePlayers.contextType = PlayersContext;
-export const getCurrentGame=()=>{
+export const getCurrentGame = () => {
     return localStorage.getItem('GAME_UUID');
 }
