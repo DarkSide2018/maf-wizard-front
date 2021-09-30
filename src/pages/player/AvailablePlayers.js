@@ -3,6 +3,7 @@ import {Button, ButtonGroup, Container, Form, FormGroup, Row, Table} from "react
 import {Card, FormControl, InputGroup,} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
+    faCrosshairs,
     faFastBackward,
     faFastForward,
     faList,
@@ -13,6 +14,7 @@ import {
     faTimes
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
+import AppNavbar from "../AppNavbar";
 
 
 class AvailablePlayers extends React.Component {
@@ -31,7 +33,7 @@ class AvailablePlayers extends React.Component {
             gamePlayers: [],
             gameName: 'Новый стол'
         };
-
+        this.confirmGame = this.confirmGame.bind(this);
     }
 
     componentDidMount() {
@@ -222,6 +224,10 @@ class AvailablePlayers extends React.Component {
                 });
             });
     };
+     confirmGame(event){
+        event.preventDefault();
+        this.props.history.push('/game/confirm');
+    }
 
     render() {
         const {
@@ -248,6 +254,7 @@ class AvailablePlayers extends React.Component {
         }
         return (
             <div className={"bg-dark"}>
+                <AppNavbar/>
                 <div>
                     <Container>
                         <Row>
@@ -256,10 +263,8 @@ class AvailablePlayers extends React.Component {
                         <Row>
                             {gamePlayersList}
                         </Row>
-                        <Form onSubmit={this.handleSubmit}>
-                            <FormGroup>
-
-                            </FormGroup>
+                        <Form onSubmit={this.confirmGame}>
+                            <Button color="primary" type="submit">Подтвердить   <FontAwesomeIcon icon={faCrosshairs}/></Button>{' '}
                         </Form>
                     </Container>
                 </div>

@@ -47,7 +47,7 @@ class GameList extends Component {
                 <td style={{whiteSpace: 'nowrap'}}>{game.gameNumber}</td>
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/game/" + game.gameUuid}>Edit</Button>
+                        <Button size="sm" color="primary" tag={Link} to={"/game/component/" + game.gameUuid}>Edit</Button>
                         <Button size="sm" color="danger" onClick={() => this.remove(game.gameUuid)}>Delete</Button>
                     </ButtonGroup>
                 </td>
