@@ -5,6 +5,9 @@ import {Card, FormControl, InputGroup,} from "react-bootstrap";
 import {getToken} from "../../api/authenticationService";
 import {getCurrentGame} from "../player/AvailablePlayers";
 import AppNavbar from "../AppNavbar";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {decrementPoints, incrementPoints} from "./IncrementButtons";
 
 
 class GameWithConfirmedPlayers extends React.Component {
@@ -30,8 +33,9 @@ class GameWithConfirmedPlayers extends React.Component {
         this.getCurrentGameAfterMount()
 
     }
-     getCurrentGameAfterMount() {
-         fetch('/game/' + getCurrentGame(), {
+
+    getCurrentGameAfterMount() {
+        fetch('/game/' + getCurrentGame(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -71,7 +75,6 @@ class GameWithConfirmedPlayers extends React.Component {
             return <p>Loading...</p>;
         }
         return (
-
             <div className={"bg-dark"}>
                 <AppNavbar/>
                 <div>
@@ -106,7 +109,25 @@ class GameWithConfirmedPlayers extends React.Component {
                                 gamePlayers.map((player) => (
                                     <tr key={player.playerUuid}>
                                         <td>{player.nickName}</td>
-                                        <td>{player.points}</td>
+                                        <td>
+                                            <Button
+                                                size="sm"
+                                                variant="outline-danger"
+                                                onClick={() => decrementPoints(this,player.playerUuid)}
+                                            >
+                                                <FontAwesomeIcon icon={faMinus}/>
+                                            </Button>
+                                            <span style={{padding:"10px"}}>
+                                                {player.points}
+                                            </span>
+                                            <Button
+                                                size="sm"
+                                                variant="outline-danger"
+                                                onClick={() => incrementPoints(this,player.playerUuid)}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus}/>
+                                            </Button>
+                                        </td>
                                         <td>{player.additionalPoints}</td>
                                         <td>{player.penalties}</td>
                                         <td>{player.wasKilled}</td>
