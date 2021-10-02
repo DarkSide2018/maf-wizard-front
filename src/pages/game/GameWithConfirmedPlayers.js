@@ -7,7 +7,13 @@ import {getCurrentGame} from "../player/AvailablePlayers";
 import AppNavbar from "../AppNavbar";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
-import {decrementPoints, incrementPoints} from "./IncrementButtons";
+import {
+    decrementAdditionalPoints, decrementPenalties,
+    decrementPoints, decrementWasKilled,
+    incrementAdditionalPoints,
+    incrementPenalties,
+    incrementPoints, incrementWasKilled
+} from "./IncrementButtons";
 
 
 class GameWithConfirmedPlayers extends React.Component {
@@ -62,15 +68,6 @@ class GameWithConfirmedPlayers extends React.Component {
             isLoading
         } = this.state;
 
-        let gamePlayersList = ''
-        if (gamePlayers !== [] && gamePlayers !== undefined) {
-            gamePlayersList = gamePlayers.map(player => {
-                return <span key={player.playerUuid + "gm"}>
-              | {player.nickName} |
-            </span>
-            });
-        }
-
         if (isLoading) {
             return <p>Loading...</p>;
         }
@@ -81,9 +78,6 @@ class GameWithConfirmedPlayers extends React.Component {
                     <Container>
                         <Row>
                             <h3>Название игры : {gameName} </h3>
-                        </Row>
-                        <Row>
-                            {gamePlayersList}
                         </Row>
                     </Container>
                 </div>
@@ -128,9 +122,63 @@ class GameWithConfirmedPlayers extends React.Component {
                                                 <FontAwesomeIcon icon={faPlus}/>
                                             </Button>
                                         </td>
-                                        <td>{player.additionalPoints}</td>
-                                        <td>{player.penalties}</td>
-                                        <td>{player.wasKilled}</td>
+                                        <td>
+                                            <Button
+                                                size="sm"
+                                                variant="outline-danger"
+                                                onClick={() => decrementAdditionalPoints(this,player.playerUuid)}
+                                            >
+                                                <FontAwesomeIcon icon={faMinus}/>
+                                            </Button>
+                                             <span style={{padding:"10px"}}>
+                                                {player.additionalPoints}
+                                            </span>
+                                            <Button
+                                                size="sm"
+                                                variant="outline-danger"
+                                                onClick={() => incrementAdditionalPoints(this,player.playerUuid)}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus}/>
+                                            </Button>
+                                        </td>
+                                        <td>
+                                            <Button
+                                                size="sm"
+                                                variant="outline-danger"
+                                                onClick={() => decrementPenalties(this,player.playerUuid)}
+                                            >
+                                                <FontAwesomeIcon icon={faMinus}/>
+                                            </Button>
+                                            <span style={{padding:"10px"}}>
+                                                {player.penalties}
+                                            </span>
+                                            <Button
+                                                size="sm"
+                                                variant="outline-danger"
+                                                onClick={() => incrementPenalties(this,player.playerUuid)}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus}/>
+                                            </Button>
+                                        </td>
+                                        <td>
+                                            <Button
+                                                size="sm"
+                                                variant="outline-danger"
+                                                onClick={() => decrementWasKilled(this,player.playerUuid)}
+                                            >
+                                                <FontAwesomeIcon icon={faMinus}/>
+                                            </Button>
+                                            <span style={{padding:"10px"}}>
+                                                {player.wasKilled}
+                                            </span>
+                                            <Button
+                                                size="sm"
+                                                variant="outline-danger"
+                                                onClick={() => incrementWasKilled(this,player.playerUuid)}
+                                            >
+                                                <FontAwesomeIcon icon={faPlus}/>
+                                            </Button>
+                                        </td>
                                         <td>{player.games}</td>
                                     </tr>
                                 ))
@@ -142,7 +190,6 @@ class GameWithConfirmedPlayers extends React.Component {
             </div>
         );
     }
-
 }
 
 export default GameWithConfirmedPlayers;
