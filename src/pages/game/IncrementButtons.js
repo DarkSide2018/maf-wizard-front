@@ -17,7 +17,7 @@ export const updatePlayerInCurrentGame = (player) =>{
 }
 export const setOthersIntoState = (thatObject,others)=>{
     thatObject.setState({
-            gamePlayers: [...new Set(others)]
+            gamePlayers: [...new Set(others.sort((a, b) => a.nickName.localeCompare(b.nickName)))]
         }
     )
 }
@@ -102,6 +102,148 @@ export const decrementWasKilled = (thatObject,playerUuid) => {
     let points = updatedPlayer.wasKilled
     points--;
     updatedPlayer.wasKilled = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const decrementBestMove = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.bestMove
+    points--;
+    updatedPlayer.bestMove = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const incrementBestMove = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.bestMove
+    points++;
+    updatedPlayer.bestMove = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+
+export const incrementVictoryRed = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.victoriesRed
+    points++;
+    updatedPlayer.victoriesRed = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const decrementVictoryRed = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.victoriesRed
+    points--;
+    updatedPlayer.victoriesRed = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const decrementDefeatRed = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.defeatRed
+    points--;
+    updatedPlayer.defeatRed = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const incrementDefeatRed = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.defeatRed
+    points++;
+    updatedPlayer.defeatRed = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const incrementVictoryBlack = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.victoriesBlack
+    points++;
+    updatedPlayer.victoriesBlack = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const decrementVictoryBlack = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.victoriesBlack
+    points--;
+    updatedPlayer.victoriesBlack = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+
+export const incrementDefeatBlack = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.defeatBlack
+    points++;
+    updatedPlayer.defeatBlack = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const decrementDefeatBlack = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.defeatBlack
+    points--;
+    updatedPlayer.defeatBlack = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const decrementDon = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.don
+    points--;
+    updatedPlayer.don = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const incrementDon = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.don
+    points++;
+    updatedPlayer.don = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const incrementSheriff = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.sheriff
+    points++;
+    updatedPlayer.sheriff = points
+    others.push(updatedPlayer)
+    setOthersIntoState(thatObject,others)
+    updatePlayerInCurrentGame(updatedPlayer)
+}
+export const decrementSheriff = (thatObject,playerUuid) => {
+    let others = [...thatObject.state.gamePlayers].filter(i => i.playerUuid !== playerUuid);
+    let updatedPlayer = [...thatObject.state.gamePlayers].filter(i => i.playerUuid === playerUuid)[0];
+    let points = updatedPlayer.sheriff
+    points--;
+    updatedPlayer.sheriff = points
     others.push(updatedPlayer)
     setOthersIntoState(thatObject,others)
     updatePlayerInCurrentGame(updatedPlayer)
