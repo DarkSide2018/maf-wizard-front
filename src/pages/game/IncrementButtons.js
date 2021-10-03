@@ -15,6 +15,27 @@ export const updatePlayerInCurrentGame = (player) =>{
         body: body,
     })
 }
+export const updatePlayersArrayToFreeStatus = (players) =>{
+    let playersArray = players.map(function (item){
+        item.status = 'FREE'
+        item.messageType = 'UpdatePlayerRequest'
+        return item ;
+    });
+    let query = {
+        messageType: "UpdatePlayerArrayRequest",
+    }
+    query.players = playersArray
+    let body = JSON.stringify(query);
+    fetch('/player', {
+        method: 'PATCH',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getToken()
+        },
+        body: body,
+    })
+}
 export const setOthersIntoState = (thatObject,others)=>{
     thatObject.setState({
             gamePlayers: [...new Set(others.sort((a, b) => a.nickName.localeCompare(b.nickName)))]
@@ -247,4 +268,30 @@ export const decrementSheriff = (thatObject,playerUuid) => {
     others.push(updatedPlayer)
     setOthersIntoState(thatObject,others)
     updatePlayerInCurrentGame(updatedPlayer)
+}
+export const endGame = (thatObject) => {
+
+    updatePlayersArrayToFreeStatus(thatObject.state.gamePlayers)
+
+    let query = {
+        messageType: "UpdateGameRequest",
+        gameUuid: thatObject.state.gameUuid,
+        status:'FINISHED'
+    }
+    let body = JSON.stringify(query);
+    fetch('/game', {
+        method: 'PUT',
+        headers: {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + getToken()
+        },
+        body: body,
+    })
+    removeGameUuid()
+    thatObject.props.history.push('/dashboard');
+}
+
+export const removeGameUuid= ()=>{
+    localStorage.removeItem('GAME_UUID');
 }

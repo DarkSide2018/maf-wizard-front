@@ -18,8 +18,9 @@ import {
     decrementSheriff,
     decrementVictoryBlack,
     decrementVictoryRed,
-    decrementWasKilled,
-    incrementAdditionalPoints, incrementBestMove,
+    decrementWasKilled, endGame,
+    incrementAdditionalPoints,
+    incrementBestMove,
     incrementDefeatBlack,
     incrementDefeatRed,
     incrementDon,
@@ -98,7 +99,7 @@ class GameWithConfirmedPlayers extends React.Component {
                 </div>
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Body>
-                        <Table bordered hover striped variant="dark" style={{width:"100%"}}>
+                        <Table bordered hover striped variant="dark" style={{width: "100%"}}>
                             <thead className={"text-white"}>
                             <tr>
                                 <th className={"confTh"}>Имя</th>
@@ -336,6 +337,18 @@ class GameWithConfirmedPlayers extends React.Component {
                                     </tr>
                                 ))
                             )}
+                            <tr>
+                                <td colSpan={"12"} style={{textAlign: "center"}}>
+                                    <Button
+                                        size="xs"
+                                        variant="outline-danger"
+                                        onClick={() => endGame(this)}
+                                        style={{padding: "15px",margin:"15px"}}
+                                    >
+                                        Закончить игру
+                                    </Button>
+                                </td>
+                            </tr>
                             </tbody>
                         </Table>
                     </Card.Body>

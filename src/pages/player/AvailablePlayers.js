@@ -38,13 +38,11 @@ class AvailablePlayers extends React.Component {
 
     componentDidMount() {
         this.findAllPlayers(this.state.pageNumber)
-        this.getCurrentGame().then(r => {
-            console.log("success promise")
-        })
+        getCurrentGame()
     }
 
-    async getCurrentGame() {
-        await fetch('/game/' + getCurrentGame(), {
+     getCurrentGame() {
+         fetch('/game/' + getCurrentGame(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',

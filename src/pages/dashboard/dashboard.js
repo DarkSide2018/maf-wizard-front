@@ -55,7 +55,8 @@ export const Dashboard = (props) => {
             .then((data) => {
                 setGameUuid(props,data.entityUuid)
             });
-        console.log("game creteed")
+        props.history.push('/new/table');
+        console.log("game created")
 
     }
     const callGameMasters = () => {
@@ -97,5 +98,4 @@ export const Dashboard = (props) => {
 
 export const setGameUuid= (props,content)=>{
     localStorage.setItem('GAME_UUID',content);
-    props.history.push('/new/table');
 }
