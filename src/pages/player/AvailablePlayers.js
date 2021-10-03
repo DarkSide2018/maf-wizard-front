@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
 import AppNavbar from "../AppNavbar";
+import {setGameUuid} from "../dashboard/dashboard";
 
 
 class AvailablePlayers extends React.Component {
@@ -34,15 +35,64 @@ class AvailablePlayers extends React.Component {
             gameName: 'Новый стол'
         };
         this.confirmGame = this.confirmGame.bind(this);
+        this.newTable = this.newTable.bind(this);
+        this.getDraftGame = this.getDraftGame.bind(this);
     }
 
     componentDidMount() {
         this.findAllPlayers(this.state.pageNumber)
-        getCurrentGame()
+        this.getDraftGame()
     }
 
-     getCurrentGame() {
-         fetch('/game/' + getCurrentGame(), {
+    getDraftGame() {
+        fetch('/game/draft', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            }
+        }).then(response => {
+            if (response.ok) {
+                response.json().then(data => {
+                        setGameUuid(data.gameUuid)
+                    }
+                )
+            } else if (response.status === 404) {
+                this.newTable()
+            } else {
+                return Promise.reject('some other error: ' + response.status)
+            }
+        })
+    }
+
+    newTable() {
+        let queryItem = {
+            messageType: 'CreateGameRequest',
+            gameUuid: null,
+            name: 'Новый Стол',
+            gameNumber: '',
+            players: []
+        }
+        fetch('/game', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(queryItem),
+        })
+            .then(response => response.json())
+            .then((data) => {
+                setGameUuid(data.entityUuid)
+            });
+
+        this.props.history.push('/new/table');
+    }
+
+    fetchCurrentGame() {
+        fetch('/game/' + getCurrentGame(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -87,10 +137,10 @@ class AvailablePlayers extends React.Component {
             )
         }).then(() => {
             let addedPlayer = this.state.players.filter(i => i.playerUuid === playerUuid)[0];
-            let oldGamePlayers =  [...this.state.gamePlayers]
+            let oldGamePlayers = [...this.state.gamePlayers]
             oldGamePlayers.push(addedPlayer)
             let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== playerUuid);
-            const newGn =  [...new Set(oldGamePlayers)]
+            const newGn = [...new Set(oldGamePlayers)]
             this.setState({
                 players: updatedPlayers,
                 gamePlayers: newGn
@@ -222,7 +272,8 @@ class AvailablePlayers extends React.Component {
                 });
             });
     };
-     confirmGame(event){
+
+    confirmGame(event) {
         event.preventDefault();
         this.props.history.push('/game/confirm');
     }
@@ -262,7 +313,8 @@ class AvailablePlayers extends React.Component {
                             {gamePlayersList}
                         </Row>
                         <Form onSubmit={this.confirmGame}>
-                            <Button color="primary" type="submit">Подтвердить   <FontAwesomeIcon icon={faCrosshairs}/></Button>{' '}
+                            <Button color="primary" type="submit">Подтвердить <FontAwesomeIcon
+                                icon={faCrosshairs}/></Button>{' '}
                         </Form>
                     </Container>
                 </div>

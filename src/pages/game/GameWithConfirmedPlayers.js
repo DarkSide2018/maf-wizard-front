@@ -31,6 +31,7 @@ import {
     incrementVictoryRed,
     incrementWasKilled
 } from "./IncrementButtons";
+import {Link} from "react-router-dom";
 
 
 class GameWithConfirmedPlayers extends React.Component {
@@ -339,14 +340,11 @@ class GameWithConfirmedPlayers extends React.Component {
                             )}
                             <tr>
                                 <td colSpan={"12"} style={{textAlign: "center"}}>
+
                                     <Button
-                                        size="xs"
-                                        variant="outline-danger"
                                         onClick={() => endGame(this)}
                                         style={{padding: "15px",margin:"15px"}}
-                                    >
-                                        Закончить игру
-                                    </Button>
+                                        color="success" tag={Link} to="/dashboard"> Закончить игру</Button>
                                 </td>
                             </tr>
                             </tbody>

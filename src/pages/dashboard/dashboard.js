@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import {Button, Container} from 'react-bootstrap';
+import {Container} from 'react-bootstrap';
 import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
 import {fetchUserData, getToken} from '../../api/authenticationService';
-import {Row} from "reactstrap";
+import {Button, ButtonGroup, Row} from "reactstrap";
+import {Link} from "react-router-dom";
 
 
 const MainWrapper = styled.div`
@@ -34,31 +35,7 @@ export const Dashboard = (props) => {
     const callPlayers = () => {
         props.history.push('/player/all');
     }
-    const newTable = () => {
-        let queryItem = {
-            messageType: 'CreateGameRequest',
-            gameUuid: null,
-            name: 'Новый Стол',
-            gameNumber: '',
-            players: []
-        }
-        fetch('/game', {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getToken()
-            },
-            body: JSON.stringify(queryItem),
-        })
-            .then(response => response.json())
-            .then((data) => {
-                setGameUuid(props,data.entityUuid)
-            });
-        props.history.push('/new/table');
-        console.log("game created")
 
-    }
     const callGameMasters = () => {
         props.history.push('/game/master/all');
     }
@@ -79,7 +56,10 @@ export const Dashboard = (props) => {
                         <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Edit players</Button>
                     </Row>
                     <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => newTable()}>New Table</Button>
+                        <ButtonGroup>
+                            <Button color="success" tag={Link} to="/new/table">create table</Button>
+                        </ButtonGroup>
+
                     </Row>
                     <Row>
                         <Button style={{marginTop: '5px'}} onClick={() => callGameMasters()}>Edit gameMasters</Button>
@@ -96,6 +76,6 @@ export const Dashboard = (props) => {
     )
 }
 
-export const setGameUuid= (props,content)=>{
+export const setGameUuid= (content)=>{
     localStorage.setItem('GAME_UUID',content);
 }

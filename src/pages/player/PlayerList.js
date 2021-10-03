@@ -250,8 +250,7 @@ class PlayerList extends Component {
                                         <td>{player.games}</td>
                                         <td>
                                             <ButtonGroup>
-                                                <Link
-                                                    to={"/player/" + player.playerUuid}
+                                                <Link to={"/player/" + player.playerUuid}
                                                     className="btn btn-sm btn-outline-primary"
                                                 >
                                                     <FontAwesomeIcon icon={faEdit} />

@@ -20,7 +20,7 @@ function App() {
         <Switch>
           <Route exact path="/" component={LoginPage}/>
           <Route exact path="/dashboard" component={Dashboard}/>
-          <Route exact path="/new/table" component={AvailablePlayers}/>
+          <Route exact path='/new/table' component={AvailablePlayers}/>
           <Route  path='/player/all' exact={true} component={PlayerList}/>
           <Route  path='/player/:id' component={PlayerEdit}/>
           <Route  path='/game/master/all' exact={true} component={GameMasterList}/>

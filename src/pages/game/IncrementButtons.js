@@ -275,7 +275,7 @@ export const endGame = (thatObject) => {
 
     let query = {
         messageType: "UpdateGameRequest",
-        gameUuid: thatObject.state.gameUuid,
+        gameUuid: getCurrentGame(),
         status:'FINISHED'
     }
     let body = JSON.stringify(query);
@@ -289,7 +289,6 @@ export const endGame = (thatObject) => {
         body: body,
     })
     removeGameUuid()
-    thatObject.props.history.push('/dashboard');
 }
 
 export const removeGameUuid= ()=>{
