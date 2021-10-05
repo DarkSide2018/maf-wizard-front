@@ -19,6 +19,7 @@ export const Dashboard = (props) => {
 
     useEffect(() => {
         fetchUserData().then((response) => {
+            console.log("response -> " + JSON.stringify(response.data))
             setData(response.data);
         }).catch((e) => {
             localStorage.clear();
@@ -53,14 +54,14 @@ export const Dashboard = (props) => {
                 <br></br>
                 <Container>
                     <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Edit players</Button>
-                    </Row>
-                    <Row>
                         <ButtonGroup>
                             <Button color="success" tag={Link} to="/new/table">create table</Button>
                         </ButtonGroup>
-
                     </Row>
+                    <Row>
+                        <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Edit players</Button>
+                    </Row>
+
                     <Row>
                         <Button style={{marginTop: '5px'}} onClick={() => callGameMasters()}>Edit gameMasters</Button>
                     </Row>
@@ -76,6 +77,3 @@ export const Dashboard = (props) => {
     )
 }
 
-export const setGameUuid= (content)=>{
-    localStorage.setItem('GAME_UUID',content);
-}

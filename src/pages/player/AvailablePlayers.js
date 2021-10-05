@@ -15,7 +15,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
 import AppNavbar from "../AppNavbar";
-import {setGameUuid} from "../dashboard/dashboard";
 
 
 class AvailablePlayers extends React.Component {
@@ -89,27 +88,6 @@ class AvailablePlayers extends React.Component {
             });
 
         this.props.history.push('/new/table');
-    }
-
-    fetchCurrentGame() {
-        fetch('/game/' + getCurrentGame(), {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getToken()
-            }
-        })
-            .then(response => response.json())
-            .then(data => this.setState({
-                        gameNumber: data.gameNumber,
-                        gameUuid: data.gameUuid,
-                        gamePlayers: data.players,
-                        gameName: data.name
-                    }
-                )
-            );
-        console.log("gamePlayers -> " + this.state.gamePlayers)
     }
 
     sortData = () => {
@@ -458,4 +436,7 @@ class AvailablePlayers extends React.Component {
 export default AvailablePlayers;
 export const getCurrentGame = () => {
     return localStorage.getItem('GAME_UUID');
+}
+export const setGameUuid= (content)=>{
+    localStorage.setItem('GAME_UUID',content);
 }
