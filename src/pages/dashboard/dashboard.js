@@ -59,6 +59,11 @@ export const Dashboard = (props) => {
                         </ButtonGroup>
                     </Row>
                     <Row>
+                        <ButtonGroup>
+                            <Button color="success" tag={Link} to="/game/ticket">create game form</Button>
+                        </ButtonGroup>
+                    </Row>
+                    <Row>
                         <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Edit players</Button>
                     </Row>
 

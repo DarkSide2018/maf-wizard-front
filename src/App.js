@@ -12,6 +12,7 @@ import GameEdit from "./pages/game/GameEdit";
 
 import GameWithConfirmedPlayers from "./pages/game/GameWithConfirmedPlayers";
 import AvailablePlayers from "./pages/player/AvailablePlayers";
+import GameTicket from "./pages/game/GameTicket";
 
 
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route  path='/game/all' component={GameList}/>
           <Route  path='/game/component/:id' component={GameEdit}/>
           <Route  path='/game/confirm' component={GameWithConfirmedPlayers}/>
+          <Route  path='/game/ticket' component={GameTicket}/>
         </Switch>
       </BrowserRouter>
   );
