@@ -259,6 +259,21 @@ class AvailablePlayers extends React.Component {
     }
     createGameTicket(event) {
         event.preventDefault();
+        let queryItem = {
+            messageType:'UpdateGameRequest',
+            gameUuid: getCurrentGame(),
+            status:'ACTIVE',
+            players: [...new Set(this.state.gamePlayers)]
+        }
+         fetch('/game', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+getToken()
+            },
+            body: JSON.stringify(queryItem),
+        });
         this.props.history.push('/game/ticket');
     }
 

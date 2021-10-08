@@ -38,8 +38,6 @@ class GameEdit extends Component {
     }
 
     async handleSubmit(event) {
-        let parsedToken = JSON.parse(atob(getToken().split('.')[1]));
-        console.log("token -> " + JSON.stringify(parsedToken))
         event.preventDefault();
         let item = this.state;
         let queryItem = item.item;
