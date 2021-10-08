@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
 import AppNavbar from "../AppNavbar";
+import {Link} from "react-router-dom";
 
 
 class AvailablePlayers extends React.Component {
@@ -34,6 +35,7 @@ class AvailablePlayers extends React.Component {
             gameName: 'Новый стол'
         };
         this.confirmGame = this.confirmGame.bind(this);
+        this.createGameTicket = this.createGameTicket.bind(this);
         this.newTable = this.newTable.bind(this);
         this.getDraftGame = this.getDraftGame.bind(this);
     }
@@ -255,6 +257,10 @@ class AvailablePlayers extends React.Component {
         event.preventDefault();
         this.props.history.push('/game/confirm');
     }
+    createGameTicket(event) {
+        event.preventDefault();
+        this.props.history.push('/game/ticket');
+    }
 
     render() {
         const {
@@ -292,6 +298,10 @@ class AvailablePlayers extends React.Component {
                         </Row>
                         <Form onSubmit={this.confirmGame}>
                             <Button color="primary" type="submit">Подтвердить <FontAwesomeIcon
+                                icon={faCrosshairs}/></Button>{' '}
+                        </Form>
+                        <Form onSubmit={this.createGameTicket}>
+                            <Button color="primary" type="submit">Создать бланк для игры <FontAwesomeIcon
                                 icon={faCrosshairs}/></Button>{' '}
                         </Form>
                     </Container>
