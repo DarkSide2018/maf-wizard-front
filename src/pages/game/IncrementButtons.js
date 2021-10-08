@@ -271,11 +271,14 @@ export const decrementSheriff = (thatObject,playerUuid) => {
 }
 export const endGame = (thatObject) => {
 
-    updatePlayersArrayToFreeStatus(thatObject.state.gamePlayers)
+    let gamePlayers = thatObject.state.gamePlayers;
+
+    updatePlayersArrayToFreeStatus(gamePlayers)
 
     let query = {
         messageType: "UpdateGameRequest",
         gameUuid: getCurrentGame(),
+        players: gamePlayers,
         status:'FINISHED'
     }
     let body = JSON.stringify(query);
