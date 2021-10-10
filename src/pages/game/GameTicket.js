@@ -1,9 +1,11 @@
 import React from "react";
-import {Container, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Table} from "reactstrap";
+import {Container, Table} from "reactstrap";
 import {Card,} from "react-bootstrap";
 import {getToken} from "../../api/authenticationService";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faList} from "@fortawesome/free-solid-svg-icons";
+import Drop from "./Drop";
+import DropDownRole from "./DropDownRole";
 
 
 class GameTicket extends React.Component {
@@ -17,29 +19,28 @@ class GameTicket extends React.Component {
             availablePlayersForMurder: [],
             availablePlayersForSheriff: [],
             availablePlayersForDon: [],
-            availableForLeftGame:[],
-            gameName: 'Новый стол'
+            availableForLeftGame: [],
+            availableRoles: [
+                'шериф',
+                'Дон',
+                'мафиози1',
+                'мафиози2',
+                'мирный1',
+                'мирный2',
+                'мирный3',
+                'мирный4',
+                'мирный5',
+                'мирный6'],
+            gameName: 'Новый стол',
+            isOpen: [
+                {
+                    key: '',
+                    open: false
+                }
+            ]
+
+
         };
-        this.drop = this.drop.bind(this);
-    }
-    drop = () => {
-        return (
-            <Dropdown isOpen={false}>
-                <DropdownToggle caret>
-                    Dropdown
-                </DropdownToggle>
-                <DropdownMenu>
-                    <DropdownItem header>Header</DropdownItem>
-                    <DropdownItem>Some Action</DropdownItem>
-                    <DropdownItem text>Dropdown Item Text</DropdownItem>
-                    <DropdownItem disabled>Action (disabled)</DropdownItem>
-                    <DropdownItem divider />
-                    <DropdownItem>Foo Action</DropdownItem>
-                    <DropdownItem>Bar Action</DropdownItem>
-                    <DropdownItem>Quo Action</DropdownItem>
-                </DropdownMenu>
-            </Dropdown>
-        );
     }
 
     componentDidMount() {
@@ -59,6 +60,12 @@ class GameTicket extends React.Component {
             .then(data => {
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                     this.setState({
+                            isOpen:  [
+                                {
+                                    key: '',
+                                    open: false
+                                }
+                            ],
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
                             nights: data.nights,
@@ -66,6 +73,7 @@ class GameTicket extends React.Component {
                             gameName: data.name,
                             availablePlayersForMurder: responsePlayers,
                             availablePlayersForSheriff: responsePlayers,
+                            availableForLeftGame: responsePlayers,
                             availablePlayersForDon: responsePlayers,
                         }
                     )
@@ -79,47 +87,49 @@ class GameTicket extends React.Component {
             availablePlayersForSheriff,
             availablePlayersForDon,
             availableForLeftGame,
+            availableRoles,
             gamePlayers,
             gameName,
             isLoading
         } = this.state;
 
 
-
         let availablePlayersForMurderList = ''
         if (availablePlayersForMurder !== [] && availablePlayersForMurder !== undefined) {
             availablePlayersForMurderList = makeArray(7, "").map(item => {
-                return <td>
-                    {this.drop()}
+                let key = generateGuid();
+                return <td key={key}>
+                    <Drop players={availablePlayersForMurder}/>
                 </td>
             })
         }
         let availablePlayersForSheriffList = ''
         if (availablePlayersForSheriff !== [] && availablePlayersForSheriff !== undefined) {
             availablePlayersForSheriffList = makeArray(7, "").map(item => {
-                return <td>
-                    {this.drop()}
+                let key = generateGuid();
+                return <td key={key}>
+                    <Drop players={availablePlayersForSheriff}/>
                 </td>
             })
         }
         let availablePlayersForDonList = ''
         if (availablePlayersForDon !== [] && availablePlayersForDon !== undefined) {
             availablePlayersForDonList = makeArray(7, "").map(item => {
-                return <td>
-                    {this.drop()}
+                let key = generateGuid();
+                return <td key={key}>
+                    <Drop key={key} players={availablePlayersForDon}/>
                 </td>
             })
         }
         let availableForLeftGameList = ''
         if (availableForLeftGame !== [] && availableForLeftGame !== undefined) {
             availableForLeftGameList = makeArray(7, "").map(item => {
-                return <td>
-                    {this.drop()}
+                let key = generateGuid();
+                return <td key={key}>
+                    <Drop players={availableForLeftGame}/>
                 </td>
             })
         }
-
-
         if (isLoading) {
             return <p>Loading...</p>;
         }
@@ -167,8 +177,40 @@ class GameTicket extends React.Component {
                             </tbody>
                         </Table>
                     </Card.Body>
-                    <Card.Footer>
-                    </Card.Footer>
+                </Card>
+                <Card  className={"border border-dark bg-dark text-white"}>
+                <Card.Body>
+                    <Table bordered hover striped variant="dark">
+                        <thead className={"text-white"}>
+                        <tr>
+                            <th>Номер слота</th>
+                            <th>Имя игрока</th>
+                            <th>Роль игрока</th>
+                            <th>Замечание</th>
+                        </tr>
+                        </thead>
+                        <tbody className={"text-white"}>
+                        {gamePlayers.map((item,index) => {
+                            return <tr>
+                                <td>
+                                    {index}
+                                </td>
+                                <td>
+                                    {index}
+                                </td>
+                                <td>
+                                    <DropDownRole roles={availableRoles}>
+
+                                    </DropDownRole>
+                                </td>
+                                <td>
+                                    {index}
+                                </td>
+                            </tr>
+                        })}
+                        </tbody>
+                    </Table>
+                </Card.Body>
                 </Card>
             </Container>
         </div>
@@ -191,3 +233,14 @@ function makeArray(count, content) {
 
 export default GameTicket;
 
+export function generateGuid() {
+    let result, i, j;
+    result = '';
+    for (j = 0; j < 32; j++) {
+        if (j === 8 || j === 12 || j === 16 || j === 20)
+            result = result + '-';
+        i = Math.floor(Math.random() * 16).toString(16).toUpperCase();
+        result = result + i;
+    }
+    return result;
+}
