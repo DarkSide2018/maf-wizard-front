@@ -15,8 +15,6 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
 import AppNavbar from "../AppNavbar";
-import {Link} from "react-router-dom";
-
 
 class AvailablePlayers extends React.Component {
 
@@ -41,8 +39,24 @@ class AvailablePlayers extends React.Component {
     }
 
     componentDidMount() {
-        this.findAllPlayers(this.state.pageNumber)
-        this.getDraftGame()
+        this.getActiveGame()
+    }
+    getActiveGame() {
+        fetch('/game/active', {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            }
+        }).then(response => {
+            if (response.ok) {
+             this.props.history.push("/game/ticket")
+            }else{
+                this.getDraftGame()
+                this.findAllPlayers(this.state.pageNumber)
+            }
+        })
     }
 
     getDraftGame() {

@@ -31,10 +31,11 @@ class Drop extends Component {
             }
         )
     }
-    setPlayerName(value){
+
+    setPlayerName(value) {
         this.setState(
             {
-                playerName: value
+                playerName: value.nickName
             }
         )
     }
@@ -42,21 +43,19 @@ class Drop extends Component {
 
     render() {
         const {players} = this.props
-
+        let dropDownTogglePlayerName = 'Cвободно'
         if (this.state.playerName !== '') {
-            return <div>
-                {this.state.playerName}
-            </div>
+            dropDownTogglePlayerName = this.state.playerName
         }
         return <div>
 
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle caret>
-                    Dropdown
+                    {dropDownTogglePlayerName}
                 </DropdownToggle>
                 <DropdownMenu>
                     {players.map(item => {
-                        return <DropdownItem onClick={()=>this.setPlayerName(item.nickName)} key={generateGuid()}>{item.nickName}</DropdownItem>
+                        return <DropdownItem onClick={() => this.setPlayerName(item)} key={generateGuid()}>{item.nickName}</DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>

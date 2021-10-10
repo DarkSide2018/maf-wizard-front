@@ -6,6 +6,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faList} from "@fortawesome/free-solid-svg-icons";
 import Drop from "./Drop";
 import DropDownRole from "./DropDownRole";
+import AppNavbar from "../AppNavbar";
 
 
 class GameTicket extends React.Component {
@@ -99,7 +100,7 @@ class GameTicket extends React.Component {
             availablePlayersForMurderList = makeArray(7, "").map(item => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop players={availablePlayersForMurder}/>
+                    <Drop type='murderList' players={availablePlayersForMurder}/>
                 </td>
             })
         }
@@ -108,7 +109,7 @@ class GameTicket extends React.Component {
             availablePlayersForSheriffList = makeArray(7, "").map(item => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop players={availablePlayersForSheriff}/>
+                    <Drop type='checkSheriff' players={availablePlayersForSheriff}/>
                 </td>
             })
         }
@@ -117,7 +118,7 @@ class GameTicket extends React.Component {
             availablePlayersForDonList = makeArray(7, "").map(item => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop key={key} players={availablePlayersForDon}/>
+                    <Drop type='checkDon' key={key} players={availablePlayersForDon}/>
                 </td>
             })
         }
@@ -126,7 +127,7 @@ class GameTicket extends React.Component {
             availableForLeftGameList = makeArray(7, "").map(item => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop players={availableForLeftGame}/>
+                    <Drop type='leftGameList' players={availableForLeftGame}/>
                 </td>
             })
         }
@@ -135,6 +136,7 @@ class GameTicket extends React.Component {
         }
 
         return <div>
+            <AppNavbar/>
             <Container>
                 {gameName}
                 <Card className={"border border-dark bg-dark text-white"}>
@@ -193,7 +195,7 @@ class GameTicket extends React.Component {
                         {gamePlayers.map((item,index) => {
                             return <tr>
                                 <td>
-                                    {index}
+                                    {index+1}
                                 </td>
                                 <td>
                                     {index}
