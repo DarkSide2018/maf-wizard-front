@@ -97,37 +97,38 @@ class GameTicket extends React.Component {
 
         let availablePlayersForMurderList = ''
         if (availablePlayersForMurder !== [] && availablePlayersForMurder !== undefined) {
-            availablePlayersForMurderList = makeArray(7, "").map(item => {
+            availablePlayersForMurderList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop type='murderList' players={availablePlayersForMurder}/>
+                    <Drop nightNumber={index} type='killedPlayer' players={availablePlayersForMurder}/>
                 </td>
             })
         }
         let availablePlayersForSheriffList = ''
         if (availablePlayersForSheriff !== [] && availablePlayersForSheriff !== undefined) {
-            availablePlayersForSheriffList = makeArray(7, "").map(item => {
+            availablePlayersForSheriffList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop type='checkSheriff' players={availablePlayersForSheriff}/>
+                    <Drop nightNumber={index} type='sheriffChecked' players={availablePlayersForSheriff}/>
                 </td>
             })
         }
         let availablePlayersForDonList = ''
         if (availablePlayersForDon !== [] && availablePlayersForDon !== undefined) {
-            availablePlayersForDonList = makeArray(7, "").map(item => {
+            availablePlayersForDonList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop type='checkDon' key={key} players={availablePlayersForDon}/>
+                    <Drop nightNumber={index} type='donChecked' key={key} players={availablePlayersForDon}/>
                 </td>
             })
         }
+
         let availableForLeftGameList = ''
         if (availableForLeftGame !== [] && availableForLeftGame !== undefined) {
-            availableForLeftGameList = makeArray(7, "").map(item => {
+            availableForLeftGameList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop type='leftGameList' players={availableForLeftGame}/>
+                    <Drop nightNumber={index} type='leftGameList' players={availableForLeftGame}/>
                 </td>
             })
         }

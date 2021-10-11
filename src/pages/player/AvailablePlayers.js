@@ -51,6 +51,10 @@ class AvailablePlayers extends React.Component {
             }
         }).then(response => {
             if (response.ok) {
+                response.json().then(data => {
+                        setGameUuid(data.gameUuid)
+                    }
+                )
              this.props.history.push("/game/ticket")
             }else{
                 this.getDraftGame()
