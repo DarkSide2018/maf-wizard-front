@@ -18,9 +18,28 @@ class Drop extends Component {
     }
 
     componentDidMount() {
+        const {type, nightNumber, players, nights} = this.props
+        console.log('nights=>' + JSON.stringify(nights[0]))
+        console.log('type=>' + type)
+        console.log('nightNumber=>' + nightNumber)
+        let filteredNight = nights.filter(item => item.nightNumber === nightNumber)
+        console.log('filteredNight=>' + JSON.stringify(filteredNight[0]))
+        let playerUuid = ''
+        let playerName = ''
+        if (type === 'killedPlayer' && filteredNight !== undefined && filteredNight.killedPlayer !== undefined) {
+            console.log('killed player branch')
+            playerUuid = filteredNight.killedPlayer
+        } else if (type === 'sheriffChecked' && filteredNight.sheriffChecked !== undefined) {
+            playerUuid = filteredNight.sheriffChecked
+        } else if (type === 'donChecked' && filteredNight.donChecked !== undefined) {
+            playerUuid = filteredNight.donChecked
+        }
+        console.log('player-uuid=>' + playerUuid)
+
         this.setState(
             {
-                players: this.props.players
+                playerName: playerName,
+                players: players
             }
         )
     }
@@ -39,11 +58,11 @@ class Drop extends Component {
         let night = {
             nightNumber: nightNumber
         }
-        if(type === 'killedPlayer'){
+        if (type === 'killedPlayer') {
             night.killedPlayer = value.playerUuid
-        }else if(type === 'sheriffChecked'){
+        } else if (type === 'sheriffChecked') {
             night.sheriffChecked = value.playerUuid
-        }else if(type === 'donChecked'){
+        } else if (type === 'donChecked') {
             night.donChecked = value.playerUuid
         }
         let gameCommand = {
@@ -52,12 +71,12 @@ class Drop extends Component {
             messageType: 'UpdateGameRequest',
             nights: [night]
         }
-         fetch('/game', {
-            method:'PUT',
+        fetch('/game', {
+            method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization':'Bearer '+getToken()
+                'Authorization': 'Bearer ' + getToken()
             },
             body: JSON.stringify(gameCommand),
         });
@@ -71,7 +90,7 @@ class Drop extends Component {
 
 
     render() {
-        const {players} = this.props
+        const {players} = this.state
         let dropDownTogglePlayerName = 'Cвободно'
         if (this.state.playerName !== '') {
             dropDownTogglePlayerName = this.state.playerName

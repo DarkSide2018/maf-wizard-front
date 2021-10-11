@@ -32,15 +32,7 @@ class GameTicket extends React.Component {
                 'мирный4',
                 'мирный5',
                 'мирный6'],
-            gameName: 'Новый стол',
-            isOpen: [
-                {
-                    key: '',
-                    open: false
-                }
-            ]
-
-
+            gameName: 'Новый стол'
         };
     }
 
@@ -61,12 +53,6 @@ class GameTicket extends React.Component {
             .then(data => {
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                     this.setState({
-                            isOpen:  [
-                                {
-                                    key: '',
-                                    open: false
-                                }
-                            ],
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
                             nights: data.nights,
@@ -84,6 +70,7 @@ class GameTicket extends React.Component {
 
     render() {
         const {
+            nights,
             availablePlayersForMurder,
             availablePlayersForSheriff,
             availablePlayersForDon,
@@ -100,7 +87,7 @@ class GameTicket extends React.Component {
             availablePlayersForMurderList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='killedPlayer' players={availablePlayersForMurder}/>
+                    <Drop nightNumber={index} type='killedPlayer' nights={nights} key={key+'dr'}  players={availablePlayersForMurder}/>
                 </td>
             })
         }
@@ -109,7 +96,7 @@ class GameTicket extends React.Component {
             availablePlayersForSheriffList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='sheriffChecked' players={availablePlayersForSheriff}/>
+                    <Drop nightNumber={index} type='sheriffChecked' nights={nights} key={key+'dr'} players={availablePlayersForSheriff}/>
                 </td>
             })
         }
@@ -118,7 +105,7 @@ class GameTicket extends React.Component {
             availablePlayersForDonList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='donChecked' key={key} players={availablePlayersForDon}/>
+                    <Drop nightNumber={index} type='donChecked' key={key+'dr'}  nights={nights} players={availablePlayersForDon}/>
                 </td>
             })
         }
@@ -128,7 +115,7 @@ class GameTicket extends React.Component {
             availableForLeftGameList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='leftGameList' players={availableForLeftGame}/>
+                    <Drop nightNumber={index} type='leftGameList' key={key+'dr'}  nights={nights} players={availableForLeftGame}/>
                 </td>
             })
         }
@@ -149,7 +136,7 @@ class GameTicket extends React.Component {
                     <Card.Body>
                         <Table bordered hover striped variant="dark">
                             <thead className={"text-white"}>
-                            <tr>
+                            <tr key={generateGuid()}>
                                 <th>Ночные действия</th>
                                 <th>1 ночь</th>
                                 <th>2 ночь</th>
@@ -161,19 +148,19 @@ class GameTicket extends React.Component {
                             </tr>
                             </thead>
                             <tbody className={"text-white"}>
-                            <tr>
+                            <tr key={generateGuid()}>
                                 <td>Убийство</td>
                                 {availablePlayersForMurderList}
                             </tr>
-                            <tr>
+                            <tr key={generateGuid()}>
                                 <td>Дон проверил</td>
                                 {availablePlayersForDonList}
                             </tr>
-                            <tr>
+                            <tr key={generateGuid()}>
                                 <td>Шериф проверил</td>
                                 {availablePlayersForSheriffList}
                             </tr>
-                            <tr>
+                            <tr key={generateGuid()}>
                                 <td>Покинул игру</td>
                                 {availableForLeftGameList}
                             </tr>
@@ -185,7 +172,7 @@ class GameTicket extends React.Component {
                 <Card.Body>
                     <Table bordered hover striped variant="dark">
                         <thead className={"text-white"}>
-                        <tr>
+                        <tr key={generateGuid()}>
                             <th>Номер слота</th>
                             <th>Имя игрока</th>
                             <th>Роль игрока</th>
@@ -194,7 +181,7 @@ class GameTicket extends React.Component {
                         </thead>
                         <tbody className={"text-white"}>
                         {gamePlayers.map((item,index) => {
-                            return <tr>
+                            return <tr key={generateGuid()}>
                                 <td>
                                     {index+1}
                                 </td>
