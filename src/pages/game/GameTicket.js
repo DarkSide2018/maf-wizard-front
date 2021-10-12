@@ -7,6 +7,7 @@ import {faList} from "@fortawesome/free-solid-svg-icons";
 import Drop from "./Drop";
 import DropDownRole from "./DropDownRole";
 import AppNavbar from "../AppNavbar";
+import DropDownPlayers from "./DropDownPlayers";
 
 
 class GameTicket extends React.Component {
@@ -17,10 +18,6 @@ class GameTicket extends React.Component {
             nights: [],
             gameUuid: null,
             gamePlayers: [],
-            availablePlayersForMurder: [],
-            availablePlayersForSheriff: [],
-            availablePlayersForDon: [],
-            availableForLeftGame: [],
             availableRoles: [
                 'шериф',
                 'Дон',
@@ -52,16 +49,13 @@ class GameTicket extends React.Component {
             .then(response => response.json())
             .then(data => {
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
+                    console.log("players => "+JSON.stringify(responsePlayers))
                     this.setState({
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
                             nights: data.nights,
                             gamePlayers: responsePlayers,
-                            gameName: data.name,
-                            availablePlayersForMurder: responsePlayers,
-                            availablePlayersForSheriff: responsePlayers,
-                            availableForLeftGame: responsePlayers,
-                            availablePlayersForDon: responsePlayers,
+                            gameName: data.name
                         }
                     )
                 }
@@ -71,10 +65,6 @@ class GameTicket extends React.Component {
     render() {
         const {
             nights,
-            availablePlayersForMurder,
-            availablePlayersForSheriff,
-            availablePlayersForDon,
-            availableForLeftGame,
             availableRoles,
             gamePlayers,
             gameName,
@@ -83,39 +73,32 @@ class GameTicket extends React.Component {
 
 
         let availablePlayersForMurderList = ''
-        if (availablePlayersForMurder !== [] && availablePlayersForMurder !== undefined) {
+        let availablePlayersForSheriffList = ''
+        let availablePlayersForDonList = ''
+        let availableForLeftGameList = ''
+        if (gamePlayers !== [] && gamePlayers !== undefined) {
             availablePlayersForMurderList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='killedPlayer' nights={nights} key={key+'dr'}  players={availablePlayersForMurder}/>
+                    <Drop nightNumber={index} type='killedPlayer' nights={nights} key={key+'dr'}  players={gamePlayers}/>
                 </td>
             })
-        }
-        let availablePlayersForSheriffList = ''
-        if (availablePlayersForSheriff !== [] && availablePlayersForSheriff !== undefined) {
             availablePlayersForSheriffList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='sheriffChecked' nights={nights} key={key+'dr'} players={availablePlayersForSheriff}/>
+                    <Drop nightNumber={index} type='sheriffChecked' nights={nights} key={key+'dr'} players={gamePlayers}/>
                 </td>
             })
-        }
-        let availablePlayersForDonList = ''
-        if (availablePlayersForDon !== [] && availablePlayersForDon !== undefined) {
             availablePlayersForDonList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='donChecked' key={key+'dr'}  nights={nights} players={availablePlayersForDon}/>
+                    <Drop nightNumber={index} type='donChecked' key={key+'dr'}  nights={nights} players={gamePlayers}/>
                 </td>
             })
-        }
-
-        let availableForLeftGameList = ''
-        if (availableForLeftGame !== [] && availableForLeftGame !== undefined) {
             availableForLeftGameList = makeArray(7, "").map((item,index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='leftGameList' key={key+'dr'}  nights={nights} players={availableForLeftGame}/>
+                    <Drop nightNumber={index} type='leftGame' key={key+'dr'}  nights={nights} players={gamePlayers}/>
                 </td>
             })
         }
@@ -182,18 +165,20 @@ class GameTicket extends React.Component {
                         <tbody className={"text-white"}>
                         {gamePlayers.map((item,index) => {
                             return <tr key={generateGuid()}>
-                                <td>
+                                <td key={generateGuid()}>
                                     {index+1}
                                 </td>
-                                <td>
-                                    {index}
+                                <td key={generateGuid()}>
+                                    <DropDownPlayers key={generateGuid()} players={gamePlayers}>
+
+                                    </DropDownPlayers>
                                 </td>
-                                <td>
+                                <td key={generateGuid()}>
                                     <DropDownRole roles={availableRoles}>
 
                                     </DropDownRole>
                                 </td>
-                                <td>
+                                <td key={generateGuid()}>
                                     {index}
                                 </td>
                             </tr>

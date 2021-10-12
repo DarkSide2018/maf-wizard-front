@@ -19,23 +19,29 @@ class Drop extends Component {
 
     componentDidMount() {
         const {type, nightNumber, players, nights} = this.props
-        console.log('nights=>' + JSON.stringify(nights[0]))
-        console.log('type=>' + type)
-        console.log('nightNumber=>' + nightNumber)
         let filteredNight = nights.filter(item => item.nightNumber === nightNumber)
-        console.log('filteredNight=>' + JSON.stringify(filteredNight[0]))
-        let playerUuid = ''
+        let playerUuid
         let playerName = ''
-        if (type === 'killedPlayer' && filteredNight !== undefined && filteredNight.killedPlayer !== undefined) {
-            console.log('killed player branch')
-            playerUuid = filteredNight.killedPlayer
-        } else if (type === 'sheriffChecked' && filteredNight.sheriffChecked !== undefined) {
-            playerUuid = filteredNight.sheriffChecked
-        } else if (type === 'donChecked' && filteredNight.donChecked !== undefined) {
-            playerUuid = filteredNight.donChecked
+        let filteredPLayers
+        if (filteredNight !== undefined && filteredNight.length > 0) {
+            if (type === 'killedPlayer' && filteredNight[0].killedPlayer !== undefined) {
+                playerUuid = filteredNight[0].killedPlayer
+            } else if (type === 'sheriffChecked' && filteredNight[0].sheriffChecked !== undefined) {
+                playerUuid = filteredNight[0].sheriffChecked
+            } else if (type === 'donChecked' && filteredNight[0].donChecked !== undefined) {
+                playerUuid = filteredNight[0].donChecked
+            } else if (type === 'leftGame' && filteredNight[0].playerLeftGame !== undefined) {
+                playerUuid = filteredNight[0].playerLeftGame
+            }
         }
-        console.log('player-uuid=>' + playerUuid)
 
+        if (playerUuid !== undefined) {
+            filteredPLayers = players.filter(item => item.playerUuid === playerUuid)
+        }
+
+        if (filteredPLayers !== undefined && filteredPLayers.length > 0) {
+            playerName = filteredPLayers[0].nickName
+        }
         this.setState(
             {
                 playerName: playerName,
@@ -64,6 +70,8 @@ class Drop extends Component {
             night.sheriffChecked = value.playerUuid
         } else if (type === 'donChecked') {
             night.donChecked = value.playerUuid
+        }else if (type === 'leftGame') {
+            night.playerLeftGame = value.playerUuid
         }
         let gameCommand = {
             gameUuid: getCurrentGame(),
@@ -96,7 +104,6 @@ class Drop extends Component {
             dropDownTogglePlayerName = this.state.playerName
         }
         return <div>
-
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle caret>
                     {dropDownTogglePlayerName}
