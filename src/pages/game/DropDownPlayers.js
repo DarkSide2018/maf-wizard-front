@@ -36,21 +36,21 @@ class DropDownPlayers extends Component {
         let name = value.nickName
         this.setState(
             {
-                currentPlayer: name
+                playerName: name
             }
         )
     }
     render() {
         const {players} = this.state
-        let currentPlayer='свободно'
-        if (this.state.currentPlayer !== '') {
-            currentPlayer = this.state.currentPlayer
+        let currentPlayer='Свободно'
+        if (this.state.playerName !== '') {
+            currentPlayer = this.state.playerName
         }
         return <div>
 
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle caret>
-                    item
+                    {currentPlayer}
                 </DropdownToggle>
                 <DropdownMenu>
                     {players.map(item => {
