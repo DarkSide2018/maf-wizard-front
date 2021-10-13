@@ -4,7 +4,7 @@ import {generateGuid} from "./GameTicket";
 import {getCurrentGame} from "../player/AvailablePlayers";
 import {getToken} from "../../api/authenticationService";
 
-
+import './Drop.css';
 class Drop extends Component {
     constructor(props) {
         super(props);
@@ -105,12 +105,12 @@ class Drop extends Component {
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
-                <DropdownToggle caret>
+                <DropdownToggle className={"dropStyle"} caret>
                     {dropDownTogglePlayerName}
                 </DropdownToggle>
                 <DropdownMenu>
                     {players.map(item => {
-                        return <DropdownItem onClick={() => this.setPlayerName(item)}
+                        return <DropdownItem className={"dropStyle"} onClick={() => this.setPlayerName(item)}
                                              key={generateGuid()}>{item.nickName}</DropdownItem>
                     })}
                 </DropdownMenu>

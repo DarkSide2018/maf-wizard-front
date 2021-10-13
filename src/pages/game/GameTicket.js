@@ -2,12 +2,11 @@ import React from "react";
 import {Container, Table} from "reactstrap";
 import {Card,} from "react-bootstrap";
 import {getToken} from "../../api/authenticationService";
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faList} from "@fortawesome/free-solid-svg-icons";
 import Drop from "./Drop";
 import DropDownRole from "./DropDownRole";
 import AppNavbar from "../AppNavbar";
 import DropDownPlayers from "./DropDownPlayers";
+import Notes from "./Notes";
 
 
 class GameTicket extends React.Component {
@@ -49,13 +48,13 @@ class GameTicket extends React.Component {
             .then(response => response.json())
             .then(data => {
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
-                    console.log("players => "+JSON.stringify(responsePlayers))
                     this.setState({
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
                             nights: data.nights,
                             gamePlayers: responsePlayers,
-                            gameName: data.name
+                            gameName: data.name,
+                            playerToSlot:data.playerToCardNumber
                         }
                     )
                 }
@@ -67,7 +66,7 @@ class GameTicket extends React.Component {
             nights,
             availableRoles,
             gamePlayers,
-            gameName,
+            playerToSlot,
             isLoading
         } = this.state;
 
@@ -109,13 +108,7 @@ class GameTicket extends React.Component {
         return <div>
             <AppNavbar/>
             <Container>
-                {gameName}
                 <Card className={"border border-dark bg-dark text-white"}>
-                    <Card.Header>
-                        <div style={{float: "left"}}>
-                            <FontAwesomeIcon icon={faList}/> Ночи
-                        </div>
-                    </Card.Header>
                     <Card.Body>
                         <Table bordered hover striped variant="dark">
                             <thead className={"text-white"}>
@@ -169,17 +162,19 @@ class GameTicket extends React.Component {
                                     {index+1}
                                 </td>
                                 <td key={generateGuid()}>
-                                    <DropDownPlayers key={generateGuid()} players={gamePlayers}>
+                                    <DropDownPlayers playersToSlot={playerToSlot} slot={index+1} key={generateGuid()} players={gamePlayers}>
 
                                     </DropDownPlayers>
                                 </td>
                                 <td key={generateGuid()}>
-                                    <DropDownRole roles={availableRoles}>
+                                    <DropDownRole playersToSlot={playerToSlot} slot={index+1} key={generateGuid()} players={gamePlayers} roles={availableRoles}>
 
                                     </DropDownRole>
                                 </td>
                                 <td key={generateGuid()}>
-                                    {index}
+                                    <Notes playersToSlot={playerToSlot} slot={index+1} key={generateGuid()}>
+
+                                    </Notes>
                                 </td>
                             </tr>
                         })}
