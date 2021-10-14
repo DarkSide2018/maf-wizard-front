@@ -1,12 +1,11 @@
-import react,{useState} from 'react';
-import { connect } from 'react-redux';
-import { authenticate, authFailure, authSuccess } from '../redux/authActions';
+import React, {useState} from 'react';
+import {connect} from 'react-redux';
+import {authenticate, authFailure, authSuccess} from '../redux/authActions';
 import './loginpage.css';
 import {userLogin} from '../api/authenticationService';
-import {Alert,Spinner} from 'react-bootstrap';
+import {Alert, Spinner} from 'react-bootstrap';
 import {Link} from "react-router-dom";
 import {Button} from "reactstrap";
-import React from "react";
 
 const LoginPage=({loading,error,...props})=>{
 
@@ -65,18 +64,18 @@ const LoginPage=({loading,error,...props})=>{
     console.log("Loading ",loading);
 
     return (
-        <div className="login-page">
-                   
-              
-                                            
+        <div  className={"login-page border border-dark bg-dark text-white"}>
         <section className="h-100">
         <div className="container h-100">
        
             <div className="row justify-content-md-center h-100">
                 <div className="card-wrapper">
+                    <div style={{height:"100px"}}>
 
-                    <div className="card fat">
-                        <div className="card-body">
+                    </div>
+
+                    <div className="text-white">
+                        <div className="card-body border border-dark bg-dark text-white">
                             <h4 className="card-title">Login</h4>
                             
                             <form className="my-login-validation" onSubmit={handleSubmit} noValidate={false}>
@@ -94,7 +93,7 @@ const LoginPage=({loading,error,...props})=>{
 
                                 <div className="form-group">
                                     <label>Password
-                                        <a href="forgot.html" className="float-right">
+                                        <a href="forgot.html" className=" border-white text-white float-right">
                                             Forgot Password?
                                         </a>
                                     </label>
@@ -113,7 +112,7 @@ const LoginPage=({loading,error,...props})=>{
                                 <div className="row">
                                     <div className="col-md-3">
                                         <div className="form-group m-0">
-                                            <button type="submit" className="btn btn-primary">
+                                            <button type="submit" className="btn border-white text-white bg-dark">
                                                 Login
                                                 {loading && (
                                                     <Spinner
@@ -130,7 +129,7 @@ const LoginPage=({loading,error,...props})=>{
                                     </div>
                                     <div className="col-md-6">
                                         <div className="form-group m-0">
-                                            <Button color="success" tag={Link} to="/user/new">Register</Button>
+                                            <Button className={"bg-dark border-white"} tag={Link} to="/user/new">Register</Button>
                                         </div>
                                     </div>
                                 </div>
@@ -147,6 +146,9 @@ const LoginPage=({loading,error,...props})=>{
             </div>
         </div>
     </section>
+            <div style={{height:"400px"}} className={"border border-dark bg-dark "}>
+
+            </div>
         </div>
     )
 

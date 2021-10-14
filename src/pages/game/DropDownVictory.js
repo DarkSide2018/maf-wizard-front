@@ -9,32 +9,20 @@ class DropDownRole extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            playerName: '',
-            roles: props.roles,
-            currentRole: '',
+            availableVictories: ['Красные','Черные'],
+            currentVictory: this.props.victory,
             isOpen: false
         };
         this.toggle = this.toggle.bind(this);
-        this.setRole = this.setRole.bind(this);
+        this.setVictory = this.setVictory.bind(this);
     }
 
     componentDidMount() {
-        const {playersToSlot,slot} = this.props
-        let filteredSlot = playersToSlot.filter(item => item.slot === slot)
-        let currentRole
-        if (filteredSlot !== undefined && filteredSlot.length > 0) {
-            if (filteredSlot[0].playerUuid !== undefined) {
-                currentRole = filteredSlot[0].role
-            }
-        }
-        if (currentRole !== undefined) {
-            this.setState(
+        this.setState(
                 {
-                    currentRole: currentRole
+                    currentRole: this.props.victory
                 }
             )
-        }
-
     }
 
     toggle() {
@@ -45,17 +33,17 @@ class DropDownRole extends Component {
             }
         )
     }
-    setRole(value){
-        const {slot} = this.props
-        let pls = {
-            slot:slot,
-            role:value
-        }
+    setVictory(value){
+        this.setState(
+            {
+                currentVictory: value
+            }
+        )
         let gameCommand = {
             gameUuid: getCurrentGame(),
             status: 'ACTIVE',
-            messageType: 'UpdateGameRequest',
-            playerToCardNumber: [pls]
+            victory:value,
+            messageType: 'UpdateGameRequest'
         }
         fetch('/game', {
             method: 'PUT',
@@ -66,27 +54,22 @@ class DropDownRole extends Component {
             },
             body: JSON.stringify(gameCommand),
         });
-        this.setState(
-            {
-                currentRole: value
-            }
-        )
     }
     render() {
-        const {roles} = this.props
-        let currentRole = 'Свободно'
-        if (this.state.currentRole !== '') {
-            currentRole = this.state.currentRole
+        const {availableVictories} = this.state
+        let currentVictory = 'Неизвестно'
+        if (this.state.currentVictory !== '' && this.state.currentVictory !== undefined) {
+            currentVictory = this.state.currentVictory
 
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"}  caret>
-                    {currentRole}
+                    {currentVictory}
                 </DropdownToggle>
                 <DropdownMenu>
-                    {roles.map(item => {
-                        return <DropdownItem className={"dropStyle"}  onClick={()=>this.setRole(item)} key={generateGuid()}>{item}</DropdownItem>
+                    {availableVictories.map(item => {
+                        return <DropdownItem className={"dropStyle"}  onClick={()=>this.setVictory(item)} key={generateGuid()}>{item}</DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>

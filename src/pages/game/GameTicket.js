@@ -1,5 +1,5 @@
 import React from "react";
-import {Container, Table} from "reactstrap";
+import {Button, Container, Table} from "reactstrap";
 import {Card,} from "react-bootstrap";
 import {getToken} from "../../api/authenticationService";
 import Drop from "./Drop";
@@ -7,6 +7,8 @@ import DropDownRole from "./DropDownRole";
 import AppNavbar from "../AppNavbar";
 import DropDownPlayers from "./DropDownPlayers";
 import Notes from "./Notes";
+import DropDownVictory from "./DropDownVictory";
+import {getCurrentGame} from "../player/AvailablePlayers";
 
 
 class GameTicket extends React.Component {
@@ -30,6 +32,7 @@ class GameTicket extends React.Component {
                 'мирный6'],
             gameName: 'Новый стол'
         };
+        this.endGame = this.endGame.bind(this);
     }
 
     componentDidMount() {
@@ -49,6 +52,7 @@ class GameTicket extends React.Component {
             .then(data => {
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                     this.setState({
+                            currentVictory:data.victory,
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
                             nights: data.nights,
@@ -60,10 +64,31 @@ class GameTicket extends React.Component {
                 }
             );
     }
+    endGame(players){
+        console.log("finish game")
+        let gameCommand = {
+            gameUuid: getCurrentGame(),
+            status: 'FINISHED',
+            messageType: 'UpdateGameRequest',
+            players: players
+        }
+        fetch('/game/finish', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(gameCommand),
+        });
+        localStorage.removeItem('GAME_UUID');
+        this.props.history.push('/dashboard');
+    }
 
     render() {
         const {
             nights,
+            currentVictory,
             availableRoles,
             gamePlayers,
             playerToSlot,
@@ -105,7 +130,7 @@ class GameTicket extends React.Component {
             return <p>Loading...</p>;
         }
 
-        return <div>
+        return <div className={"bg-dark"}>
             <AppNavbar/>
             <Container>
                 <Card className={"border border-dark bg-dark text-white"}>
@@ -140,10 +165,19 @@ class GameTicket extends React.Component {
                                 <td>Покинул игру</td>
                                 {availableForLeftGameList}
                             </tr>
+                            <tr key={generateGuid()}>
+                                <td>Победа</td>
+                                <td colSpan={"7"}>
+                                    <DropDownVictory victory={currentVictory}>
+
+                                    </DropDownVictory>
+                                </td>
+                            </tr>
                             </tbody>
                         </Table>
                     </Card.Body>
                 </Card>
+
                 <Card  className={"border border-dark bg-dark text-white"}>
                 <Card.Body>
                     <Table bordered hover striped variant="dark">
@@ -180,6 +214,13 @@ class GameTicket extends React.Component {
                         })}
                         </tbody>
                     </Table>
+                        <Button
+                            style={{float:"right"}}
+                            type="button"
+                            variant="outline-info"
+                            onClick={()=>this.endGame(gamePlayers)}>
+                            Закончить игру
+                        </Button>
                 </Card.Body>
                 </Card>
             </Container>
