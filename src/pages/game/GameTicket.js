@@ -20,16 +20,16 @@ class GameTicket extends React.Component {
             gameUuid: null,
             gamePlayers: [],
             availableRoles: [
-                'шериф',
+                'Шериф',
                 'Дон',
-                'мафиози1',
-                'мафиози2',
-                'мирный1',
-                'мирный2',
-                'мирный3',
-                'мирный4',
-                'мирный5',
-                'мирный6'],
+                'Мафиози1',
+                'Мафиози2',
+                'Мирный1',
+                'Мирный2',
+                'Мирный3',
+                'Мирный4',
+                'Мирный5',
+                'Мирный6'],
             gameName: 'Новый стол'
         };
         this.endGame = this.endGame.bind(this);

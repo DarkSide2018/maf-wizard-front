@@ -37,13 +37,6 @@ export const Dashboard = (props) => {
         props.history.push('/player/all');
     }
 
-    const callGameMasters = () => {
-        props.history.push('/game/master/all');
-    }
-    const callGames = () => {
-        props.history.push('/game/all');
-    }
-
     return (
         <Container>
             <MainWrapper>
@@ -55,18 +48,11 @@ export const Dashboard = (props) => {
                 <Container>
                     <Row>
                         <ButtonGroup>
-                            <Button color="success" tag={Link} to="/new/table">create table</Button>
+                            <Button color="success" tag={Link} to="/new/table">Создать игру</Button>
                         </ButtonGroup>
                     </Row>
                     <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Edit players</Button>
-                    </Row>
-
-                    <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callGameMasters()}>Edit gameMasters</Button>
-                    </Row>
-                    <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callGames()}>Edit games</Button>
+                        <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Статистика</Button>
                     </Row>
                     <Row>
                         <Button style={{marginTop: '5px'}} onClick={() => logOut()}>Logout</Button>
