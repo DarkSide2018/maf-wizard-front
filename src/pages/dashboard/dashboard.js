@@ -48,11 +48,16 @@ export const Dashboard = (props) => {
                 <Container>
                     <Row>
                         <ButtonGroup>
-                            <Button color="success" tag={Link} to="/new/table">Создать игру</Button>
+                            <Button style={{marginTop: '5px'}} tag={Link} to="/new/table">Создать игру</Button>
                         </ButtonGroup>
                     </Row>
                     <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Статистика</Button>
+                        <ButtonGroup>
+                            <Button style={{marginTop: '5px'}} tag={Link} to="/game/history">История игр</Button>
+                        </ButtonGroup>
+                    </Row>
+                    <Row>
+                        <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Статистика Игроков</Button>
                     </Row>
                     <Row>
                         <Button style={{marginTop: '5px'}} onClick={() => logOut()}>Logout</Button>

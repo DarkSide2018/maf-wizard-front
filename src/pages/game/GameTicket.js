@@ -8,7 +8,7 @@ import AppNavbar from "../AppNavbar";
 import DropDownPlayers from "./DropDownPlayers";
 import Notes from "./Notes";
 import DropDownVictory from "./DropDownVictory";
-import {getCurrentGame} from "../player/AvailablePlayers";
+import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
 
 
 class GameTicket extends React.Component {
@@ -36,7 +36,39 @@ class GameTicket extends React.Component {
     }
 
     componentDidMount() {
-        this.getCurrentGameAfterMount()
+        let id = this.props.match.params.id;
+        console.log("id -> " + id)
+        if(id === "new"){
+            this.getCurrentGameAfterMount()
+        }else{
+            setGameUuid(id)
+            this.getOldGame(id)
+        }
+    }
+    getOldGame(id){
+        fetch('/game/'+id, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                    let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
+                    this.setState({
+                            currentVictory:data.victory,
+                            gameNumber: data.gameNumber,
+                            gameUuid: data.gameUuid,
+                            nights: data.nights,
+                            gamePlayers: responsePlayers,
+                            gameName: data.name,
+                            playerToSlot:data.playerToCardNumber
+                        }
+                    )
+                }
+            );
     }
 
     getCurrentGameAfterMount() {

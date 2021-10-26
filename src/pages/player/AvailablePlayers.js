@@ -15,6 +15,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
 import AppNavbar from "../AppNavbar";
+import {currentTime} from "../../common/Time";
 
 class AvailablePlayers extends React.Component {
 
@@ -30,7 +31,7 @@ class AvailablePlayers extends React.Component {
             gameNumber: null,
             gameUuid: null,
             gamePlayers: [],
-            gameName: 'Новый стол'
+            gameName: 'Новая игра oт ' + currentTime()
         };
         this.confirmGame = this.confirmGame.bind(this);
         this.createGameTicket = this.createGameTicket.bind(this);
@@ -89,7 +90,7 @@ class AvailablePlayers extends React.Component {
         let queryItem = {
             messageType: 'CreateGameRequest',
             gameUuid: null,
-            name: 'Новый Стол',
+            name: 'Новая игра от ' + currentTime(),
             gameNumber: '',
             players: []
         }
@@ -292,7 +293,7 @@ class AvailablePlayers extends React.Component {
             },
             body: JSON.stringify(queryItem),
         });
-        this.props.history.push('/game/ticket');
+        this.props.history.push('/game/ticket/new');
     }
 
     render() {

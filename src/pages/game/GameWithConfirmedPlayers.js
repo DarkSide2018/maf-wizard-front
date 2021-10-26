@@ -32,6 +32,7 @@ import {
     incrementWasKilled
 } from "./IncrementButtons";
 import {Link} from "react-router-dom";
+import {currentTime} from "../../common/Time";
 
 
 class GameWithConfirmedPlayers extends React.Component {
@@ -48,7 +49,7 @@ class GameWithConfirmedPlayers extends React.Component {
             gameNumber: null,
             gameUuid: null,
             gamePlayers: [],
-            gameName: 'Новый стол'
+            gameName: 'Новая игра oт ' + currentTime()
         };
 
     }
