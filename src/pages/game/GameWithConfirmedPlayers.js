@@ -93,6 +93,7 @@ class GameWithConfirmedPlayers extends React.Component {
             <div className={"bg-dark"}>
                 <AppNavbar/>
                 <div>
+
                     <Container>
                         <Row>
                             <h3>Название игры : {gameName} </h3>

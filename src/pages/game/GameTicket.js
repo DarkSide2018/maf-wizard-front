@@ -19,6 +19,7 @@ class GameTicket extends React.Component {
             nights: [],
             gameUuid: null,
             gamePlayers: [],
+            edit: false,
             availableRoles: [
                 'Шериф',
                 'Дон',
@@ -41,6 +42,9 @@ class GameTicket extends React.Component {
         if(id === "new"){
             this.getCurrentGameAfterMount()
         }else{
+            this.setState({
+                edit:true
+            })
             setGameUuid(id)
             this.getOldGame(id)
         }
@@ -116,6 +120,25 @@ class GameTicket extends React.Component {
         localStorage.removeItem('GAME_UUID');
         this.props.history.push('/dashboard');
     }
+    toPlayersSelection(players){
+        console.log("toPlayersSelection")
+        let gameCommand = {
+            gameUuid: getCurrentGame(),
+            status: 'DRAFT',
+            messageType: 'UpdateGameRequest',
+            players: players
+        }
+        fetch('/game', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(gameCommand),
+        });
+        this.props.history.push('/new/table');
+    }
 
     render() {
         const {
@@ -124,7 +147,8 @@ class GameTicket extends React.Component {
             availableRoles,
             gamePlayers,
             playerToSlot,
-            isLoading
+            isLoading,
+            edit
         } = this.state;
 
 
@@ -161,11 +185,32 @@ class GameTicket extends React.Component {
         if (isLoading) {
             return <p>Loading...</p>;
         }
+        let playerSelectionButton = <Button
+            style={{float:"right"}}
+            type="button"
+            variant="outline-info"
+            onClick={()=>this.toPlayersSelection(gamePlayers)}>
+            Вернуться к подбору игроков
+        </Button>
+        let endGameButton =        <Button
+            style={{float:"right"}}
+            type="button"
+            variant="outline-info"
+            onClick={()=>this.endGame(gamePlayers)}>
+            Закончить игру
+        </Button>
+        if(edit){
+            playerSelectionButton = ""
+            endGameButton=""
+        }
 
         return <div className={"bg-dark"}>
             <AppNavbar/>
             <Container>
                 <Card className={"border border-dark bg-dark text-white"}>
+                    <Card.Header>
+                        {playerSelectionButton}
+                    </Card.Header>
                     <Card.Body>
                         <Table bordered hover striped variant="dark">
                             <thead className={"text-white"}>
@@ -246,13 +291,7 @@ class GameTicket extends React.Component {
                         })}
                         </tbody>
                     </Table>
-                        <Button
-                            style={{float:"right"}}
-                            type="button"
-                            variant="outline-info"
-                            onClick={()=>this.endGame(gamePlayers)}>
-                            Закончить игру
-                        </Button>
+                    {endGameButton}
                 </Card.Body>
                 </Card>
             </Container>

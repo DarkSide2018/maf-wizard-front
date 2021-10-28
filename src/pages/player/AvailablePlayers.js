@@ -56,7 +56,7 @@ class AvailablePlayers extends React.Component {
                         setGameUuid(data.gameUuid)
                     }
                 )
-             this.props.history.push("/game/ticket")
+                this.findAllPlayers(this.state.pageNumber)
             }else{
                 this.getDraftGame()
                 this.findAllPlayers(this.state.pageNumber)
@@ -474,7 +474,6 @@ class AvailablePlayers extends React.Component {
             </div>
         );
     }
-
 }
 
 export default AvailablePlayers;
