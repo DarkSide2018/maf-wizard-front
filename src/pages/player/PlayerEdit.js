@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import {Link, withRouter} from 'react-router-dom';
 import {Button, Container, Form, FormGroup, Input, Label} from 'reactstrap';
 import AppNavbar from '../AppNavbar';
+import {getToken} from "../../api/authenticationService";
 
 
 class PlayerEdit extends Component {
@@ -26,6 +27,7 @@ class PlayerEdit extends Component {
         defeatBlack: '',
         defeatRed: '',
         don: '',
+        image: '',
         sheriff: '',
         wasKilled: '',
     };
@@ -61,7 +63,8 @@ class PlayerEdit extends Component {
             method: (queryItem.playerUuid) ? 'PUT' : 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization':'Bearer '+getToken()
             },
             body: JSON.stringify(queryItem),
         });
@@ -70,7 +73,7 @@ class PlayerEdit extends Component {
 
     render() {
         const {item} = this.state;
-        const title = <h2>{item.playerUuid ? 'Edit Client' : 'Add Client'}</h2>;
+        const title = <h2>{item.playerUuid ? 'Редактировать игрока' : 'Добавить Игрока'}</h2>;
 
         return <div>
             <AppNavbar/>

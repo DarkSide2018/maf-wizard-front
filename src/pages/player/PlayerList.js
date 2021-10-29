@@ -189,6 +189,7 @@ class PlayerList extends Component {
                 <AppNavbar/>
                 <Card className={"border border-dark bg-dark text-white"}>
                     <Card.Header>
+
                         <div style={{ float: "left" }}>
                             <FontAwesomeIcon icon={faList} /> Игроки
                         </div>
@@ -223,10 +224,14 @@ class PlayerList extends Component {
                         </div>
                     </Card.Header>
                     <Card.Body>
+                        <div className="float-right">
+                            <Button  size="md" variant="outline-danger" tag={Link} to="/player/new">Добавить игрока</Button>
+                        </div>
                         <Table bordered hover striped variant="dark">
                             <thead className={"text-white"}>
                             <tr>
                                 <th>Имя</th>
+                                <th>Фото</th>
                                 <th>Очки</th>
                                 <th>Доп.Очки</th>
                                 <th>Штрафы</th>
@@ -243,6 +248,7 @@ class PlayerList extends Component {
                                 players.map((player) => (
                                     <tr key={player.playerUuid}>
                                         <td>{player.nickName}</td>
+                                        <td>Фото</td>
                                         <td>{player.points}</td>
                                         <td>{player.additionalPoints}</td>
                                         <td>{player.penalties}</td>
@@ -255,13 +261,6 @@ class PlayerList extends Component {
                                                 >
                                                     <FontAwesomeIcon icon={faEdit} />
                                                 </Link>{" "}
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline-danger"
-                                                    onClick={() => this.remove(player.playerUuid)}
-                                                >
-                                                    <FontAwesomeIcon icon={faTrash} />
-                                                </Button>
                                             </ButtonGroup>
                                         </td>
                                     </tr>
