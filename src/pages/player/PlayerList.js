@@ -1,8 +1,8 @@
 import {Component} from "react";
 import {Link} from "react-router-dom";
-import {Button,ButtonGroup, Table} from "reactstrap";
+import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import AppNavbar from "../AppNavbar";
-import {FormControl,InputGroup,Card,} from "react-bootstrap";
+import {FormControl, InputGroup, Card} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
     faEdit,
@@ -14,6 +14,7 @@ import {
     faTimes, faTrash,
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
+import {UploadImage} from "./UploadImage";
 
 class PlayerList extends Component {
 
@@ -24,7 +25,7 @@ class PlayerList extends Component {
             search: "",
             pageNumber: 1,
             pageSize: 10,
-            sortBy:"nickName",
+            sortBy: "nickName",
             sortDir: "asc",
         };
         this.remove = this.remove.bind(this);
@@ -33,31 +34,33 @@ class PlayerList extends Component {
     componentDidMount() {
         this.findAllPlayers(this.state.pageNumber)
     }
+
     sortData = () => {
         setTimeout(() => {
             this.state.sortDir === "asc"
-                ? this.setState({ sortDir: "desc" })
-                : this.setState({ sortDir: "asc" });
+                ? this.setState({sortDir: "desc"})
+                : this.setState({sortDir: "asc"});
             this.findAllPlayers(this.state.pageNumber);
         }, 500);
     };
+
     findAllPlayers(currentPage) {
         currentPage -= 1;
 
-        fetch('/player/all',{
+        fetch('/player/all', {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization':'Bearer '+getToken()
+                'Authorization': 'Bearer ' + getToken()
             },
             body: JSON.stringify(
                 {
-                    messageType:"ReadAllPlayersRequest",
-                    nickName:this.state.search,
-                    pageSize:this.state.pageSize,
-                    pageNumber:currentPage,
-                    sortBy:this.state.sortBy,
+                    messageType: "ReadAllPlayersRequest",
+                    nickName: this.state.search,
+                    pageSize: this.state.pageSize,
+                    pageNumber: currentPage,
+                    sortBy: this.state.sortBy,
                     sortDir: this.state.sortDir
                 }
             )
@@ -66,10 +69,11 @@ class PlayerList extends Component {
             .then(data => this.setState({
                 players: data.players,
                 totalPages: data.totalPages,
-                totalElements:data.totalElements,
-                pageNumber:data.pageNumber+1
+                totalElements: data.totalElements,
+                pageNumber: data.pageNumber + 1
             }));
     }
+
     async remove(id) {
         await fetch(`/player/${id}`, {
             method: 'DELETE',
@@ -151,7 +155,7 @@ class PlayerList extends Component {
     };
     searchData = (currentPage) => {
         currentPage -= 1;
-        fetch("/player/like",{
+        fetch("/player/like", {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
@@ -159,11 +163,11 @@ class PlayerList extends Component {
             },
             body: JSON.stringify(
                 {
-                    messageType:"SearchPlayerRequest",
-                    nickName:this.state.search,
-                    pageSize:this.state.pageSize,
-                    pageNumber:currentPage,
-                    sortBy:this.state.sortBy,
+                    messageType: "SearchPlayerRequest",
+                    nickName: this.state.search,
+                    pageSize: this.state.pageSize,
+                    pageNumber: currentPage,
+                    sortBy: this.state.sortBy,
                     sortDir: this.state.sortDir
                 }
             )
@@ -178,6 +182,7 @@ class PlayerList extends Component {
                 });
             });
     };
+
     render() {
         const {players, search, pageNumber, totalPages, isLoading} = this.state;
 
@@ -186,95 +191,100 @@ class PlayerList extends Component {
         }
         return (
             <div className={"bg-dark"}>
-                <AppNavbar/>
-                <Card className={"border border-dark bg-dark text-white"}>
-                    <Card.Header>
-
-                        <div style={{ float: "left" }}>
-                            <FontAwesomeIcon icon={faList} /> Игроки
-                        </div>
-                        <div style={{ float: "right" }}>
-                            <InputGroup size="sm">
-                                <FormControl
-                                    placeholder="Search"
-                                    name="search"
-                                    value={search}
-                                    className={"info-border bg-dark text-white"}
-                                    onChange={this.searchChange}
-                                />
-                                <InputGroup.Append>
-                                    <Button
-                                        size="sm"
-                                        variant="outline-info"
-                                        type="button"
-                                        onClick={this.searchData}
-                                    >
-                                        <FontAwesomeIcon icon={faSearch} />
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        variant="outline-danger"
-                                        type="button"
-                                        onClick={this.cancelSearch}
-                                    >
-                                        <FontAwesomeIcon icon={faTimes} />
-                                    </Button>
-                                </InputGroup.Append>
-                            </InputGroup>
-                        </div>
-                    </Card.Header>
-                    <Card.Body>
-                        <div className="float-right">
-                            <Button  size="md" variant="outline-danger" tag={Link} to="/player/new">Добавить игрока</Button>
-                        </div>
-                        <Table bordered hover striped variant="dark">
-                            <thead className={"text-white"}>
-                            <tr>
-                                <th>Имя</th>
-                                <th>Фото</th>
-                                <th>Очки</th>
-                                <th>Доп.Очки</th>
-                                <th>Штрафы</th>
-                                <th>First Night kill</th>
-                                <th>Количество игр</th>
-                            </tr>
-                            </thead>
-                            <tbody className={"text-white"}>
-                            {players.length === 0 ? (
-                                <tr align="center">
-                                    <td colSpan="7">No players Available.</td>
+                <Container>
+                    <AppNavbar/>
+                    <Card className={"border border-dark bg-dark text-white"}>
+                        <Card.Header>
+                            <div style={{float: "left"}}>
+                                <FontAwesomeIcon icon={faList}/> Игроки
+                            </div>
+                            <div style={{float: "right"}}>
+                                <InputGroup size="sm">
+                                    <FormControl
+                                        placeholder="Search"
+                                        name="search"
+                                        value={search}
+                                        className={"info-border bg-dark text-white"}
+                                        onChange={this.searchChange}
+                                    />
+                                    <InputGroup.Append>
+                                        <Button
+                                            size="sm"
+                                            variant="outline-info"
+                                            type="button"
+                                            onClick={this.searchData}
+                                        >
+                                            <FontAwesomeIcon icon={faSearch}/>
+                                        </Button>
+                                        <Button
+                                            size="sm"
+                                            variant="outline-danger"
+                                            type="button"
+                                            onClick={this.cancelSearch}
+                                        >
+                                            <FontAwesomeIcon icon={faTimes}/>
+                                        </Button>
+                                    </InputGroup.Append>
+                                </InputGroup>
+                            </div>
+                        </Card.Header>
+                        <Card.Body>
+                            <div className="float-right">
+                                <Button size="md" variant="outline-danger" tag={Link} to="/player/new">Добавить
+                                    игрока</Button>
+                            </div>
+                            <Table bordered hover striped variant="dark">
+                                <thead className={"text-white"}>
+                                <tr>
+                                    <th>Имя</th>
+                                    <th>Фото</th>
+                                    <th>Очки</th>
+                                    <th>Доп.Очки</th>
+                                    <th>Штрафы</th>
+                                    <th>First Night kill</th>
+                                    <th>Количество игр</th>
                                 </tr>
-                            ) : (
-                                players.map((player) => (
-                                    <tr key={player.playerUuid}>
-                                        <td>{player.nickName}</td>
-                                        <td>Фото</td>
-                                        <td>{player.points}</td>
-                                        <td>{player.additionalPoints}</td>
-                                        <td>{player.penalties}</td>
-                                        <td>{player.wasKilled}</td>
-                                        <td>{player.games}</td>
-                                        <td>
-                                            <ButtonGroup>
-                                                <Link to={"/player/" + player.playerUuid}
-                                                    className="btn btn-sm btn-outline-primary"
-                                                >
-                                                    <FontAwesomeIcon icon={faEdit} />
-                                                </Link>{" "}
-                                            </ButtonGroup>
-                                        </td>
+                                </thead>
+                                <tbody className={"text-white"}>
+                                {players.length === 0 ? (
+                                    <tr align="center">
+                                        <td colSpan="7">No players Available.</td>
                                     </tr>
-                                ))
-                            )}
-                            </tbody>
-                        </Table>
-                    </Card.Body>
-                    {players.length > 0 ? (
+                                ) : (
+
+                                    players.map((player) => (
+                                        <tr key={player.playerUuid}>
+                                            <td>{player.nickName}</td>
+                                            <td>{player.image === "" ? (
+                                                <UploadImage playerUuid={player.playerUuid}/>) : (
+                                                <img src={"data:image/jpeg;base64," + player.image}/>)
+                                            }</td>
+                                            <td>{player.points}</td>
+                                            <td>{player.additionalPoints}</td>
+                                            <td>{player.penalties}</td>
+                                            <td>{player.wasKilled}</td>
+                                            <td>{player.games}</td>
+                                            <td>
+                                                <ButtonGroup>
+                                                    <Link to={"/player/" + player.playerUuid}
+                                                          className="btn btn-sm btn-outline-primary"
+                                                    >
+                                                        <FontAwesomeIcon icon={faEdit}/>
+                                                    </Link>{" "}
+                                                </ButtonGroup>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                        {players.length > 0 ? (
                             <Card.Footer>
-                                <div style={{ float: "left" }}>
+                                <div style={{float: "left"}}>
                                     Showing Page {pageNumber} of {totalPages}
                                 </div>
-                                <div style={{ float: "right" }}>
+                                <div style={{float: "right"}}>
                                     <InputGroup size="sm">
                                         <InputGroup.Prepend>
                                             <Button
@@ -283,7 +293,7 @@ class PlayerList extends Component {
                                                 disabled={pageNumber === 1}
                                                 onClick={this.firstPage}
                                             >
-                                                <FontAwesomeIcon icon={faFastBackward} /> First
+                                                <FontAwesomeIcon icon={faFastBackward}/> First
                                             </Button>
                                             <Button
                                                 type="button"
@@ -291,7 +301,7 @@ class PlayerList extends Component {
                                                 disabled={pageNumber === 1}
                                                 onClick={this.prevPage}
                                             >
-                                                <FontAwesomeIcon icon={faStepBackward} /> Prev
+                                                <FontAwesomeIcon icon={faStepBackward}/> Prev
                                             </Button>
                                         </InputGroup.Prepend>
                                         <FormControl
@@ -306,7 +316,7 @@ class PlayerList extends Component {
                                                 disabled={pageNumber === totalPages}
                                                 onClick={this.nextPage}
                                             >
-                                                <FontAwesomeIcon icon={faStepForward} /> Next
+                                                <FontAwesomeIcon icon={faStepForward}/> Next
                                             </Button>
                                             <Button
                                                 type="button"
@@ -314,18 +324,20 @@ class PlayerList extends Component {
                                                 disabled={pageNumber === totalPages}
                                                 onClick={this.lastPage}
                                             >
-                                                <FontAwesomeIcon icon={faFastForward} /> Last
+                                                <FontAwesomeIcon icon={faFastForward}/> Last
                                             </Button>
                                         </InputGroup.Append>
                                     </InputGroup>
                                 </div>
                             </Card.Footer>
-                    ) : null}
-                </Card>
+                        ) : null}
+                    </Card>
+                </Container>
             </div>
         );
     }
 
 }
+
 export default PlayerList;
 
