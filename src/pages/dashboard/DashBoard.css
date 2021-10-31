@@ -2,14 +2,23 @@
     height: 1500px;
     object-fit: cover;
     width: 100%;
-    background-image: url("bg-mafia-7.jpg");
+    background-image: url("dark-mafia.jpg");
 }
 .gameMaster{
-    width: 25%;
+    width: 20%;
     background-color: #6e747c;
-    padding: 20px 10px 10px;
+    padding: 20px 5px 5px;
     border-radius:5px;
+    border: white solid 2px;
     text-align: center;
     font-size: 16pt;
     margin-bottom: 10px;
+}
+.bg-general{
+    height: 1500px;
+    background-image: url("dark-mafia.jpg");
+}
+.bg-second{
+    background-color: #343a40;
+    opacity: 0.8;
 }

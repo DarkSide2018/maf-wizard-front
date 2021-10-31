@@ -68,7 +68,7 @@ const LoginPage=({loading,error,...props})=>{
         <section className="h-100">
         <div className="container h-100">
        
-            <div className="row justify-content-md-center h-100">
+            <div className="row justify-content-md-left h-100">
                 <div className="card-wrapper">
                     <div style={{height:"100px"}}>
 
@@ -92,11 +92,6 @@ const LoginPage=({loading,error,...props})=>{
                                 </div>
 
                                 <div className="form-group">
-                                    <label>Password
-                                        <a href="forgot.html" className=" border-white text-white float-right">
-                                            Forgot Password?
-                                        </a>
-                                    </label>
                                     <input id="password" type="password" className="form-control" minLength={8} value={values.password} onChange={handleChange} name="password" required/>
                                     <div className="invalid-feedback">
                                         Password is required

@@ -5,6 +5,7 @@ import {getCurrentGame} from "../player/AvailablePlayers";
 import {getToken} from "../../api/authenticationService";
 
 import './Drop.css';
+
 class Drop extends Component {
     constructor(props) {
         super(props);
@@ -70,7 +71,7 @@ class Drop extends Component {
             night.sheriffChecked = value.playerUuid
         } else if (type === 'donChecked') {
             night.donChecked = value.playerUuid
-        }else if (type === 'leftGame') {
+        } else if (type === 'leftGame') {
             night.playerLeftGame = value.playerUuid
         }
         let gameCommand = {

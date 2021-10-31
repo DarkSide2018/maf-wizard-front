@@ -3,6 +3,8 @@ import {Link} from "react-router-dom";
 import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import AppNavbar from "../AppNavbar";
 import {getToken} from "../../api/authenticationService";
+import '../dashboard/DashBoard.css';
+
 class GameHistory extends Component {
 
     constructor(props) {
@@ -12,17 +14,18 @@ class GameHistory extends Component {
     }
 
     componentDidMount() {
-        fetch('/game/all',{
+        fetch('/game/all', {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization':'Bearer '+getToken()
+                'Authorization': 'Bearer ' + getToken()
             }
         })
             .then(response => response.json())
             .then(data => this.setState({games: data.games}));
     }
+
     async remove(id) {
         await fetch(`/game/${id}`, {
             method: 'DELETE',
@@ -35,6 +38,7 @@ class GameHistory extends Component {
             this.setState({games: updatedGames});
         });
     }
+
     render() {
         const {games, isLoading} = this.state;
 
@@ -47,17 +51,18 @@ class GameHistory extends Component {
                 <td style={{whiteSpace: 'nowrap'}}>{game.name}</td>
                 <td>
                     <ButtonGroup>
-                        <Button size="sm" color="primary" tag={Link} to={"/game/ticket/" + game.gameUuid}>Edit</Button>
+                        <Button size="md" className={"bg-dark border-white"} tag={Link}
+                                to={"/game/ticket/" + game.gameUuid}>Edit</Button>
                     </ButtonGroup>
                 </td>
             </tr>
         });
         return (
-            <div>
-                <AppNavbar/>
-                <Container fluid>
+            <div className={"bg-general"}>
+                <Container className={"bg-second text-white"}>
+                    <AppNavbar/>
                     <h3>Игры</h3>
-                    <Table className="mt-4">
+                    <Table className="mt-4 text-white">
                         <thead>
                         <tr>
                             <th width="30%">Name</th>
@@ -73,5 +78,6 @@ class GameHistory extends Component {
         );
     }
 }
+
 export default GameHistory;
 

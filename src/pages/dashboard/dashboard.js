@@ -38,33 +38,32 @@ export const Dashboard = (props) => {
     }
 
     return (
-        <div className={"bg-mafia"}>
-
-        <Container className={"text-white"}>
-            <MainWrapper>
-                <div className={"gameMaster"}>
-                    <p>Ведущий : {data && `${data.firstName} ${data.lastName}`}</p>
-                </div>
-                <Container>
-                    <Row>
-                        <ButtonGroup>
-                            <Button style={{marginTop: '5px'}} tag={Link} to="/new/table">Создать игру</Button>
-                        </ButtonGroup>
-                    </Row>
-                    <Row>
-                        <ButtonGroup>
-                            <Button style={{marginTop: '5px'}} tag={Link} to="/game/history">История игр</Button>
-                        </ButtonGroup>
-                    </Row>
-                    <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Статистика Игроков</Button>
-                    </Row>
-                    <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => logOut()}>Выход</Button>
-                    </Row>
-                </Container>
-            </MainWrapper>
-        </Container>
+        <div className={"bg-general"}>
+            <Container className={"text-white"}>
+                <MainWrapper>
+                    <div className={"gameMaster bg-dark"}>
+                        <p>Ведущий : {data && `${data.firstName} ${data.lastName}`}</p>
+                    </div>
+                    <Container>
+                        <Row>
+                            <ButtonGroup>
+                                <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link} to="/new/table">Создать игру</Button>
+                            </ButtonGroup>
+                        </Row>
+                        <Row>
+                            <ButtonGroup>
+                                <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link} to="/game/history">История игр</Button>
+                            </ButtonGroup>
+                        </Row>
+                        <Row>
+                            <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} onClick={() => callPlayers()}>Статистика Игроков</Button>
+                        </Row>
+                        <Row>
+                            <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} onClick={() => logOut()}>Выход</Button>
+                        </Row>
+                    </Container>
+                </MainWrapper>
+            </Container>
         </div>
     )
 }

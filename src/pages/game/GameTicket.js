@@ -39,18 +39,19 @@ class GameTicket extends React.Component {
     componentDidMount() {
         let id = this.props.match.params.id;
         console.log("id -> " + id)
-        if(id === "new"){
+        if (id === "new") {
             this.getCurrentGameAfterMount()
-        }else{
+        } else {
             this.setState({
-                edit:true
+                edit: true
             })
             setGameUuid(id)
             this.getOldGame(id)
         }
     }
-    getOldGame(id){
-        fetch('/game/'+id, {
+
+    getOldGame(id) {
+        fetch('/game/' + id, {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -62,13 +63,13 @@ class GameTicket extends React.Component {
             .then(data => {
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                     this.setState({
-                            currentVictory:data.victory,
+                            currentVictory: data.victory,
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
                             nights: data.nights,
                             gamePlayers: responsePlayers,
                             gameName: data.name,
-                            playerToSlot:data.playerToCardNumber
+                            playerToSlot: data.playerToCardNumber
                         }
                     )
                 }
@@ -88,19 +89,20 @@ class GameTicket extends React.Component {
             .then(data => {
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                     this.setState({
-                            currentVictory:data.victory,
+                            currentVictory: data.victory,
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
                             nights: data.nights,
                             gamePlayers: responsePlayers,
                             gameName: data.name,
-                            playerToSlot:data.playerToCardNumber
+                            playerToSlot: data.playerToCardNumber
                         }
                     )
                 }
             );
     }
-    endGame(players){
+
+    endGame(players) {
         console.log("finish game")
         let gameCommand = {
             gameUuid: getCurrentGame(),
@@ -120,7 +122,8 @@ class GameTicket extends React.Component {
         localStorage.removeItem('GAME_UUID');
         this.props.history.push('/dashboard');
     }
-    toPlayersSelection(players){
+
+    toPlayersSelection(players) {
         console.log("toPlayersSelection")
         let gameCommand = {
             gameUuid: getCurrentGame(),
@@ -157,28 +160,30 @@ class GameTicket extends React.Component {
         let availablePlayersForDonList = ''
         let availableForLeftGameList = ''
         if (gamePlayers !== [] && gamePlayers !== undefined) {
-            availablePlayersForMurderList = makeArray(7, "").map((item,index) => {
+            availablePlayersForMurderList = makeArray(7, "").map((item, index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='killedPlayer' nights={nights} key={key+'dr'}  players={gamePlayers}/>
+                    <Drop nightNumber={index} type='killedPlayer' nights={nights} key={key + 'dr'}
+                          players={gamePlayers}/>
                 </td>
             })
-            availablePlayersForSheriffList = makeArray(7, "").map((item,index) => {
+            availablePlayersForSheriffList = makeArray(7, "").map((item, index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='sheriffChecked' nights={nights} key={key+'dr'} players={gamePlayers}/>
+                    <Drop nightNumber={index} type='sheriffChecked' nights={nights} key={key + 'dr'}
+                          players={gamePlayers}/>
                 </td>
             })
-            availablePlayersForDonList = makeArray(7, "").map((item,index) => {
+            availablePlayersForDonList = makeArray(7, "").map((item, index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='donChecked' key={key+'dr'}  nights={nights} players={gamePlayers}/>
+                    <Drop nightNumber={index} type='donChecked' key={key + 'dr'} nights={nights} players={gamePlayers}/>
                 </td>
             })
-            availableForLeftGameList = makeArray(7, "").map((item,index) => {
+            availableForLeftGameList = makeArray(7, "").map((item, index) => {
                 let key = generateGuid();
                 return <td key={key}>
-                    <Drop nightNumber={index} type='leftGame' key={key+'dr'}  nights={nights} players={gamePlayers}/>
+                    <Drop nightNumber={index} type='leftGame' key={key + 'dr'} nights={nights} players={gamePlayers}/>
                 </td>
             })
         }
@@ -186,28 +191,28 @@ class GameTicket extends React.Component {
             return <p>Loading...</p>;
         }
         let playerSelectionButton = <Button
-            style={{float:"right"}}
+            style={{float: "right"}}
             type="button"
             variant="outline-info"
-            onClick={()=>this.toPlayersSelection(gamePlayers)}>
+            onClick={() => this.toPlayersSelection(gamePlayers)}>
             Вернуться к подбору игроков
         </Button>
-        let endGameButton =        <Button
-            style={{float:"right"}}
+        let endGameButton = <Button
+            style={{float: "right"}}
             type="button"
             variant="outline-info"
-            onClick={()=>this.endGame(gamePlayers)}>
+            onClick={() => this.endGame(gamePlayers)}>
             Закончить игру
         </Button>
-        if(edit){
+        if (edit) {
             playerSelectionButton = ""
-            endGameButton=""
+            endGameButton = ""
         }
 
-        return <div className={"bg-dark"}>
-            <AppNavbar/>
+        return <div className={"bg-general"}>
             <Container>
-                <Card className={"border border-dark bg-dark text-white"}>
+                <AppNavbar/>
+                <Card className={"bg-dark text-white"} style={{opacity: '0.8', zIndex: 1}}>
                     <Card.Header>
                         {playerSelectionButton}
                     </Card.Header>
@@ -254,45 +259,46 @@ class GameTicket extends React.Component {
                         </Table>
                     </Card.Body>
                 </Card>
-
-                <Card  className={"border border-dark bg-dark text-white"}>
-                <Card.Body>
-                    <Table bordered hover striped variant="dark">
-                        <thead className={"text-white"}>
-                        <tr key={generateGuid()}>
-                            <th>Номер слота</th>
-                            <th>Имя игрока</th>
-                            <th>Роль игрока</th>
-                            <th>Замечание</th>
-                        </tr>
-                        </thead>
-                        <tbody className={"text-white"}>
-                        {gamePlayers.map((item,index) => {
-                            return <tr key={generateGuid()}>
-                                <td key={generateGuid()}>
-                                    {index+1}
-                                </td>
-                                <td key={generateGuid()}>
-                                    <DropDownPlayers playersToSlot={playerToSlot} slot={index+1} key={generateGuid()} players={gamePlayers}>
-
-                                    </DropDownPlayers>
-                                </td>
-                                <td key={generateGuid()}>
-                                    <DropDownRole playersToSlot={playerToSlot} slot={index+1} key={generateGuid()} players={gamePlayers} roles={availableRoles}>
-
-                                    </DropDownRole>
-                                </td>
-                                <td key={generateGuid()}>
-                                    <Notes playersToSlot={playerToSlot} slot={index+1} key={generateGuid()}>
-
-                                    </Notes>
-                                </td>
+                <Card className={"bg-dark text-white"} style={{opacity: '0.8', zIndex: 0}}>
+                    <Card.Body>
+                        <Table bordered hover striped variant="dark">
+                            <thead className={"text-white"}>
+                            <tr key={generateGuid()}>
+                                <th>Номер слота</th>
+                                <th>Имя игрока</th>
+                                <th>Роль игрока</th>
+                                <th>Замечание</th>
                             </tr>
-                        })}
-                        </tbody>
-                    </Table>
-                    {endGameButton}
-                </Card.Body>
+                            </thead>
+                            <tbody className={"text-white"}>
+                            {gamePlayers.map((item, index) => {
+                                return <tr key={generateGuid()}>
+                                    <td key={generateGuid()}>
+                                        {index + 1}
+                                    </td>
+                                    <td key={generateGuid()}>
+                                        <DropDownPlayers playersToSlot={playerToSlot} slot={index + 1}
+                                                         key={generateGuid()} players={gamePlayers}>
+
+                                        </DropDownPlayers>
+                                    </td>
+                                    <td key={generateGuid()}>
+                                        <DropDownRole playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}
+                                                      players={gamePlayers} roles={availableRoles}>
+
+                                        </DropDownRole>
+                                    </td>
+                                    <td key={generateGuid()}>
+                                        <Notes playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}>
+
+                                        </Notes>
+                                    </td>
+                                </tr>
+                            })}
+                            </tbody>
+                        </Table>
+                        {endGameButton}
+                    </Card.Body>
                 </Card>
             </Container>
         </div>

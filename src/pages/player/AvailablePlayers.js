@@ -31,7 +31,7 @@ class AvailablePlayers extends React.Component {
             gameNumber: null,
             gameUuid: null,
             gamePlayers: [],
-            gameName: 'Новая игра oт ' + currentTime()
+            gameName: 'Новая игра | ' + currentTime()
         };
         this.confirmGame = this.confirmGame.bind(this);
         this.createGameTicket = this.createGameTicket.bind(this);
@@ -42,6 +42,7 @@ class AvailablePlayers extends React.Component {
     componentDidMount() {
         this.getActiveGame()
     }
+
     getActiveGame() {
         fetch('/game/active', {
             method: 'GET',
@@ -57,7 +58,7 @@ class AvailablePlayers extends React.Component {
                     }
                 )
                 this.findAllPlayers(this.state.pageNumber)
-            }else{
+            } else {
                 this.getDraftGame()
                 this.findAllPlayers(this.state.pageNumber)
             }
@@ -276,20 +277,21 @@ class AvailablePlayers extends React.Component {
         event.preventDefault();
         this.props.history.push('/game/confirm');
     }
+
     createGameTicket(event) {
         event.preventDefault();
         let queryItem = {
-            messageType:'UpdateGameRequest',
+            messageType: 'UpdateGameRequest',
             gameUuid: getCurrentGame(),
-            status:'ACTIVE',
+            status: 'ACTIVE',
             players: [...new Set(this.state.gamePlayers)]
         }
-         fetch('/game', {
+        fetch('/game', {
             method: 'PUT',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization':'Bearer '+getToken()
+                'Authorization': 'Bearer ' + getToken()
             },
             body: JSON.stringify(queryItem),
         });
@@ -320,157 +322,148 @@ class AvailablePlayers extends React.Component {
             return <p>Loading...</p>;
         }
         return (
-            <div className={"bg-dark"}>
-                <AppNavbar/>
-                <div>
-                    <Container>
-                        <Row>
-                            <h3>Название игры : {gameName} : UUID: {this.state.gameUuid}</h3>
-                        </Row>
-                        <Row>
-                            {gamePlayersList}
-                        </Row>
-                        <Form onSubmit={this.confirmGame}>
-                            <Button color="primary" type="submit">Подтвердить <FontAwesomeIcon
-                                icon={faCrosshairs}/></Button>{' '}
-                        </Form>
-                        <Form onSubmit={this.createGameTicket}>
-                            <Button color="primary" type="submit">Создать бланк для игры <FontAwesomeIcon
-                                icon={faCrosshairs}/></Button>{' '}
-                        </Form>
-                    </Container>
-                </div>
-                <Card className={"border border-dark bg-dark text-white"}>
-                    <Card.Header>
-                        <div style={{float: "left"}}>
-                            <FontAwesomeIcon icon={faList}/> Игроки
-                        </div>
-                        <div style={{float: "right"}}>
-                            <InputGroup size="sm">
-                                <FormControl
-                                    placeholder="Search"
-                                    name="search"
-                                    value={search}
-                                    className={"info-border bg-dark text-white"}
-                                    onChange={this.searchChange}
-                                />
-                                <InputGroup.Append>
-                                    <Button
-                                        size="sm"
-                                        variant="outline-info"
-                                        type="button"
-                                        onClick={this.searchData}
-                                    >
-                                        <FontAwesomeIcon icon={faSearch}/>
-                                    </Button>
-                                    <Button
-                                        size="sm"
-                                        variant="outline-danger"
-                                        type="button"
-                                        onClick={this.cancelSearch}
-                                    >
-                                        <FontAwesomeIcon icon={faTimes}/>
-                                    </Button>
-                                </InputGroup.Append>
-                            </InputGroup>
-                        </div>
-                    </Card.Header>
-                    <Card.Body>
-                        <Table bordered hover striped variant="dark">
-                            <thead className={"text-white"}>
-                            <tr>
-                                <th>Имя</th>
-                                <th>Очки</th>
-                                <th>Доп.Очки</th>
-                                <th>Штрафы</th>
-                                <th>First Night kill</th>
-                                <th>Количество игр</th>
-                            </tr>
-                            </thead>
-                            <tbody className={"text-white"}>
-                            {players.length === 0 ? (
-                                <tr align="center">
-                                    <td colSpan="7">No players Available.</td>
-                                </tr>
-                            ) : (
-                                players.map((player) => (
-                                    <tr key={player.playerUuid}>
-                                        <td>{player.nickName}</td>
-                                        <td>{player.points}</td>
-                                        <td>{player.additionalPoints}</td>
-                                        <td>{player.penalties}</td>
-                                        <td>{player.wasKilled}</td>
-                                        <td>{player.games}</td>
-                                        <td>
-                                            <ButtonGroup>
-                                                <Button
-                                                    size="sm"
-                                                    variant="outline-danger"
-                                                    onClick={() => this.addPlayerToGame(player.playerUuid)}
-                                                >
-                                                    <FontAwesomeIcon icon={faPlus}/>
-                                                </Button>
-                                            </ButtonGroup>
-                                        </td>
-                                    </tr>
-                                ))
-                            )}
-                            </tbody>
-                        </Table>
-                    </Card.Body>
-                    {players.length > 0 ? (
-                        <Card.Footer>
+            <div className={"bg-general"}>
+                <Container className={"bg-second"}>
+                    <AppNavbar/>
+                    <Row>
+                        {gamePlayersList}
+                    </Row>
+                    <Form onSubmit={this.createGameTicket}>
+                        <Button className={"bg-dark border-white"} type="submit">Создать бланк для игры
+                        </Button>
+                    </Form>
+                    <Card className={"border border-dark bg-dark text-white"}>
+                        <Card.Header>
                             <div style={{float: "left"}}>
-                                Showing Page {pageNumber} of {totalPages}
+                                <h3>{gameName}</h3>
                             </div>
                             <div style={{float: "right"}}>
                                 <InputGroup size="sm">
-                                    <InputGroup.Prepend>
-                                        <Button
-                                            type="button"
-                                            variant="outline-info"
-                                            disabled={pageNumber === 1}
-                                            onClick={this.firstPage}
-                                        >
-                                            <FontAwesomeIcon icon={faFastBackward}/> First
-                                        </Button>
-                                        <Button
-                                            type="button"
-                                            variant="outline-info"
-                                            disabled={pageNumber === 1}
-                                            onClick={this.prevPage}
-                                        >
-                                            <FontAwesomeIcon icon={faStepBackward}/> Prev
-                                        </Button>
-                                    </InputGroup.Prepend>
                                     <FormControl
-                                        className={"page-num bg-dark"}
-                                        name="currentPage"
-                                        onChange={this.changePage}
+                                        placeholder="Search"
+                                        name="search"
+                                        value={search}
+                                        className={"info-border bg-dark text-white"}
+                                        onChange={this.searchChange}
                                     />
                                     <InputGroup.Append>
                                         <Button
-                                            type="button"
+                                            size="sm"
                                             variant="outline-info"
-                                            disabled={pageNumber === totalPages}
-                                            onClick={this.nextPage}
+                                            type="button"
+                                            onClick={this.searchData}
                                         >
-                                            <FontAwesomeIcon icon={faStepForward}/> Next
+                                            <FontAwesomeIcon icon={faSearch}/>
                                         </Button>
                                         <Button
+                                            size="sm"
+                                            variant="outline-danger"
                                             type="button"
-                                            variant="outline-info"
-                                            disabled={pageNumber === totalPages}
-                                            onClick={this.lastPage}
+                                            onClick={this.cancelSearch}
                                         >
-                                            <FontAwesomeIcon icon={faFastForward}/> Last
+                                            <FontAwesomeIcon icon={faTimes}/>
                                         </Button>
                                     </InputGroup.Append>
                                 </InputGroup>
                             </div>
-                        </Card.Footer>
-                    ) : null}
-                </Card>
+                        </Card.Header>
+                        <Card.Body>
+                            <Table bordered hover striped variant="dark">
+                                <thead className={"text-white"}>
+                                <tr>
+                                    <th>Имя</th>
+                                    <th>Очки</th>
+                                    <th>Доп.Очки</th>
+                                    <th>Штрафы</th>
+                                    <th>First Night kill</th>
+                                    <th>Количество игр</th>
+                                </tr>
+                                </thead>
+                                <tbody className={"text-white"}>
+                                {players.length === 0 ? (
+                                    <tr align="center">
+                                        <td colSpan="7">No players Available.</td>
+                                    </tr>
+                                ) : (
+                                    players.map((player) => (
+                                        <tr key={player.playerUuid}>
+                                            <td>{player.nickName}</td>
+                                            <td>{player.points}</td>
+                                            <td>{player.additionalPoints}</td>
+                                            <td>{player.penalties}</td>
+                                            <td>{player.wasKilled}</td>
+                                            <td>{player.games}</td>
+                                            <td>
+                                                <ButtonGroup>
+                                                    <Button
+                                                        size="sm"
+                                                        variant="outline-danger"
+                                                        onClick={() => this.addPlayerToGame(player.playerUuid)}
+                                                    >
+                                                        <FontAwesomeIcon icon={faPlus}/>
+                                                    </Button>
+                                                </ButtonGroup>
+                                            </td>
+                                        </tr>
+                                    ))
+                                )}
+                                </tbody>
+                            </Table>
+                        </Card.Body>
+                        {players.length > 0 ? (
+                            <Card.Footer>
+                                <div style={{float: "left"}}>
+                                    Showing Page {pageNumber} of {totalPages}
+                                </div>
+                                <div style={{float: "right"}}>
+                                    <InputGroup size="sm">
+                                        <InputGroup.Prepend>
+                                            <Button
+                                                type="button"
+                                                variant="outline-info"
+                                                disabled={pageNumber === 1}
+                                                onClick={this.firstPage}
+                                            >
+                                                <FontAwesomeIcon icon={faFastBackward}/> First
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="outline-info"
+                                                disabled={pageNumber === 1}
+                                                onClick={this.prevPage}
+                                            >
+                                                <FontAwesomeIcon icon={faStepBackward}/> Prev
+                                            </Button>
+                                        </InputGroup.Prepend>
+                                        <FormControl
+                                            className={"page-num bg-dark"}
+                                            name="currentPage"
+                                            onChange={this.changePage}
+                                        />
+                                        <InputGroup.Append>
+                                            <Button
+                                                type="button"
+                                                variant="outline-info"
+                                                disabled={pageNumber === totalPages}
+                                                onClick={this.nextPage}
+                                            >
+                                                <FontAwesomeIcon icon={faStepForward}/> Next
+                                            </Button>
+                                            <Button
+                                                type="button"
+                                                variant="outline-info"
+                                                disabled={pageNumber === totalPages}
+                                                onClick={this.lastPage}
+                                            >
+                                                <FontAwesomeIcon icon={faFastForward}/> Last
+                                            </Button>
+                                        </InputGroup.Append>
+                                    </InputGroup>
+                                </div>
+                            </Card.Footer>
+                        ) : null}
+                    </Card>
+                </Container>
             </div>
         );
     }
@@ -480,6 +473,6 @@ export default AvailablePlayers;
 export const getCurrentGame = () => {
     return localStorage.getItem('GAME_UUID');
 }
-export const setGameUuid= (content)=>{
-    localStorage.setItem('GAME_UUID',content);
+export const setGameUuid = (content) => {
+    localStorage.setItem('GAME_UUID', content);
 }

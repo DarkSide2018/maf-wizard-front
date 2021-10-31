@@ -190,10 +190,10 @@ class PlayerList extends Component {
             return <p>Loading...</p>;
         }
         return (
-            <div className={"bg-dark"}>
+            <div className={"bg-general"}>
                 <Container>
                     <AppNavbar/>
-                    <Card className={"border border-dark bg-dark text-white"}>
+                    <Card className={"bg-dark text-white"} style={{opacity:"0.8"}}>
                         <Card.Header>
                             <div style={{float: "left"}}>
                                 <FontAwesomeIcon icon={faList}/> Игроки
