@@ -5,7 +5,7 @@ import styled from 'styled-components';
 import {fetchUserData, getToken} from '../../api/authenticationService';
 import {Button, ButtonGroup, Row} from "reactstrap";
 import {Link} from "react-router-dom";
-
+import './DashBoard.css';
 
 const MainWrapper = styled.div`
     padding-top:40px;
@@ -38,13 +38,13 @@ export const Dashboard = (props) => {
     }
 
     return (
-        <Container>
+        <div className={"bg-mafia"}>
+
+        <Container className={"text-white"}>
             <MainWrapper>
-                <h4>Hello {data && `${data.firstName} ${data.lastName}`}</h4>
-                <br></br>
-                {data && data.roles && data.roles.filter(value => value.roleCode === 'ADMIN').length > 0 &&
-                <Button type="variant">Add User</Button>}
-                <br></br>
+                <div className={"gameMaster"}>
+                    <p>Ведущий : {data && `${data.firstName} ${data.lastName}`}</p>
+                </div>
                 <Container>
                     <Row>
                         <ButtonGroup>
@@ -60,11 +60,12 @@ export const Dashboard = (props) => {
                         <Button style={{marginTop: '5px'}} onClick={() => callPlayers()}>Статистика Игроков</Button>
                     </Row>
                     <Row>
-                        <Button style={{marginTop: '5px'}} onClick={() => logOut()}>Logout</Button>
+                        <Button style={{marginTop: '5px'}} onClick={() => logOut()}>Выход</Button>
                     </Row>
                 </Container>
             </MainWrapper>
         </Container>
+        </div>
     )
 }
 

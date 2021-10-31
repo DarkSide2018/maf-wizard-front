@@ -6,7 +6,7 @@ import {userLogin} from '../api/authenticationService';
 import {Alert, Spinner} from 'react-bootstrap';
 import {Link} from "react-router-dom";
 import {Button} from "reactstrap";
-
+import './dashboard/DashBoard.css';
 const LoginPage=({loading,error,...props})=>{
 
 
@@ -64,7 +64,7 @@ const LoginPage=({loading,error,...props})=>{
     console.log("Loading ",loading);
 
     return (
-        <div  className={"login-page border border-dark bg-dark text-white"}>
+        <div  className={"login-page border border-dark bg-mafia text-white"}>
         <section className="h-100">
         <div className="container h-100">
        
@@ -146,9 +146,6 @@ const LoginPage=({loading,error,...props})=>{
             </div>
         </div>
     </section>
-            <div style={{height:"400px"}} className={"border border-dark bg-dark "}>
-
-            </div>
         </div>
     )
 

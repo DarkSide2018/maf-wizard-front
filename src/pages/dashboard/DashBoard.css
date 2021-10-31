@@ -1,0 +1,15 @@
+.bg-mafia{
+    height: 1500px;
+    object-fit: cover;
+    width: 100%;
+    background-image: url("bg-mafia-7.jpg");
+}
+.gameMaster{
+    width: 25%;
+    background-color: #6e747c;
+    padding: 20px 10px 10px;
+    border-radius:5px;
+    text-align: center;
+    font-size: 16pt;
+    margin-bottom: 10px;
+}
