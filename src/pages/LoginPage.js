@@ -68,14 +68,14 @@ const LoginPage=({loading,error,...props})=>{
         <section className="h-100">
         <div className="container h-100">
        
-            <div className="row justify-content-md-left h-100">
+            <div className="row justify-content-md-left h-100" style={{opacity:0.8}}>
                 <div className="card-wrapper">
                     <div style={{height:"100px"}}>
 
                     </div>
 
                     <div className="text-white">
-                        <div className="card-body border border-dark bg-dark text-white">
+                        <div className="card-body bg-dark text-white">
                             <h4 className="card-title">Login</h4>
                             
                             <form className="my-login-validation" onSubmit={handleSubmit} noValidate={false}>
