@@ -64,7 +64,7 @@ const LoginPage=({loading,error,...props})=>{
     console.log("Loading ",loading);
 
     return (
-        <div  className={"login-page border border-dark bg-mafia text-white"}>
+        <div  className={"login-page bg-mafia text-white"}>
         <section className="h-100">
         <div className="container h-100">
        
