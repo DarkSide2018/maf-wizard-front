@@ -212,7 +212,7 @@ class GameTicket extends React.Component {
         return <div className={"bg-general"}>
             <Container>
                 <AppNavbar/>
-                <Card className={"bg-dark text-white"} style={{opacity: '0.8', zIndex: 1}}>
+                <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
                     <Card.Header>
                         {playerSelectionButton}
                     </Card.Header>
@@ -259,7 +259,10 @@ class GameTicket extends React.Component {
                         </Table>
                     </Card.Body>
                 </Card>
-                <Card className={"bg-dark text-white"} style={{opacity: '0.8', zIndex: 0}}>
+                <div style={{height:'250px'}}>
+
+                </div>
+                <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
                     <Card.Body>
                         <Table bordered hover striped variant="dark">
                             <thead className={"text-white"}>
@@ -283,7 +286,7 @@ class GameTicket extends React.Component {
                                         </DropDownPlayers>
                                     </td>
                                     <td key={generateGuid()}>
-                                        <DropDownRole playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}
+                                        <DropDownRole  playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}
                                                       players={gamePlayers} roles={availableRoles}>
 
                                         </DropDownRole>

@@ -15,8 +15,9 @@
     margin-bottom: 10px;
 }
 .bg-general{
-    height: 1500px;
+    height: 2000px;
     background-image: url("dark-mafia.jpg");
+    background-repeat: repeat-y;
 }
 .bg-second{
     background-color: #343a40;
