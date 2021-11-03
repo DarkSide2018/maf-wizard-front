@@ -73,13 +73,13 @@ class PlayerEdit extends Component {
 
     render() {
         const {item} = this.state;
-        const title = <h2>{item.playerUuid ? 'Редактировать игрока' : 'Добавить Игрока'}</h2>;
+        const title = <h4 className={"text-white"}>{item.playerUuid ? 'Редактировать игрока' : 'Добавить Игрока'}</h4>;
 
-        return <div>
+        return     <div className={"bg-general"}>
+            <Container >
             <AppNavbar/>
-            <Container>
                 {title}
-                <Form onSubmit={this.handleSubmit}>
+                <Form className={"text-white"} onSubmit={this.handleSubmit} style={{width:'30%'}}>
                     <FormGroup>
                         <Label for="nickName">Имя</Label>
                         <Input type="text" name="nickName" id="nickName" value={item.nickName || ''}

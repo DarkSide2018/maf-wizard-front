@@ -9,6 +9,7 @@ import DropDownPlayers from "./DropDownPlayers";
 import Notes from "./Notes";
 import DropDownVictory from "./DropDownVictory";
 import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
+import AdditionalPoints from "./AdditionalPoints";
 
 
 class GameTicket extends React.Component {
@@ -271,6 +272,7 @@ class GameTicket extends React.Component {
                                 <th>Имя игрока</th>
                                 <th>Роль игрока</th>
                                 <th>Замечание</th>
+                                <th>Доп.Баллы</th>
                             </tr>
                             </thead>
                             <tbody className={"text-white"}>
@@ -295,6 +297,11 @@ class GameTicket extends React.Component {
                                         <Notes playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}>
 
                                         </Notes>
+                                    </td>
+                                    <td key={generateGuid()}>
+                                        <AdditionalPoints playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}>
+
+                                        </AdditionalPoints>
                                     </td>
                                 </tr>
                             })}
