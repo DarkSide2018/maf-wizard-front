@@ -24,11 +24,11 @@ class AdditionalPoints extends Component {
         let filteredSlot = playersToSlot.filter(item => item.slot === slot)
         let currentNote
         if (filteredSlot !== undefined && filteredSlot.length > 0) {
-            if (filteredSlot[0].note !== undefined) {
+            if (filteredSlot[0].addPoints !== undefined) {
+
                 currentNote = filteredSlot[0].addPoints
             }
         }
-        console.log("current note -> " + currentNote)
         if (currentNote !== undefined) {
             this.setState(
                 {
