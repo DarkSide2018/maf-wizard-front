@@ -104,7 +104,6 @@ class GameTicket extends React.Component {
     }
 
     endGame(players) {
-        console.log("finish game")
         let gameCommand = {
             gameUuid: getCurrentGame(),
             status: 'FINISHED',
@@ -155,7 +154,7 @@ class GameTicket extends React.Component {
             edit
         } = this.state;
 
-
+        console.log("playerTOSlot render-> " + JSON.stringify(playerToSlot))
         let availablePlayersForMurderList = ''
         let availablePlayersForSheriffList = ''
         let availablePlayersForDonList = ''
@@ -260,7 +259,7 @@ class GameTicket extends React.Component {
                         </Table>
                     </Card.Body>
                 </Card>
-                <div style={{height:'250px'}}>
+                <div style={{height: '250px'}}>
 
                 </div>
                 <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
@@ -288,7 +287,7 @@ class GameTicket extends React.Component {
                                         </DropDownPlayers>
                                     </td>
                                     <td key={generateGuid()}>
-                                        <DropDownRole  playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}
+                                        <DropDownRole playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}
                                                       players={gamePlayers} roles={availableRoles}>
 
                                         </DropDownRole>
@@ -299,7 +298,8 @@ class GameTicket extends React.Component {
                                         </Notes>
                                     </td>
                                     <td key={generateGuid()}>
-                                        <AdditionalPoints playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}>
+                                        <AdditionalPoints playersToSlot={playerToSlot} slot={index + 1}
+                                                          key={generateGuid()}>
 
                                         </AdditionalPoints>
                                     </td>

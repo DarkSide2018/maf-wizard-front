@@ -242,6 +242,10 @@ class PlayerList extends Component {
                                     <th>Доп.Очки</th>
                                     <th>Штрафы</th>
                                     <th>First Night kill</th>
+                                    <th>VR</th>
+                                    <th>VB</th>
+                                    <th>DR</th>
+                                    <th>DB</th>
                                     <th>Количество игр</th>
                                 </tr>
                                 </thead>
@@ -263,6 +267,10 @@ class PlayerList extends Component {
                                             <td>{player.additionalPoints}</td>
                                             <td>{player.penalties}</td>
                                             <td>{player.wasKilled}</td>
+                                            <td>{player.victoriesRed}</td>
+                                            <td>{player.victoriesBlack}</td>
+                                            <td>{player.defeatRed}</td>
+                                            <td>{player.defeatBlack}</td>
                                             <td>{player.games}</td>
                                             <td>
                                                 <ButtonGroup>
