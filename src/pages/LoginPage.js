@@ -123,9 +123,7 @@ const LoginPage=({loading,error,...props})=>{
                                         </div>
                                     </div>
                                     <div className="col-md-6">
-                                        <div className="form-group m-0">
-                                            <Button className={"bg-dark border-white"} tag={Link} to="/user/new">Register</Button>
-                                        </div>
+
                                     </div>
                                 </div>
                             </form>
