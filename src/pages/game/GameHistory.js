@@ -52,7 +52,7 @@ class GameHistory extends Component {
                 <td>
                     <ButtonGroup>
                         <Button size="md" className={"bg-dark border-white"} tag={Link}
-                                to={"/game/ticket/" + game.gameUuid}>Edit</Button>
+                                to={"/game/ticket/" + game.gameUuid}>Просмотреть</Button>
                     </ButtonGroup>
                 </td>
             </tr>

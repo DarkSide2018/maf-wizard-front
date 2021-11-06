@@ -9,7 +9,15 @@ class PlayerEdit extends Component {
     async componentDidMount() {
         console.log("PlayerEdit componentDidMount")
         if (this.props.match.params.id !== 'new') {
-            const player = await (await fetch(`/player/${this.props.match.params.id}`)).json();
+            const player = await (await fetch(`/player/${this.props.match.params.id}`,{
+                method:'GET',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization':'Bearer '+getToken()
+
+                }
+              })).json();
             this.setState({item: player});
         }
     }
@@ -86,17 +94,17 @@ class PlayerEdit extends Component {
                                onChange={this.handleChange} autoComplete="nickName"/>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="points">Очки</Label>
+                        <Label for="points">Баллы</Label>
                         <Input type="text" name="points" id="points" value={item.points || ''}
                                onChange={this.handleChange} autoComplete="points"/>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="foulAmount">Количество фолов</Label>
+                        <Label for="foulAmount">Фолов</Label>
                         <Input type="text" name="foulAmount" id="foulAmount" value={item.foulAmount || ''}
                                onChange={this.handleChange} autoComplete="foulAmount"/>
                     </FormGroup>
                     <FormGroup>
-                        <Label for="additionalPoints">Дополнительные очки</Label>
+                        <Label for="additionalPoints">Дополнительные баллы</Label>
                         <Input type="text" name="additionalPoints" id="additionalPoints"
                                value={item.additionalPoints || ''}
                                onChange={this.handleChange} autoComplete="additionalPoints"/>
@@ -105,11 +113,6 @@ class PlayerEdit extends Component {
                         <Label for="penalties">Штрафы</Label>
                         <Input type="text" name="penalties" id="penalties" value={item.penalties || ''}
                                onChange={this.handleChange} autoComplete="penalties"/>
-                    </FormGroup>
-                    <FormGroup>
-                        <Label for="bestMove">Лучший ход</Label>
-                        <Input type="text" name="bestMove" id="bestMove" value={item.bestMove || ''}
-                               onChange={this.handleChange} autoComplete="bestMove"/>
                     </FormGroup>
                     <FormGroup>
                         <Label for="victoriesRed">Победы за красных</Label>
@@ -146,7 +149,11 @@ class PlayerEdit extends Component {
                         <Input type="text" name="wasKilled" id="wasKilled" value={item.wasKilled || ''}
                                onChange={this.handleChange} autoComplete="wasKilled"/>
                     </FormGroup>
-
+                    <FormGroup>
+                        <Label for="games">Количество сыгранных игр</Label>
+                        <Input type="text" name="games" id="games" value={item.games || ''}
+                               onChange={this.handleChange} autoComplete="games"/>
+                    </FormGroup>
                     <FormGroup>
                         <Button color="primary" type="submit">Save</Button>{' '}
                         <Button color="secondary" tag={Link} to="/player/all">Cancel</Button>

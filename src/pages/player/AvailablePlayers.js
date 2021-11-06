@@ -295,8 +295,9 @@ class AvailablePlayers extends React.Component {
                 'Authorization': 'Bearer ' + getToken()
             },
             body: JSON.stringify(queryItem),
+        }).then(() => {
+            this.props.history.push('/game/ticket/new');
         });
-        this.props.history.push('/game/ticket/new');
     }
 
     render() {
@@ -313,9 +314,10 @@ class AvailablePlayers extends React.Component {
         let gamePlayersList = ''
         if (gamePlayers !== [] && gamePlayers !== undefined) {
             gamePlayersList = gamePlayers.map(player => {
-                return <span key={player.playerUuid + "gm"}>
-              | {player.nickName} |
-            </span>
+                return <Button
+                    size="sm"
+                    variant="outline-danger"> | {player.nickName} |
+                </Button>
             });
         }
 

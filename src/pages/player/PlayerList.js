@@ -67,7 +67,15 @@ class PlayerList extends Component {
         })
             .then(response => response.json())
             .then(data => this.setState({
-                players: data.players,
+                players: data.players.sort(function (a, b) {
+                    if (a.rating < b.rating) {
+                        return 1;
+                    }
+                    if (a.rating > b.rating) {
+                        return -1;
+                    }
+                    return 0;
+                }),
                 totalPages: data.totalPages,
                 totalElements: data.totalElements,
                 pageNumber: data.pageNumber + 1
@@ -193,7 +201,7 @@ class PlayerList extends Component {
             <div className={"bg-general"}>
                 <Container>
                     <AppNavbar/>
-                    <Card className={"bg-dark text-white"} style={{opacity:"0.8"}}>
+                    <Card className={"bg-dark text-white"} style={{opacity: "0.8"}}>
                         <Card.Header>
                             <div style={{float: "left"}}>
                                 <FontAwesomeIcon icon={faList}/> Игроки
@@ -237,6 +245,8 @@ class PlayerList extends Component {
                                 <thead className={"text-white"}>
                                 <tr>
                                     <th>Имя</th>
+                                    <th>Фото</th>
+                                    <th>R</th>
                                     <th>P</th>
                                     <th>AP</th>
                                     <th>PS</th>
@@ -261,11 +271,14 @@ class PlayerList extends Component {
                                     players.map((player) => (
                                         <tr key={player.playerUuid}>
                                             <td>{player.nickName}
-                                                {player.image === "" ? (
-                                                    <UploadImage playerUuid={player.playerUuid}/>) : (
-                                                    <img src={"data:image/jpeg;base64," + player.image}/>)
-                                                }
+
                                             </td>
+                                            <td> {player.image === "" ? (
+                                                <UploadImage playerUuid={player.playerUuid}/>) : (
+                                                <img src={"data:image/jpeg;base64," + player.image}/>)
+                                            }
+                                            </td>
+                                            <td>{player.rating}</td>
                                             <td>{player.points}</td>
                                             <td>{player.additionalPoints}</td>
                                             <td>{player.penalties}</td>
@@ -346,6 +359,18 @@ class PlayerList extends Component {
                             </Card.Footer>
                         ) : null}
                     </Card>
+                    <div className={"text-white"}>P-баллы</div>
+                    <div className={"text-white"}>AP-дополнительные баллы</div>
+                    <div className={"text-white"}>PS-штрафы</div>
+                    <div className={"text-white"}>FNK-был убит в первую ночь</div>
+                    <div className={"text-white"}>VP-процент побед</div>
+                    <div className={"text-white"}>VR-Количество побед за красных</div>
+                    <div className={"text-white"}>VB-Количество побед за черных</div>
+                    <div className={"text-white"}>VBP-Процент побед за черных</div>
+                    <div className={"text-white"}>VRP-Процент побед за красных</div>
+                    <div className={"text-white"}>DB-Поражения за черных</div>
+                    <div className={"text-white"}>DR-Поражения за красных</div>
+                    <div className={"text-white"}>GA-Количество сыгранных игр</div>
                 </Container>
             </div>
         );
