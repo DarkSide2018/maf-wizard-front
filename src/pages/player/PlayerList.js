@@ -237,13 +237,14 @@ class PlayerList extends Component {
                                 <thead className={"text-white"}>
                                 <tr>
                                     <th>Имя</th>
-                                    <th>Фото</th>
                                     <th>Очки</th>
                                     <th>Доп.Очки</th>
                                     <th>Штрафы</th>
                                     <th>First Night kill</th>
                                     <th>VR</th>
+                                    <th>VRP</th>
                                     <th>VB</th>
+                                    <th>VBP</th>
                                     <th>DR</th>
                                     <th>DB</th>
                                     <th>Количество игр</th>
@@ -258,17 +259,20 @@ class PlayerList extends Component {
 
                                     players.map((player) => (
                                         <tr key={player.playerUuid}>
-                                            <td>{player.nickName}</td>
-                                            <td>{player.image === "" ? (
-                                                <UploadImage playerUuid={player.playerUuid}/>) : (
-                                                <img src={"data:image/jpeg;base64," + player.image}/>)
-                                            }</td>
+                                            <td>{player.nickName}
+                                                {player.image === "" ? (
+                                                    <UploadImage playerUuid={player.playerUuid}/>) : (
+                                                    <img src={"data:image/jpeg;base64," + player.image}/>)
+                                                }
+                                            </td>
                                             <td>{player.points}</td>
                                             <td>{player.additionalPoints}</td>
                                             <td>{player.penalties}</td>
                                             <td>{player.wasKilled}</td>
                                             <td>{player.victoriesRed}</td>
+                                            <td>{player.victoriesRedPercent}</td>
                                             <td>{player.victoriesBlack}</td>
+                                            <td>{player.victoriesBlackPercent}</td>
                                             <td>{player.defeatRed}</td>
                                             <td>{player.defeatBlack}</td>
                                             <td>{player.games}</td>
