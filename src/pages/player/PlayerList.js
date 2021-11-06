@@ -237,17 +237,18 @@ class PlayerList extends Component {
                                 <thead className={"text-white"}>
                                 <tr>
                                     <th>Имя</th>
-                                    <th>Очки</th>
-                                    <th>Доп.Очки</th>
-                                    <th>Штрафы</th>
-                                    <th>First Night kill</th>
+                                    <th>P</th>
+                                    <th>AP</th>
+                                    <th>PS</th>
+                                    <th>FNK</th>
+                                    <th>VP</th>
                                     <th>VR</th>
                                     <th>VRP</th>
                                     <th>VB</th>
                                     <th>VBP</th>
                                     <th>DR</th>
                                     <th>DB</th>
-                                    <th>Количество игр</th>
+                                    <th>GA</th>
                                 </tr>
                                 </thead>
                                 <tbody className={"text-white"}>
@@ -269,6 +270,7 @@ class PlayerList extends Component {
                                             <td>{player.additionalPoints}</td>
                                             <td>{player.penalties}</td>
                                             <td>{player.wasKilled}</td>
+                                            <td>{player.victoriesPercent}</td>
                                             <td>{player.victoriesRed}</td>
                                             <td>{player.victoriesRedPercent}</td>
                                             <td>{player.victoriesBlack}</td>
