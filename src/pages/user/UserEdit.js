@@ -100,19 +100,6 @@ class UserEdit extends Component {
                                        onChange={this.handleChange} autoComplete="lastName"/>
                             </FormGroup>
                             <FormGroup>
-                                <Label for="email">email</Label>
-                                <Input className={"registerInput"} type="text" name="email" id="email"
-                                       value={item.email || ''}
-                                       onChange={this.handleChange} autoComplete="email"/>
-                            </FormGroup>
-                            <FormGroup>
-                                <Label for="phoneNumber">Номер телефона</Label>
-                                <Input className={"registerInput"} type="text" name="phoneNumber" id="phoneNumber"
-                                       value={item.phoneNumber || ''}
-                                       onChange={this.handleChange} autoComplete="phoneNumber"/>
-                            </FormGroup>
-
-                            <FormGroup>
                                 <Button color="secondary" type="submit">Save</Button>{' '}
                                 <Button color="secondary" tag={Link} to="/">Cancel</Button>
                             </FormGroup>
