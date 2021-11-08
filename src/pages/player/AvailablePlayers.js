@@ -3,10 +3,8 @@ import {Button, ButtonGroup, Container, Form, FormGroup, Row, Table} from "react
 import {Card, FormControl, InputGroup,} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {
-    faCrosshairs,
     faFastBackward,
     faFastForward,
-    faList,
     faPlus,
     faSearch,
     faStepBackward,
@@ -55,6 +53,9 @@ class AvailablePlayers extends React.Component {
             if (response.ok) {
                 response.json().then(data => {
                         setGameUuid(data.gameUuid)
+                    this.setState({
+                        gamePlayers: data.players
+                       })
                     }
                 )
                 this.findAllPlayers(this.state.pageNumber)
@@ -122,29 +123,14 @@ class AvailablePlayers extends React.Component {
     };
 
     addPlayerToGame(playerUuid) {
-        fetch(`/game/player`, {
-            method: 'POST',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(
-                {
-                    messageType: "AddPlayerRequest",
-                    playerUuid: playerUuid,
-                    gameUuid: getCurrentGame()
-                }
-            )
-        }).then(() => {
-            let addedPlayer = this.state.players.filter(i => i.playerUuid === playerUuid)[0];
-            let oldGamePlayers = [...this.state.gamePlayers]
-            oldGamePlayers.push(addedPlayer)
-            let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== playerUuid);
-            const newGn = [...new Set(oldGamePlayers)]
-            this.setState({
-                players: updatedPlayers,
-                gamePlayers: newGn
-            });
+        let addedPlayer = this.state.players.filter(i => i.playerUuid === playerUuid)[0];
+        let oldGamePlayers = [...this.state.gamePlayers]
+        oldGamePlayers.push(addedPlayer)
+        let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== playerUuid);
+        const newGn = [...new Set(oldGamePlayers)]
+        this.setState({
+            players: updatedPlayers,
+            gamePlayers: newGn
         });
     }
 
@@ -280,24 +266,28 @@ class AvailablePlayers extends React.Component {
     }
 
     createGameTicket(event) {
-        event.preventDefault();
-        let queryItem = {
-            messageType: 'UpdateGameRequest',
-            gameUuid: getCurrentGame(),
-            status: 'ACTIVE',
-            players: [...new Set(this.state.gamePlayers)]
+        event.preventDefault()
+        if(this.state.gamePlayers.length <8){
+            alert("Игроков должно быть больше или равно 8")
+        }else{
+            let queryItem = {
+                messageType: 'UpdateGameRequest',
+                gameUuid: getCurrentGame(),
+                status: 'ACTIVE',
+                players: [...new Set(this.state.gamePlayers)]
+            }
+            fetch('/game', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getToken()
+                },
+                body: JSON.stringify(queryItem),
+            }).then(() => {
+                this.props.history.push('/game/ticket/new');
+            });
         }
-        fetch('/game', {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getToken()
-            },
-            body: JSON.stringify(queryItem),
-        }).then(() => {
-            this.props.history.push('/game/ticket/new');
-        });
     }
 
     render() {
@@ -314,7 +304,7 @@ class AvailablePlayers extends React.Component {
         let gamePlayersList = ''
         if (gamePlayers !== [] && gamePlayers !== undefined) {
             gamePlayersList = gamePlayers.map(player => {
-                return <Button
+                return <Button style={{marginRight:"10px"}}
                     size="sm"
                     variant="outline-danger"> | {player.nickName} |
                 </Button>
@@ -329,7 +319,16 @@ class AvailablePlayers extends React.Component {
                 <Container className={"bg-second"}>
                     <AppNavbar/>
                     <Row>
-                        {gamePlayersList}
+                        <div className={"text-white"} style={{marginBottom:"15px",marginLeft:"10px"}}>
+                            Выбранные игроки :
+                        </div>
+
+                    </Row>
+                    <Row>
+                        <div style={{marginBottom:"15px",marginLeft:"10px"}} >
+                            {gamePlayersList}
+                        </div>
+
                     </Row>
                     <Form onSubmit={this.createGameTicket}>
                         <Button className={"bg-dark border-white"} type="submit">Создать бланк для игры

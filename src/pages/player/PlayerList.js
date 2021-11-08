@@ -167,7 +167,8 @@ class PlayerList extends Component {
             method: 'POST',
             headers: {
                 'Accept': 'application/json',
-                'Content-Type': 'application/json'
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
             },
             body: JSON.stringify(
                 {

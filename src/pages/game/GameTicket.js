@@ -122,6 +122,35 @@ class GameTicket extends React.Component {
         localStorage.removeItem('GAME_UUID');
         this.props.history.push('/dashboard');
     }
+    randomLanding() {
+        let pls = this.state.playerToSlot
+       this.state.gamePlayers.forEach((player,index)=>{
+
+           pls[index] = {
+               slot: index+1,
+               playerUuid:player.playerUuid
+           }
+       })
+        this.setState({
+                playerToSlot: pls
+            }
+        )
+        let gameCommand = {
+            gameUuid: getCurrentGame(),
+            status: 'ACTIVE',
+            messageType: 'UpdateGameRequest',
+            playerToCardNumber: pls
+        }
+        fetch('/game', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(gameCommand),
+        });
+    }
 
     toPlayersSelection(players) {
         console.log("toPlayersSelection")
@@ -154,7 +183,6 @@ class GameTicket extends React.Component {
             edit
         } = this.state;
 
-        console.log("playerTOSlot render-> " + JSON.stringify(playerToSlot))
         let availablePlayersForMurderList = ''
         let availablePlayersForSheriffList = ''
         let availablePlayersForDonList = ''
@@ -248,6 +276,12 @@ class GameTicket extends React.Component {
                                 {availableForLeftGameList}
                             </tr>
                             <tr key={generateGuid()}>
+                                <td>Голосование</td>
+                                <td colSpan={"7"}>
+                                    <Button style={{width:"100%"}} color="secondary">Начать голосование</Button>
+                                </td>
+                            </tr>
+                            <tr key={generateGuid()}>
                                 <td>Победа</td>
                                 <td colSpan={"7"}>
                                     <DropDownVictory victory={currentVictory}>
@@ -264,6 +298,11 @@ class GameTicket extends React.Component {
                 </div>
                 <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
                     <Card.Body>
+                        <Button
+                            style={{marginBottom:"15px"}}
+                            color="secondary"
+                            onClick={() => this.randomLanding()}
+                            >Рандомная посадка</Button>
                         <Table bordered hover striped variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>

@@ -17,8 +17,7 @@ export default class AppNavbar extends Component {
 
     render() {
         return <Navbar className={"bg-second"} dark expand="md">
-            <NavbarBrand tag={Link} to="/">Home</NavbarBrand>
-            <NavbarBrand tag={Link} to="/dashboard">Назад</NavbarBrand>
+            <NavbarBrand tag={Link} to="/dashboard">Home</NavbarBrand>
         </Navbar>;
     }
 }
