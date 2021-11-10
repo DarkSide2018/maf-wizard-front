@@ -17,9 +17,12 @@ class GameTicket extends React.Component {
         super(props);
         this.state = {
             players: [],
+            election: '',
+            selectPlayers: '',
             nights: [],
             gameUuid: null,
             gamePlayers: [],
+            electionStarted: false,
             edit: false,
             availableRoles: [
                 'Шериф',
@@ -49,6 +52,18 @@ class GameTicket extends React.Component {
             setGameUuid(id)
             this.getOldGame(id)
         }
+
+        this.setState({
+            election: <tr key={generateGuid()}>
+                <td>Голосование</td>
+                <td colSpan={"7"}>
+                    <Button style={{width: "100%"}}
+                            color="secondary"
+                            onClick={() => this.startElection()}
+                    >Начать голосование</Button>
+                </td>
+            </tr>
+        })
     }
 
     getOldGame(id) {
@@ -122,15 +137,16 @@ class GameTicket extends React.Component {
         localStorage.removeItem('GAME_UUID');
         this.props.history.push('/dashboard');
     }
+
     randomLanding() {
         let pls = this.state.playerToSlot
-       this.state.gamePlayers.forEach((player,index)=>{
+        this.state.gamePlayers.forEach((player, index) => {
 
-           pls[index] = {
-               slot: index+1,
-               playerUuid:player.playerUuid
-           }
-       })
+            pls[index] = {
+                slot: index + 1,
+                playerUuid: player.playerUuid
+            }
+        })
         this.setState({
                 playerToSlot: pls
             }
@@ -150,6 +166,25 @@ class GameTicket extends React.Component {
             },
             body: JSON.stringify(gameCommand),
         });
+    }
+
+    startElection() {
+        console.log("election started")
+        this.setState({
+            electionStarted: true,
+            election: <tr key={generateGuid()}>
+                <td>Голосование</td>
+                <td colSpan={"7"}>
+                    Выбранные игроки
+                </td>
+            </tr>,
+            selectPlayers: <tr key={generateGuid()}>
+                <td>Выбор игроков</td>
+                <td colSpan={"7"}>
+                    Доступные игроки
+                </td>
+            </tr>
+        })
     }
 
     toPlayersSelection(players) {
@@ -180,6 +215,8 @@ class GameTicket extends React.Component {
             gamePlayers,
             playerToSlot,
             isLoading,
+            selectPlayers,
+            election,
             edit
         } = this.state;
 
@@ -275,12 +312,8 @@ class GameTicket extends React.Component {
                                 <td>Покинул игру</td>
                                 {availableForLeftGameList}
                             </tr>
-                            <tr key={generateGuid()}>
-                                <td>Голосование</td>
-                                <td colSpan={"7"}>
-                                    <Button style={{width:"100%"}} color="secondary">Начать голосование</Button>
-                                </td>
-                            </tr>
+                            {election}
+                            {selectPlayers}
                             <tr key={generateGuid()}>
                                 <td>Победа</td>
                                 <td colSpan={"7"}>
@@ -299,10 +332,10 @@ class GameTicket extends React.Component {
                 <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
                     <Card.Body>
                         <Button
-                            style={{marginBottom:"15px"}}
+                            style={{marginBottom: "15px"}}
                             color="secondary"
                             onClick={() => this.randomLanding()}
-                            >Рандомная посадка</Button>
+                        >Рандомная посадка</Button>
                         <Table bordered hover striped variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>
