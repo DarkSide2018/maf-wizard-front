@@ -22,7 +22,7 @@ class GameTicket extends React.Component {
             nights: [],
             gameUuid: null,
             gamePlayers: [],
-            electionStarted: false,
+            pushedPlayers: [],
             edit: false,
             availableRoles: [
                 'Шериф',
@@ -168,20 +168,50 @@ class GameTicket extends React.Component {
         });
     }
 
-    startElection() {
-        console.log("election started")
+    pushPlayerToElection(player) {
+        let pushPlayers = this.state.pushedPlayers
+        pushPlayers.push(player)
+        let pushPlayersList = pushPlayers.map(player => {
+            let pls = this.state.playerToSlot.filter(item => item.playerUuid === player.playerUuid)
+            return <Button style={{marginRight: "10px", marginTop: '10px'}}
+                           size="sm"
+                           key={generateGuid()}
+                           variant="outline-danger"> | Cлот : {pls[0].slot} | {player.nickName} | Голоса :
+            </Button>
+        });
         this.setState({
-            electionStarted: true,
+            pushedPlayers: pushPlayers,
             election: <tr key={generateGuid()}>
                 <td>Голосование</td>
                 <td colSpan={"7"}>
-                    Выбранные игроки
+                    {pushPlayersList}
+                </td>
+            </tr>
+        })
+
+    }
+
+    startElection() {
+        let gamePlayersList = this.state.gamePlayers.map(player => {
+            let pls = this.state.playerToSlot.filter(item => item.playerUuid === player.playerUuid)
+            return <Button style={{marginRight: "10px", marginTop: '10px'}}
+                           size="sm"
+                           key={generateGuid()}
+                           onClick={() => this.pushPlayerToElection(player)}
+                           variant="outline-danger"> | Cлот : {pls[0].slot} | {player.nickName} |
+            </Button>
+        });
+        this.setState({
+            election: <tr key={generateGuid()}>
+                <td>Голосование</td>
+                <td colSpan={"7"}>
+                    Выбранные игроки :
                 </td>
             </tr>,
             selectPlayers: <tr key={generateGuid()}>
                 <td>Выбор игроков</td>
                 <td colSpan={"7"}>
-                    Доступные игроки
+                    {gamePlayersList}
                 </td>
             </tr>
         })
@@ -277,12 +307,12 @@ class GameTicket extends React.Component {
         return <div className={"bg-general"}>
             <Container>
                 <AppNavbar/>
-                <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
+                <Card className={"bg-dark text-white"} style={{width: '103%', opacity: '0.8'}}>
                     <Card.Header>
                         {playerSelectionButton}
                     </Card.Header>
                     <Card.Body>
-                        <Table bordered hover striped variant="dark">
+                        <Table bordered variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>
                                 <th>Ночные действия</th>
@@ -336,7 +366,7 @@ class GameTicket extends React.Component {
                             color="secondary"
                             onClick={() => this.randomLanding()}
                         >Рандомная посадка</Button>
-                        <Table bordered hover striped variant="dark">
+                        <Table bordered variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>
                                 <th>Номер слота</th>
