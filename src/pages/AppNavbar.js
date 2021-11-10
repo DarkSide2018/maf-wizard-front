@@ -16,7 +16,7 @@ export default class AppNavbar extends Component {
     }
 
     render() {
-        return <Navbar className={"bg-second"} dark expand="md">
+        return <Navbar className={"bg-second"} dark style={{width:'103%'}}>
             <NavbarBrand tag={Link} to="/dashboard">Home</NavbarBrand>
         </Navbar>;
     }
