@@ -19,6 +19,7 @@ class GameTicket extends React.Component {
             players: [],
             election: '',
             selectPlayers: '',
+            playersForElection: '',
             nights: [],
             gameUuid: null,
             gamePlayers: [],
@@ -27,14 +28,8 @@ class GameTicket extends React.Component {
             availableRoles: [
                 'Шериф',
                 'Дон',
-                'Мафиози1',
-                'Мафиози2',
-                'Мирный1',
-                'Мирный2',
-                'Мирный3',
-                'Мирный4',
-                'Мирный5',
-                'Мирный6'],
+                'Мафиози',
+                'Мирный'],
             gameName: 'Новый стол'
         };
         this.endGame = this.endGame.bind(this);
@@ -110,6 +105,7 @@ class GameTicket extends React.Component {
                             gameUuid: data.gameUuid,
                             nights: data.nights,
                             gamePlayers: responsePlayers,
+                            playersForElection: responsePlayers,
                             gameName: data.name,
                             playerToSlot: data.playerToCardNumber
                         }
@@ -170,6 +166,7 @@ class GameTicket extends React.Component {
 
     pushPlayerToElection(player) {
         let pushPlayers = this.state.pushedPlayers
+        let filteredPlayersForElection = this.state.playersForElection.filter(item => item.playerUuid !== player.playerUuid)
         pushPlayers.push(player)
         let pushPlayersList = pushPlayers.map(player => {
             let pls = this.state.playerToSlot.filter(item => item.playerUuid === player.playerUuid)
@@ -179,7 +176,15 @@ class GameTicket extends React.Component {
                            variant="outline-danger"> | Cлот : {pls[0].slot} | {player.nickName} | Голоса :
             </Button>
         });
+        let gamePlayersList = this.generateAvailablePlayersForElection(filteredPlayersForElection)
         this.setState({
+            playersForElection: filteredPlayersForElection,
+            selectPlayers: <tr key={generateGuid()}>
+                <td>Выбор игроков</td>
+                <td colSpan={"7"}>
+                    {gamePlayersList}
+                </td>
+            </tr>,
             pushedPlayers: pushPlayers,
             election: <tr key={generateGuid()}>
                 <td>Голосование</td>
@@ -191,8 +196,8 @@ class GameTicket extends React.Component {
 
     }
 
-    startElection() {
-        let gamePlayersList = this.state.gamePlayers.map(player => {
+    generateAvailablePlayersForElection(players) {
+        return players.map(player => {
             let pls = this.state.playerToSlot.filter(item => item.playerUuid === player.playerUuid)
             return <Button style={{marginRight: "10px", marginTop: '10px'}}
                            size="sm"
@@ -201,6 +206,10 @@ class GameTicket extends React.Component {
                            variant="outline-danger"> | Cлот : {pls[0].slot} | {player.nickName} |
             </Button>
         });
+    }
+
+    startElection() {
+        let gamePlayersList = this.generateAvailablePlayersForElection(this.state.playersForElection)
         this.setState({
             election: <tr key={generateGuid()}>
                 <td>Голосование</td>
