@@ -1,47 +1,40 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {generateGuid} from "./GameTicket";
-import {getCurrentGame} from "../player/AvailablePlayers";
-import {getToken} from "../../api/authenticationService";
+import {generateGuid} from "../GameTicket";
+import {getCurrentGame} from "../../player/AvailablePlayers";
+import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
 
-class DropDownPlayers extends Component {
+class Notes extends Component {
     constructor(props) {
         super(props);
         this.state = {
             playerName: '',
+            currentNote:'',
             players: props.players,
-            currentPlayer: '',
-            isOpen: false
+            isOpen: false,
+            availableNotes:[1,2,3,4]
         };
         this.toggle = this.toggle.bind(this);
-        this.setPlayer = this.setPlayer.bind(this);
+        this.setNote = this.setNote.bind(this);
     }
 
     componentDidMount() {
-        const {playersToSlot,slot,players} = this.props
+        const {playersToSlot,slot} = this.props
         let filteredSlot = playersToSlot.filter(item => item.slot === slot)
-        let playerUuid
-        let playerName = ''
-        let filteredPLayers
+        let currentNote
         if (filteredSlot !== undefined && filteredSlot.length > 0) {
-            if (filteredSlot[0].playerUuid !== undefined) {
-                playerUuid = filteredSlot[0].playerUuid
+            if (filteredSlot[0].note !== undefined) {
+                currentNote = filteredSlot[0].note
             }
         }
-        if (playerUuid !== undefined) {
-            filteredPLayers = players.filter(item => item.playerUuid === playerUuid)
+        if (currentNote !== undefined) {
+            this.setState(
+                {
+                    currentNote: currentNote
+                }
+            )
         }
-
-        if (filteredPLayers !== undefined && filteredPLayers.length > 0) {
-            playerName = filteredPLayers[0].nickName
-        }
-        this.setState(
-            {
-                playerName:playerName,
-                players: this.props.players
-            }
-        )
     }
 
     toggle() {
@@ -52,16 +45,16 @@ class DropDownPlayers extends Component {
             }
         )
     }
-    setPlayer(value){
+
+    setNote(value) {
         const {slot} = this.props
-        let name = value.nickName
         let pls = {
             slot:slot,
-            playerUuid:value.playerUuid
+            note:value
         }
         this.setState(
             {
-                playerName: name
+                currentNote: value
             }
         )
         let gameCommand = {
@@ -80,21 +73,22 @@ class DropDownPlayers extends Component {
             body: JSON.stringify(gameCommand),
         });
     }
+
+
     render() {
-        const {players} = this.state
-        let currentPlayer='Свободно'
-        if (this.state.playerName !== '') {
-            currentPlayer = this.state.playerName
+        const {availableNotes} = this.state
+        let dropDownToggle = 'Cвободно'
+        if (this.state.currentNote !== '') {
+            dropDownToggle = this.state.currentNote
         }
         return <div>
-
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
-                <DropdownToggle className={"dropStyle"} caret>
-                    {currentPlayer}
+                <DropdownToggle className={"dropStyle"}  caret>
+                    {dropDownToggle}
                 </DropdownToggle>
                 <DropdownMenu>
-                    {players.map(item => {
-                        return <DropdownItem className={"dropStyle"} onClick={()=>this.setPlayer(item)} key={generateGuid()}>{item.nickName}</DropdownItem>
+                    {availableNotes.map(item => {
+                        return <DropdownItem className={"dropStyle"} onClick={() => this.setNote(item)} key={generateGuid()}>{item}</DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>
@@ -102,4 +96,4 @@ class DropDownPlayers extends Component {
     }
 }
 
-export default DropDownPlayers;
+export default Notes;

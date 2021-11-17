@@ -1,40 +1,47 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {generateGuid} from "./GameTicket";
-import {getCurrentGame} from "../player/AvailablePlayers";
-import {getToken} from "../../api/authenticationService";
-
+import {generateGuid} from "../GameTicket";
+import {getCurrentGame} from "../../player/AvailablePlayers";
+import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
-class DropDownRole extends Component {
+
+class DropDownPlayers extends Component {
     constructor(props) {
         super(props);
         this.state = {
             playerName: '',
-            roles: props.roles,
-            currentRole: '',
+            players: props.players,
+            currentPlayer: '',
             isOpen: false
         };
         this.toggle = this.toggle.bind(this);
-        this.setRole = this.setRole.bind(this);
+        this.setPlayer = this.setPlayer.bind(this);
     }
 
     componentDidMount() {
-        const {playersToSlot,slot} = this.props
+        const {playersToSlot,slot,players} = this.props
         let filteredSlot = playersToSlot.filter(item => item.slot === slot)
-        let currentRole
+        let playerUuid
+        let playerName = ''
+        let filteredPLayers
         if (filteredSlot !== undefined && filteredSlot.length > 0) {
             if (filteredSlot[0].playerUuid !== undefined) {
-                currentRole = filteredSlot[0].role
+                playerUuid = filteredSlot[0].playerUuid
             }
         }
-        if (currentRole !== undefined) {
-            this.setState(
-                {
-                    currentRole: currentRole
-                }
-            )
+        if (playerUuid !== undefined) {
+            filteredPLayers = players.filter(item => item.playerUuid === playerUuid)
         }
 
+        if (filteredPLayers !== undefined && filteredPLayers.length > 0) {
+            playerName = filteredPLayers[0].nickName
+        }
+        this.setState(
+            {
+                playerName:playerName,
+                players: this.props.players
+            }
+        )
     }
 
     toggle() {
@@ -45,12 +52,18 @@ class DropDownRole extends Component {
             }
         )
     }
-    setRole(value){
+    setPlayer(value){
         const {slot} = this.props
+        let name = value.nickName
         let pls = {
             slot:slot,
-            role:value
+            playerUuid:value.playerUuid
         }
+        this.setState(
+            {
+                playerName: name
+            }
+        )
         let gameCommand = {
             gameUuid: getCurrentGame(),
             status: 'ACTIVE',
@@ -66,27 +79,21 @@ class DropDownRole extends Component {
             },
             body: JSON.stringify(gameCommand),
         });
-        this.setState(
-            {
-                currentRole: value
-            }
-        )
     }
     render() {
-        const {roles} = this.props
-        let currentRole = 'Свободно'
-        if (this.state.currentRole !== '') {
-            currentRole = this.state.currentRole
-
+        const {players} = this.state
+        let currentPlayer='Свободно'
+        if (this.state.playerName !== '') {
+            currentPlayer = this.state.playerName
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
-                <DropdownToggle className={"dropStyle"}  caret>
-                    {currentRole}
+                <DropdownToggle className={"dropStyle"} caret>
+                    {currentPlayer}
                 </DropdownToggle>
                 <DropdownMenu>
-                    {roles.map(item => {
-                        return <DropdownItem className={"dropStyle"}  onClick={()=>this.setRole(item)} key={generateGuid()}>{item}</DropdownItem>
+                    {players.map(item => {
+                        return <DropdownItem className={"dropStyle"} onClick={()=>this.setPlayer(item)} key={generateGuid()}>{item.nickName}</DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>
@@ -94,4 +101,4 @@ class DropDownRole extends Component {
     }
 }
 
-export default DropDownRole;
+export default DropDownPlayers;

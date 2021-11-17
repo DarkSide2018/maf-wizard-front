@@ -1,8 +1,8 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {generateGuid} from "./GameTicket";
-import {getCurrentGame} from "../player/AvailablePlayers";
-import {getToken} from "../../api/authenticationService";
+import {generateGuid} from "../GameTicket";
+import {getCurrentGame} from "../../player/AvailablePlayers";
+import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
 

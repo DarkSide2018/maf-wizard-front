@@ -2,12 +2,12 @@ import React from "react";
 import {Button, Container, Table} from "reactstrap";
 import {Card,} from "react-bootstrap";
 import {getToken} from "../../api/authenticationService";
-import Drop from "./Drop";
-import DropDownRole from "./DropDownRole";
+import Drop from "./dropDowns/Drop";
+import DropDownRole from "./dropDowns/DropDownRole";
 import AppNavbar from "../AppNavbar";
-import DropDownPlayers from "./DropDownPlayers";
-import Notes from "./Notes";
-import DropDownVictory from "./DropDownVictory";
+import DropDownPlayers from "./dropDowns/DropDownPlayers";
+import Notes from "./dropDowns/Notes";
+import DropDownVictory from "./dropDowns/DropDownVictory";
 import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
 import AdditionalPoints from "./AdditionalPoints";
 

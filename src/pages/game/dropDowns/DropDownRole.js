@@ -1,41 +1,40 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {generateGuid} from "./GameTicket";
-import {getCurrentGame} from "../player/AvailablePlayers";
-import {getToken} from "../../api/authenticationService";
-import './dropDowns/Drop.css';
+import {generateGuid} from "../GameTicket";
+import {getCurrentGame} from "../../player/AvailablePlayers";
+import {getToken} from "../../../api/authenticationService";
 
-class AdditionalPoints extends Component {
+import './Drop.css';
+class DropDownRole extends Component {
     constructor(props) {
         super(props);
         this.state = {
             playerName: '',
-            currentNote:'',
-            players: props.players,
-            isOpen: false,
-            availablePoints:[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+            roles: props.roles,
+            currentRole: '',
+            isOpen: false
         };
         this.toggle = this.toggle.bind(this);
-        this.setNote = this.setNote.bind(this);
+        this.setRole = this.setRole.bind(this);
     }
 
     componentDidMount() {
         const {playersToSlot,slot} = this.props
         let filteredSlot = playersToSlot.filter(item => item.slot === slot)
-        let currentNote
+        let currentRole
         if (filteredSlot !== undefined && filteredSlot.length > 0) {
-            if (filteredSlot[0].addPoints !== undefined) {
-
-                currentNote = filteredSlot[0].addPoints
+            if (filteredSlot[0].playerUuid !== undefined) {
+                currentRole = filteredSlot[0].role
             }
         }
-        if (currentNote !== undefined) {
+        if (currentRole !== undefined) {
             this.setState(
                 {
-                    currentNote: currentNote
+                    currentRole: currentRole
                 }
             )
         }
+
     }
 
     toggle() {
@@ -46,18 +45,12 @@ class AdditionalPoints extends Component {
             }
         )
     }
-
-    setNote(value) {
+    setRole(value){
         const {slot} = this.props
         let pls = {
             slot:slot,
-            addPoints:value
+            role:value
         }
-        this.setState(
-            {
-                currentNote: value
-            }
-        )
         let gameCommand = {
             gameUuid: getCurrentGame(),
             status: 'ACTIVE',
@@ -73,23 +66,27 @@ class AdditionalPoints extends Component {
             },
             body: JSON.stringify(gameCommand),
         });
+        this.setState(
+            {
+                currentRole: value
+            }
+        )
     }
-
-
     render() {
-        const {availablePoints} = this.state
-        let dropDownToggle = 'Cвободно'
-        if (this.state.currentNote !== '') {
-            dropDownToggle = this.state.currentNote
+        const {roles} = this.props
+        let currentRole = 'Свободно'
+        if (this.state.currentRole !== '') {
+            currentRole = this.state.currentRole
+
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"}  caret>
-                    {dropDownToggle}
+                    {currentRole}
                 </DropdownToggle>
                 <DropdownMenu>
-                    {availablePoints.map(item => {
-                        return <DropdownItem className={"dropStyle"} onClick={() => this.setNote(item)} key={generateGuid()}>{item}</DropdownItem>
+                    {roles.map(item => {
+                        return <DropdownItem className={"dropStyle"}  onClick={()=>this.setRole(item)} key={generateGuid()}>{item}</DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>
@@ -97,4 +94,4 @@ class AdditionalPoints extends Component {
     }
 }
 
-export default AdditionalPoints;
+export default DropDownRole;
