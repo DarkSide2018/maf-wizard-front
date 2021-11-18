@@ -5,7 +5,7 @@ import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
 
-class DropDownPlayers extends Component {
+class DropDownElection extends Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -101,4 +101,4 @@ class DropDownPlayers extends Component {
     }
 }
 
-export default DropDownPlayers;
+export default DropDownElection;
