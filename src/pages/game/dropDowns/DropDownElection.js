@@ -9,39 +9,17 @@ class DropDownElection extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            playerName: '',
-            players: props.players,
-            currentPlayer: '',
+            playerVote:'',
+            currentPlayer: this.props.pushedPlayer,
+            availableVotes:[1,2,3,4,5,6,7,8,9],
             isOpen: false
         };
         this.toggle = this.toggle.bind(this);
-        this.setPlayer = this.setPlayer.bind(this);
+        this.setVote = this.setVote.bind(this);
     }
 
     componentDidMount() {
-        const {playersToSlot,slot,players} = this.props
-        let filteredSlot = playersToSlot.filter(item => item.slot === slot)
-        let playerUuid
-        let playerName = ''
-        let filteredPLayers
-        if (filteredSlot !== undefined && filteredSlot.length > 0) {
-            if (filteredSlot[0].playerUuid !== undefined) {
-                playerUuid = filteredSlot[0].playerUuid
-            }
-        }
-        if (playerUuid !== undefined) {
-            filteredPLayers = players.filter(item => item.playerUuid === playerUuid)
-        }
 
-        if (filteredPLayers !== undefined && filteredPLayers.length > 0) {
-            playerName = filteredPLayers[0].nickName
-        }
-        this.setState(
-            {
-                playerName:playerName,
-                players: this.props.players
-            }
-        )
     }
 
     toggle() {
@@ -52,48 +30,27 @@ class DropDownElection extends Component {
             }
         )
     }
-    setPlayer(value){
-        const {slot} = this.props
-        let name = value.nickName
-        let pls = {
-            slot:slot,
-            playerUuid:value.playerUuid
-        }
+    setVote(value){
         this.setState(
             {
-                playerName: name
+                playerVote: value
             }
         )
-        let gameCommand = {
-            gameUuid: getCurrentGame(),
-            status: 'ACTIVE',
-            messageType: 'UpdateGameRequest',
-            playerToCardNumber: [pls]
-        }
-        fetch('/game', {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getToken()
-            },
-            body: JSON.stringify(gameCommand),
-        });
     }
     render() {
-        const {players} = this.state
-        let currentPlayer='Свободно'
-        if (this.state.playerName !== '') {
-            currentPlayer = this.state.playerName
+        const {availableVotes,currentPlayer} = this.state
+        let currentVote=0
+        if (this.state.playerVote !== '') {
+            currentVote = this.state.playerVote
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"} caret>
-                    {currentPlayer}
+                    | Cлот : {currentPlayer.slot} | {currentPlayer.nickName} | Голоса : {currentVote}
                 </DropdownToggle>
                 <DropdownMenu>
-                    {players.map(item => {
-                        return <DropdownItem className={"dropStyle"} onClick={()=>this.setPlayer(item)} key={generateGuid()}>{item.nickName}</DropdownItem>
+                    {availableVotes.map(item => {
+                        return <DropdownItem className={"dropStyle"} onClick={()=>this.setVote(item)} key={generateGuid()}>  {item}  </DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>

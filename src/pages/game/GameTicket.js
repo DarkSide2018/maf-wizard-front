@@ -9,13 +9,15 @@ import DropDownPlayers from "./dropDowns/DropDownPlayers";
 import Notes from "./dropDowns/Notes";
 import DropDownVictory from "./dropDowns/DropDownVictory";
 import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
-import AdditionalPoints from "./AdditionalPoints";
+import AdditionalPoints from "./dropDowns/AdditionalPoints";
+import DropDownElection from "./dropDowns/DropDownElection";
 
 
 class GameTicket extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            currentElection: '',
             players: [],
             election: '',
             selectPlayers: '',
@@ -167,17 +169,28 @@ class GameTicket extends React.Component {
     pushPlayerToElection(player) {
         let pushPlayers = this.state.pushedPlayers
         let filteredPlayersForElection = this.state.playersForElection.filter(item => item.playerUuid !== player.playerUuid)
+        let pls = this.state.playerToSlot.filter(item => item.playerUuid === player.playerUuid)
+        player.slot = pls[0].slot
         pushPlayers.push(player)
+        let currentElectionUpdated = this.state.currentElection;
+        currentElectionUpdated.dropdowns = pushPlayers
+
         let pushPlayersList = pushPlayers.map(player => {
-            let pls = this.state.playerToSlot.filter(item => item.playerUuid === player.playerUuid)
-            return <Button style={{marginRight: "10px", marginTop: '10px'}}
-                           size="sm"
-                           key={generateGuid()}
-                           variant="outline-danger"> | Cлот : {pls[0].slot} | {player.nickName} | Голоса :
-            </Button>
+
+            return <div>
+                <DropDownElection style={{marginRight: "10px", marginTop: '10px'}}
+                                  size="sm" thatObject={this.state}
+                                  pushedPlayer={player}
+                                  key={generateGuid()}
+                                  variant="outline-danger">
+                </DropDownElection>
+
+            </div>
+
         });
         let gamePlayersList = this.generateAvailablePlayersForElection(filteredPlayersForElection)
         this.setState({
+            currentElection: currentElectionUpdated,
             playersForElection: filteredPlayersForElection,
             selectPlayers: <tr key={generateGuid()}>
                 <td>Выбор игроков</td>
@@ -190,10 +203,28 @@ class GameTicket extends React.Component {
                 <td>Голосование</td>
                 <td colSpan={"7"}>
                     {pushPlayersList}
+                    <Button style={{marginRight: "10px", marginTop: '10px'}}
+                            size="sm"
+                            onClick={() => this.endElection()}
+                            key={generateGuid()}
+                            variant="outline-danger"> Закончить голосование
+                    </Button>
                 </td>
             </tr>
         })
 
+    }
+
+    endElection(){
+        fetch('/game/election', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(this.state.currentElection),
+        });
     }
 
     generateAvailablePlayersForElection(players) {
@@ -210,7 +241,13 @@ class GameTicket extends React.Component {
 
     startElection() {
         let gamePlayersList = this.generateAvailablePlayersForElection(this.state.playersForElection)
+        let electionDto = {
+            electionId: generateGuid(),
+            gameUuid: getCurrentGame(),
+            dropdowns: []
+        }
         this.setState({
+            currentElection: electionDto,
             election: <tr key={generateGuid()}>
                 <td>Голосование</td>
                 <td colSpan={"7"}>
@@ -227,7 +264,6 @@ class GameTicket extends React.Component {
     }
 
     toPlayersSelection(players) {
-        console.log("toPlayersSelection")
         let gameCommand = {
             gameUuid: getCurrentGame(),
             status: 'DRAFT',
@@ -373,8 +409,7 @@ class GameTicket extends React.Component {
                         <Button
                             style={{marginBottom: "15px"}}
                             color="secondary"
-                            onClick={() => this.randomLanding()}
-                        >Рандомная посадка</Button>
+                            onClick={() => this.randomLanding()}>Рандомная посадка</Button>
                         <Table bordered variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>
