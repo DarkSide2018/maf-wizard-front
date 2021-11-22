@@ -24,6 +24,7 @@ class GameTicket extends React.Component {
             playersForElection: '',
             nights: [],
             gameUuid: null,
+            playerToSlot:[],
             gamePlayers: [],
             pushedPlayers: [],
             edit: false,
@@ -102,6 +103,7 @@ class GameTicket extends React.Component {
             .then(data => {
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                     this.setState({
+                            elections: data.elections,
                             currentVictory: data.victory,
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
@@ -179,7 +181,7 @@ class GameTicket extends React.Component {
 
             return <div>
                 <DropDownElection style={{marginRight: "10px", marginTop: '10px'}}
-                                  size="sm" thatObject={this.state}
+                                  size="sm" thatObject={this}
                                   pushedPlayer={player}
                                   key={generateGuid()}
                                   variant="outline-danger">
@@ -224,7 +226,23 @@ class GameTicket extends React.Component {
                 'Authorization': 'Bearer ' + getToken()
             },
             body: JSON.stringify(this.state.currentElection),
-        });
+        }).then(response => {
+            this.setState({
+                pushedPlayers:[],
+                currentElection: '',
+                election: <tr key={generateGuid()}>
+                    <td>Голосование</td>
+                    <td colSpan={"7"}>
+                        <Button style={{width: "100%"}}
+                                color="secondary"
+                                onClick={() => this.startElection()}
+                        >Начать голосование</Button>
+                    </td>
+                </tr>,
+                selectPlayers:''
+            })
+            this.getCurrentGameAfterMount()
+        })
     }
 
     generateAvailablePlayersForElection(players) {
@@ -285,6 +303,7 @@ class GameTicket extends React.Component {
     render() {
         const {
             nights,
+            elections,
             currentVictory,
             availableRoles,
             gamePlayers,
@@ -299,6 +318,23 @@ class GameTicket extends React.Component {
         let availablePlayersForSheriffList = ''
         let availablePlayersForDonList = ''
         let availableForLeftGameList = ''
+        let oldElections = ''
+        if(elections !== [] && elections !== undefined){
+            oldElections = elections.sort((a, b) => a.sortOrder > (b.sortOrder)).map(item=>{
+                let key = generateGuid();
+                let sortElection = item.sortOrder+1;
+                let gamblers = item.dropdowns.map(drop=>{
+                 return  <Button color="secondary"> {drop.nickName} | {drop.numberOfVotes}</Button>})
+                return <tr key={key}>
+                        <td>
+                            Голосование {sortElection}
+                        </td>
+                          <td colSpan={"7"}>
+                              {gamblers}
+                          </td>
+                </tr>
+            })
+        }
         if (gamePlayers !== [] && gamePlayers !== undefined) {
             availablePlayersForMurderList = makeArray(7, "").map((item, index) => {
                 let key = generateGuid();
@@ -387,6 +423,7 @@ class GameTicket extends React.Component {
                                 <td>Покинул игру</td>
                                 {availableForLeftGameList}
                             </tr>
+                            {oldElections}
                             {election}
                             {selectPlayers}
                             <tr key={generateGuid()}>

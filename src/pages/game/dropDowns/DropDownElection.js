@@ -1,8 +1,6 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import {generateGuid} from "../GameTicket";
-import {getCurrentGame} from "../../player/AvailablePlayers";
-import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
 
 class DropDownElection extends Component {
@@ -34,6 +32,15 @@ class DropDownElection extends Component {
         this.setState(
             {
                 playerVote: value
+            }
+        )
+        let thatObject = this.props.thatObject;
+        let player = this.props.pushedPlayer;
+        let state = thatObject.state.currentElection;
+        state.dropdowns.filter(item => item.playerUuid === player.playerUuid)[0].numberOfVotes = value
+        thatObject.setState(
+            {
+                currentElection: state,
             }
         )
     }
