@@ -276,7 +276,7 @@ class GameTicket extends React.Component {
             election: <tr key={generateGuid()}>
                 <td>Голосование</td>
                 <td colSpan={"7"}>
-                    Выбранные игроки :
+                    Выбранные игроки для голосования :
                 </td>
             </tr>,
             selectPlayers: <tr key={generateGuid()}>
