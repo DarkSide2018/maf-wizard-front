@@ -81,6 +81,8 @@ class GameTicket extends React.Component {
                             gameNumber: data.gameNumber,
                             gameUuid: data.gameUuid,
                             nights: data.nights,
+                            elections: data.elections,
+                            election:'',
                             gamePlayers: responsePlayers,
                             gameName: data.name,
                             playerToSlot: data.playerToCardNumber
@@ -258,6 +260,10 @@ class GameTicket extends React.Component {
     }
 
     startElection() {
+        if(this.state.playersForElection.length !== this.state.playerToSlot.length){
+            alert("Игроки не на своих местах")
+            return
+        }
         let gamePlayersList = this.generateAvailablePlayersForElection(this.state.playersForElection)
         let electionDto = {
             electionId: generateGuid(),
