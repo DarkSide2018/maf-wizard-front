@@ -53,7 +53,7 @@ class GameTicket extends React.Component {
 
         this.setState({
             election: <tr key={generateGuid()}>
-                <td>Голосование</td>
+                <td> Голосование </td>
                 <td colSpan={"7"}>
                     <Button style={{width: "100%"}}
                             color="secondary"
@@ -276,7 +276,7 @@ class GameTicket extends React.Component {
             election: <tr key={generateGuid()}>
                 <td>Голосование</td>
                 <td colSpan={"7"}>
-                    Выбранные игроки для голосования :
+                    Выбранные игроки :
                 </td>
             </tr>,
             selectPlayers: <tr key={generateGuid()}>

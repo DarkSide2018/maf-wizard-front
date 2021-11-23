@@ -1,6 +1,6 @@
-heroku login
-
-heroku container:login
+#heroku login
+#
+#heroku container:login
 
 docker container stop mafia-front
 docker container rm mafia-front
