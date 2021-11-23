@@ -103,6 +103,7 @@ class GameTicket extends React.Component {
         })
             .then(response => response.json())
             .then(data => {
+                    console.log("gameActive => " + JSON.stringify(data))
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                     this.setState({
                             elections: data.elections,
