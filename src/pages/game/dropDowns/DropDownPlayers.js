@@ -1,7 +1,6 @@
 import React, {Component} from "react";
-import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {generateGuid} from "../GameTicket";
-import {getCurrentGame} from "../../player/AvailablePlayers";
+import {Button} from "reactstrap";
+import {getCurrentGame, setGameUuid} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -21,7 +20,7 @@ class DropDownPlayers extends Component {
     }
 
     componentDidMount() {
-        const {playersToSlot,slot,players} = this.props
+        const {playersToSlot, slot, players} = this.props
         let filteredSlot = playersToSlot.filter(item => item.slot === slot)
         let playerUuid
         let playerName = ''
@@ -40,7 +39,7 @@ class DropDownPlayers extends Component {
         }
         this.setState(
             {
-                playerName:playerName,
+                playerName: playerName,
                 players: this.props.players
             }
         )
@@ -54,12 +53,13 @@ class DropDownPlayers extends Component {
             }
         )
     }
-    setPlayer(value){
+
+    setPlayer(value) {
         const {slot} = this.props
         let name = value.nickName
         let pls = {
-            slot:slot,
-            playerUuid:value.playerUuid
+            slot: slot,
+            playerUuid: value.playerUuid
         }
         this.setState(
             {
@@ -82,35 +82,103 @@ class DropDownPlayers extends Component {
             body: JSON.stringify(gameCommand),
         });
     }
-    deletePlayer(value){
+
+    deletePlayer(value) {
         console.log(JSON.stringify(value))
     }
+
+
     render() {
-        const {players,currentPlayer} = this.state
-        let playerName='Свободно'
-        if (this.state.currentPlayer !== '') {
-            playerName = this.state.currentPlayer.nickName
-        }
+        const people = [
+            "Siri",
+            "Alexa",
+            "Google",
+            "Facebook",
+            "Twitter",
+            "Linkedin",
+            "Sinkedin"
+        ];
+
+        const {players, currentPlayer} = this.state
         return <div>
-            <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
-                <DropdownToggle className={"dropStyle"} caret>
-                    {playerName}
-                    <Button
-                    size="sm"
-                    variant="outline-danger"
-                    style={{marginLeft:"10px"}}
-                    onClick={() => this.deletePlayer(currentPlayer)}>
-                    <FontAwesomeIcon icon={faMinus}/>
-                </Button>
-                </DropdownToggle>
-                <DropdownMenu>
-                    {players.map(item => {
-                        return <DropdownItem className={"dropStyle"} onClick={()=>this.setPlayer(item)} key={generateGuid()}>{item.nickName}</DropdownItem>
-                    })}
-                </DropdownMenu>
-            </Dropdown>
+            <Button
+                size="sm"
+                variant="outline-danger"
+                style={{marginLeft: "10px"}}
+                onClick={() => this.deletePlayer(currentPlayer)}>
+                <FontAwesomeIcon icon={faMinus}/>
+            </Button>
+            <Search/>
         </div>
     }
 }
 
 export default DropDownPlayers;
+
+const people = [
+    "Siri",
+    "Alexa",
+    "Google",
+    "Facebook",
+    "Twitter",
+    "Linkedin",
+    "Sinkedin"
+];
+
+function Search() {
+
+    const [searchTerm, setSearchTerm] = React.useState("");
+    const [searchResults, setSearchResults] = React.useState(["-"]);
+    const handleChange = event => {
+        setSearchTerm(event.target.value);
+    };
+    React.useEffect(() => {
+        let players=["P"]
+        fetch('/player/like/all/' + searchTerm, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            }
+        }).then(response => {
+            if (response.ok) {
+                response.json().then(data => {
+
+                        data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
+                        players = data.players.map(it=> it.nickName);
+                        console.log("players like => " + JSON.stringify(players))
+                        setSearchResults(players);
+                    }
+                )
+            }
+        })
+        setSearchResults(players);
+    }, [searchTerm]);
+    return (
+        <div className="App">
+            <input
+                type="text"
+                placeholder="Search"
+                value={searchTerm}
+                onChange={handleChange}
+            />
+            <ul>
+                {searchResults.map(item => (
+                    <li>{item} <Button
+                        size="sm"
+                        variant="outline-danger"
+                        style={{marginLeft: "10px"}}
+                        onClick={() => assignPlayer(item)}>
+                        <FontAwesomeIcon icon={faPlus}/>
+                    </Button>
+                    </li>
+                ))}
+            </ul>
+        </div>
+    );
+}
+
+function assignPlayer(value) {
+    console.log("assignPlayer -> " + value)
+}
