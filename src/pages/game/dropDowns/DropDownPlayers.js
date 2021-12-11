@@ -1,9 +1,11 @@
 import React, {Component} from "react";
-import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
+import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import {generateGuid} from "../GameTicket";
 import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
 
 class DropDownPlayers extends Component {
     constructor(props) {
@@ -61,7 +63,7 @@ class DropDownPlayers extends Component {
         }
         this.setState(
             {
-                playerName: name
+                currentPlayer: value
             }
         )
         let gameCommand = {
@@ -80,16 +82,26 @@ class DropDownPlayers extends Component {
             body: JSON.stringify(gameCommand),
         });
     }
+    deletePlayer(value){
+        console.log(JSON.stringify(value))
+    }
     render() {
-        const {players} = this.state
-        let currentPlayer='Свободно'
-        if (this.state.playerName !== '') {
-            currentPlayer = this.state.playerName
+        const {players,currentPlayer} = this.state
+        let playerName='Свободно'
+        if (this.state.currentPlayer !== '') {
+            playerName = this.state.currentPlayer.nickName
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"} caret>
-                    {currentPlayer}
+                    {playerName}
+                    <Button
+                    size="sm"
+                    variant="outline-danger"
+                    style={{marginLeft:"10px"}}
+                    onClick={() => this.deletePlayer(currentPlayer)}>
+                    <FontAwesomeIcon icon={faMinus}/>
+                </Button>
                 </DropdownToggle>
                 <DropdownMenu>
                     {players.map(item => {

@@ -12,7 +12,7 @@ import AdditionalPoints from "./dropDowns/AdditionalPoints";
 import DropDownElection from "./dropDowns/DropDownElection";
 
 
-class GameTicket extends React.Component {
+class GameTicketFast extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
@@ -510,7 +510,7 @@ function makeArray(count, content) {
     return result;
 }
 
-export default GameTicket;
+export default GameTicketFast;
 
 export function generateGuid() {
     let result, i, j;

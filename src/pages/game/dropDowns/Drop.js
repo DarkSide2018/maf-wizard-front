@@ -10,6 +10,7 @@ class Drop extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            availableSlots:[1,2,3,4,5,6,7,8,9,10],
             playerName: '',
             players: props.players,
             isOpen: false
@@ -91,7 +92,7 @@ class Drop extends Component {
         });
         this.setState(
             {
-                playerName: value.nickName
+                playerName: value
             }
         )
 
@@ -99,7 +100,7 @@ class Drop extends Component {
 
 
     render() {
-        const {players} = this.state
+        let slots = this.state.availableSlots
         let dropDownTogglePlayerName = 'Cвободно'
         if (this.state.playerName !== '') {
             dropDownTogglePlayerName = this.state.playerName
@@ -110,9 +111,9 @@ class Drop extends Component {
                     {dropDownTogglePlayerName}
                 </DropdownToggle>
                 <DropdownMenu>
-                    {players.map(item => {
+                    {slots.map(item => {
                         return <DropdownItem className={"dropStyle"} onClick={() => this.setPlayerName(item)}
-                                             key={generateGuid()}>{item.nickName}</DropdownItem>
+                                             key={generateGuid()}>{item}</DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>

@@ -47,19 +47,29 @@ export const Dashboard = (props) => {
                     <Container>
                         <Row>
                             <ButtonGroup>
-                                <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link} to="/new/table">Создать игру</Button>
+                                <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link}
+                                        to="/game/fast/new">Быстрая игра</Button>
                             </ButtonGroup>
                         </Row>
                         <Row>
                             <ButtonGroup>
-                                <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link} to="/game/history">История игр</Button>
+                                <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link}
+                                        to="/new/table">Создать игру</Button>
                             </ButtonGroup>
                         </Row>
                         <Row>
-                            <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} onClick={() => callPlayers()}>Статистика Игроков</Button>
+                            <ButtonGroup>
+                                <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link}
+                                        to="/game/history">История игр</Button>
+                            </ButtonGroup>
                         </Row>
                         <Row>
-                            <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} onClick={() => logOut()}>Выход</Button>
+                            <Button className={"bg-dark border-white"} style={{marginTop: '5px'}}
+                                    onClick={() => callPlayers()}>Статистика Игроков</Button>
+                        </Row>
+                        <Row>
+                            <Button className={"bg-dark border-white"} style={{marginTop: '5px'}}
+                                    onClick={() => logOut()}>Выход</Button>
                         </Row>
                     </Container>
                 </MainWrapper>
