@@ -28,7 +28,6 @@ export const Dashboard = (props) => {
     }, [])
 
     const logOut = () => {
-
         localStorage.clear();
         props.history.push('/');
 
@@ -49,12 +48,6 @@ export const Dashboard = (props) => {
                             <ButtonGroup>
                                 <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link}
                                         to="/game/fast/new">Быстрая игра</Button>
-                            </ButtonGroup>
-                        </Row>
-                        <Row>
-                            <ButtonGroup>
-                                <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link}
-                                        to="/new/table">Создать игру</Button>
                             </ButtonGroup>
                         </Row>
                         <Row>

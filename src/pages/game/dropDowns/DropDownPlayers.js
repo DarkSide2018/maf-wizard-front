@@ -1,10 +1,11 @@
 import React, {Component} from "react";
-import {Button} from "reactstrap";
+import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import {getCurrentGame, setGameUuid} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus, faPlus} from "@fortawesome/free-solid-svg-icons";
+import {generateGuid} from "../GameTicket";
 
 class DropDownPlayers extends Component {
     constructor(props) {
@@ -82,32 +83,9 @@ class DropDownPlayers extends Component {
             body: JSON.stringify(gameCommand),
         });
     }
-
-    deletePlayer(value) {
-        console.log(JSON.stringify(value))
-    }
-
-
     render() {
-        const people = [
-            "Siri",
-            "Alexa",
-            "Google",
-            "Facebook",
-            "Twitter",
-            "Linkedin",
-            "Sinkedin"
-        ];
-
-        const {players, currentPlayer} = this.state
         return <div>
-            <Button
-                size="sm"
-                variant="outline-danger"
-                style={{marginLeft: "10px"}}
-                onClick={() => this.deletePlayer(currentPlayer)}>
-                <FontAwesomeIcon icon={faMinus}/>
-            </Button>
+
             <Search/>
         </div>
     }
@@ -115,25 +93,18 @@ class DropDownPlayers extends Component {
 
 export default DropDownPlayers;
 
-const people = [
-    "Siri",
-    "Alexa",
-    "Google",
-    "Facebook",
-    "Twitter",
-    "Linkedin",
-    "Sinkedin"
-];
-
 function Search() {
 
     const [searchTerm, setSearchTerm] = React.useState("");
-    const [searchResults, setSearchResults] = React.useState(["-"]);
+    const [searchResults, setSearchResults] = React.useState([""]);
+    const [currentName, setCurrentName] = React.useState("");
+    const [isOpen, toggle] = React.useState(false);
     const handleChange = event => {
         setSearchTerm(event.target.value);
     };
+
     React.useEffect(() => {
-        let players=["P"]
+        let players=["empty search term"]
         fetch('/player/like/all/' + searchTerm, {
             method: 'GET',
             headers: {
@@ -144,7 +115,6 @@ function Search() {
         }).then(response => {
             if (response.ok) {
                 response.json().then(data => {
-
                         data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                         players = data.players.map(it=> it.nickName);
                         console.log("players like => " + JSON.stringify(players))
@@ -157,24 +127,42 @@ function Search() {
     }, [searchTerm]);
     return (
         <div className="App">
-            <input
-                type="text"
-                placeholder="Search"
-                value={searchTerm}
-                onChange={handleChange}
-            />
-            <ul>
-                {searchResults.map(item => (
-                    <li>{item} <Button
-                        size="sm"
-                        variant="outline-danger"
-                        style={{marginLeft: "10px"}}
-                        onClick={() => assignPlayer(item)}>
-                        <FontAwesomeIcon icon={faPlus}/>
-                    </Button>
-                    </li>
-                ))}
-            </ul>
+            <Dropdown isOpen={isOpen} toggle={()=>toggle(!isOpen)}>
+                <DropdownToggle className={"dropStyle"} caret>
+                    {currentName ===  "" ? (
+                        <input
+                            type="text"
+                            placeholder="Search Player"
+                            value={searchTerm}
+                            onChange={handleChange}
+                        />
+                    ) : null}
+                        {currentName}
+                    {currentName !==  "" ? (
+                        <Button
+                            size="sm"
+                            variant="outline-danger"
+                            style={{marginLeft: "10px"}}
+                            onClick={() => setCurrentName("")}>
+                            <FontAwesomeIcon icon={faMinus}/>
+                        </Button>
+                    ) : null}
+                </DropdownToggle>
+                <DropdownMenu>
+                    {searchResults.map(item => (
+                        <DropdownItem className={"dropStyle"} onClick={()=>setCurrentName(item)} key={generateGuid()}>
+                            {item}
+                            <Button
+                                size="sm"
+                                variant="outline-danger"
+                                style={{marginLeft: "10px"}}
+                                onClick={() => assignPlayer(item)}>
+                                <FontAwesomeIcon icon={faPlus}/>
+                            </Button>
+                        </DropdownItem>
+                    ))}
+                </DropdownMenu>
+            </Dropdown>
         </div>
     );
 }

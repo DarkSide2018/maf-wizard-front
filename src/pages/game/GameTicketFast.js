@@ -10,7 +10,8 @@ import DropDownVictory from "./dropDowns/DropDownVictory";
 import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
 import AdditionalPoints from "./dropDowns/AdditionalPoints";
 import DropDownElection from "./dropDowns/DropDownElection";
-
+import {currentTime} from "../../common/Time";
+import './style.css';
 
 class GameTicketFast extends React.Component {
     constructor(props) {
@@ -100,8 +101,9 @@ class GameTicketFast extends React.Component {
                 'Authorization': 'Bearer ' + getToken()
             }
         })
-            .then(response => response.json())
-            .then(data => {
+            .then(response => {
+                if(response.status === 200){
+                    let data = response.json()
                     console.log("gameActive => " + JSON.stringify(data))
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                     this.setState({
@@ -116,8 +118,37 @@ class GameTicketFast extends React.Component {
                             playerToSlot: data.playerToCardNumber
                         }
                     )
+                }else if(response.status === 404){
+                    this.newTable()
                 }
-            );
+            });
+    }
+    newTable() {
+        let queryItem = {
+            messageType: 'CreateGameRequest',
+            gameUuid: null,
+            name: 'Новая игра от ' + currentTime(),
+            gameNumber: '',
+            players: []
+        }
+        fetch('/game', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(queryItem),
+        })
+            .then(response => response.json())
+            .then((data) => {
+                setGameUuid(data.entityUuid)
+                this.setState(
+                    {
+                        gamePlayers: [1,2,3,4,5,6,7,8,9,10],
+                    }
+                )
+            });
     }
 
     endGame(players) {
@@ -448,10 +479,6 @@ class GameTicketFast extends React.Component {
                 </div>
                 <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
                     <Card.Body>
-                        <Button
-                            style={{marginBottom: "15px"}}
-                            color="secondary"
-                            onClick={() => this.randomLanding()}>Рандомная посадка</Button>
                         <Table bordered variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>
@@ -474,9 +501,7 @@ class GameTicketFast extends React.Component {
                                         </DropDownPlayers>
                                     </td>
                                     <td key={generateGuid()}>
-                                        <Notes playersToSlot={playerToSlot} slot={index + 1} key={generateGuid()}>
-
-                                        </Notes>
+                                        <Checkbox/>
                                     </td>
                                     <td key={generateGuid()}>
                                         <AdditionalPoints playersToSlot={playerToSlot} slot={index + 1}
@@ -522,4 +547,35 @@ export function generateGuid() {
         result = result + i;
     }
     return result;
+}
+function Checkbox() {
+    const [checked1, setChecked1] = React.useState(false);
+    const [checked2, setChecked2] = React.useState(false);
+    const [checked3, setChecked3] = React.useState(false);
+    const [checked4, setChecked4] = React.useState(false);
+
+    return (
+        <label>
+            <input type="checkbox"
+                   className={"styled-checkbox"}
+                   defaultChecked={checked1}
+                   onChange={() => setChecked1(!checked2)}
+            />
+            <input type="checkbox"
+                   className={"styled-checkbox"}
+                   defaultChecked={checked2}
+                   onChange={() => setChecked2(!checked2)}
+            />
+            <input type="checkbox"
+                   className={"styled-checkbox"}
+                   defaultChecked={checked3}
+                   onChange={() => setChecked3(!checked3)}
+            />
+            <input type="checkbox"
+                   className={"styled-checkbox"}
+                   defaultChecked={checked4}
+                   onChange={() => setChecked4(!checked4)}
+            />
+        </label>
+    );
 }
