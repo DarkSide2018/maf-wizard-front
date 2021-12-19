@@ -30,7 +30,7 @@ import {
     incrementVictoryBlack,
     incrementVictoryRed,
     incrementWasKilled
-} from "./IncrementButtons";
+} from "./elements/IncrementButtons";
 import {Link} from "react-router-dom";
 import {currentTime} from "../../common/Time";
 

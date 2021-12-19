@@ -1,4 +1,4 @@
 {
-  "backendUrl": "https://maf-wizard-back.herokuapp.com",
-  "backendUrlLocal": "http://localhost:8080"
+  "backendUrlProd": "https://maf-wizard-back.herokuapp.com",
+  "backendUrl": "http://localhost:8080"
 }

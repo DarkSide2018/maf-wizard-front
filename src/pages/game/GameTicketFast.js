@@ -5,13 +5,14 @@ import {getToken} from "../../api/authenticationService";
 import Drop from "./dropDowns/Drop";
 import AppNavbar from "../AppNavbar";
 import DropDownPlayers from "./dropDowns/DropDownPlayers";
-import Notes from "./dropDowns/Notes";
 import DropDownVictory from "./dropDowns/DropDownVictory";
 import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
 import AdditionalPoints from "./dropDowns/AdditionalPoints";
 import DropDownElection from "./dropDowns/DropDownElection";
 import {currentTime} from "../../common/Time";
 import './style.css';
+import {Checkbox} from "./elements/CheckBox";
+import {Stopwatch} from "./elements/StopWatch";
 
 class GameTicketFast extends React.Component {
     constructor(props) {
@@ -475,7 +476,7 @@ class GameTicketFast extends React.Component {
                     </Card.Body>
                 </Card>
                 <div style={{height: '250px'}}>
-
+                    <Stopwatch/>
                 </div>
                 <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
                     <Card.Body>
@@ -547,35 +548,4 @@ export function generateGuid() {
         result = result + i;
     }
     return result;
-}
-function Checkbox() {
-    const [checked1, setChecked1] = React.useState(false);
-    const [checked2, setChecked2] = React.useState(false);
-    const [checked3, setChecked3] = React.useState(false);
-    const [checked4, setChecked4] = React.useState(false);
-
-    return (
-        <label>
-            <input type="checkbox"
-                   className={"styled-checkbox"}
-                   defaultChecked={checked1}
-                   onChange={() => setChecked1(!checked2)}
-            />
-            <input type="checkbox"
-                   className={"styled-checkbox"}
-                   defaultChecked={checked2}
-                   onChange={() => setChecked2(!checked2)}
-            />
-            <input type="checkbox"
-                   className={"styled-checkbox"}
-                   defaultChecked={checked3}
-                   onChange={() => setChecked3(!checked3)}
-            />
-            <input type="checkbox"
-                   className={"styled-checkbox"}
-                   defaultChecked={checked4}
-                   onChange={() => setChecked4(!checked4)}
-            />
-        </label>
-    );
 }

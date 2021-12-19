@@ -2,7 +2,7 @@
   "name": "auth-app-demo",
   "version": "0.0.1",
   "private": true,
-  "proxy": "https://maf-wizard-back.herokuapp.com",
+  "proxy": "http://localhost:8080",
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-solid-svg-icons": "^5.15.4",
@@ -23,6 +23,7 @@
     "reactstrap": "^8.10.0",
     "redux": "^4.1.1",
     "styled-components": "^5.2.3",
+    "use-sound": "^4.0.1",
     "web-vitals": "^1.0.1"
   },
   "scripts": {

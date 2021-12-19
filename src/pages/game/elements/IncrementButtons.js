@@ -1,5 +1,5 @@
-import {getToken} from "../../api/authenticationService";
-import {getCurrentGame} from "../player/AvailablePlayers";
+import {getToken} from "../../../api/authenticationService";
+import {getCurrentGame} from "../../player/AvailablePlayers";
 
 export const updatePlayerInCurrentGame = (player) =>{
     player.gameUuid = getCurrentGame()
