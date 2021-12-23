@@ -19,6 +19,7 @@ export class Stopwatch extends React.Component {
 
 
     handleStartClick() {
+        if(this.state.incrementer !== null) return
         this.setState({
             incrementer: setInterval(() =>
                     this.setState({
@@ -38,6 +39,7 @@ export class Stopwatch extends React.Component {
     handleResetClick() {
         clearInterval(this.state.incrementer);
         this.setState({
+            incrementer: null,
             secondsElapsed: 0
         });
     }
