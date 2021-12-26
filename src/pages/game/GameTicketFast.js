@@ -556,7 +556,7 @@ class GameTicketFast extends React.Component {
                        </RolesTable>
                     ):(
                         <div>
-                            false
+                      
                         </div>
                 )}
             </Container>
