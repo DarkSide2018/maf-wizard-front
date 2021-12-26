@@ -1,6 +1,4 @@
 import React from "react";
-import useSound from 'use-sound';
-import sound from './silence.mp3';
 
 const formattedSeconds = (sec) =>
     Math.floor(sec / 60) +

@@ -1,6 +1,6 @@
 import React from "react";
 import {Button, Container, Table} from "reactstrap";
-import {Card,} from "react-bootstrap";
+import {Card} from "react-bootstrap";
 import {getToken} from "../../api/authenticationService";
 import Drop from "./dropDowns/Drop";
 import AppNavbar from "../AppNavbar";
@@ -10,14 +10,16 @@ import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
 import AdditionalPoints from "./dropDowns/AdditionalPoints";
 import DropDownElection from "./dropDowns/DropDownElection";
 import {currentTime} from "../../common/Time";
-import './style.css';
+import './style-general.css';
 import {Checkbox} from "./elements/CheckBox";
 import {Stopwatch} from "./elements/StopWatch";
+import {RolesTable} from "./elements/RolesTable";
 
 class GameTicketFast extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            showRoles:false,
             currentElection: '',
             players: [],
             election: '',
@@ -101,8 +103,7 @@ class GameTicketFast extends React.Component {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + getToken()
             }
-        })
-            .then(response => {
+        }).then(response => {
                 if(response.status === 200){
                     let data = response.json()
                     console.log("gameActive => " + JSON.stringify(data))
@@ -150,6 +151,15 @@ class GameTicketFast extends React.Component {
                     }
                 )
             });
+    }
+
+    showRoles(){
+        let roles = this.state.showRoles;
+        this.setState(
+            {
+                showRoles:!roles
+            }
+        )
     }
 
     endGame(players) {
@@ -417,13 +427,20 @@ class GameTicketFast extends React.Component {
             onClick={() => this.endGame(gamePlayers)}>
             Закончить игру
         </Button>
+        let showRolesButton = <Button
+            style={{float: "left"}}
+            type="button"
+            variant="outline-info"
+            onClick={() => this.showRoles()}>
+            Показать/Скрыть роли
+        </Button>
         if (edit) {
             playerSelectionButton = ""
             endGameButton = ""
         }
 
         return <div className={"bg-general"}>
-            <Container>
+            <Container style={{width:"50%"}}>
                 <AppNavbar/>
                 <Card className={"bg-dark text-white"} style={{width: '103%', opacity: '0.8'}}>
                     <Card.Header>
@@ -433,14 +450,14 @@ class GameTicketFast extends React.Component {
                         <Table bordered variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>
-                                <th>Ночные действия</th>
-                                <th>1 ночь</th>
-                                <th>2 ночь</th>
-                                <th>3 ночь</th>
-                                <th>4 ночь</th>
-                                <th>5 ночь</th>
-                                <th>6 ночь</th>
-                                <th>7 ночь</th>
+                                <th>Ночь №</th>
+                                <th>1</th>
+                                <th>2</th>
+                                <th>3</th>
+                                <th>4</th>
+                                <th>5</th>
+                                <th>6</th>
+                                <th>7</th>
                             </tr>
                             </thead>
                             <tbody className={"text-white"}>
@@ -475,6 +492,7 @@ class GameTicketFast extends React.Component {
                         </Table>
                     </Card.Body>
                 </Card>
+
                 <div style={{
                     textAlign:"center",
                     height: '150px',
@@ -490,10 +508,9 @@ class GameTicketFast extends React.Component {
                         <Stopwatch className={"text-white"}/>
                     </div>
                 </div>
+
                 <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
-
                     <Card.Body>
-
                         <Table bordered variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>
@@ -529,8 +546,19 @@ class GameTicketFast extends React.Component {
                             </tbody>
                         </Table>
                         {endGameButton}
+                        {showRolesButton}
                     </Card.Body>
+
                 </Card>
+                {this.state.showRoles === true ? (
+                       <RolesTable>
+
+                       </RolesTable>
+                    ):(
+                        <div>
+                            false
+                        </div>
+                )}
             </Container>
         </div>
     }

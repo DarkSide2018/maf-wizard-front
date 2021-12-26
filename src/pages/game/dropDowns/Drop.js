@@ -10,7 +10,7 @@ class Drop extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            availableSlots:[1,2,3,4,5,6,7,8,9,10],
+            availableSlots:[0,1,2,3,4,5,6,7,8,9,10],
             playerName: '',
             players: props.players,
             isOpen: false
@@ -101,7 +101,7 @@ class Drop extends Component {
 
     render() {
         let slots = this.state.availableSlots
-        let dropDownTogglePlayerName = 'Cвободно'
+        let dropDownTogglePlayerName = '0'
         if (this.state.playerName !== '') {
             dropDownTogglePlayerName = this.state.playerName
         }

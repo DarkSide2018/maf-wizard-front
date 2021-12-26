@@ -78,7 +78,7 @@ class AdditionalPoints extends Component {
 
     render() {
         const {availablePoints} = this.state
-        let dropDownToggle = 'Cвободно'
+        let dropDownToggle = '0'
         if (this.state.currentNote !== '') {
             dropDownToggle = this.state.currentNote
         }

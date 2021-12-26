@@ -5,13 +5,14 @@ import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
-class DropDownRole extends Component {
+
+export class DropDownRole extends Component {
     constructor(props) {
         super(props);
         this.state = {
             playerName: '',
-            roles: props.roles,
-            currentRole: '',
+            availablePlayers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            currentPlayer: 0,
             isOpen: false
         };
         this.toggle = this.toggle.bind(this);
@@ -19,23 +20,13 @@ class DropDownRole extends Component {
     }
 
     componentDidMount() {
-        const {playersToSlot,slot} = this.props
-        let filteredSlot = playersToSlot.filter(item => item.slot === slot)
-        let currentRole
-        if (filteredSlot !== undefined && filteredSlot.length > 0) {
-            if (filteredSlot[0].playerUuid !== undefined) {
-                currentRole = filteredSlot[0].role
+        this.setState(
+            {
+                availablePlayers: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
             }
-        }
-        if (currentRole !== undefined) {
-            this.setState(
-                {
-                    currentRole: currentRole
-                }
-            )
-        }
-
+        )
     }
+
 
     toggle() {
         let currentState = this.state.isOpen
@@ -45,48 +36,31 @@ class DropDownRole extends Component {
             }
         )
     }
-    setRole(value){
-        const {slot} = this.props
-        let pls = {
-            slot:slot,
-            role:value
-        }
-        let gameCommand = {
-            gameUuid: getCurrentGame(),
-            status: 'ACTIVE',
-            messageType: 'UpdateGameRequest',
-            playerToCardNumber: [pls]
-        }
-        fetch('/game', {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getToken()
-            },
-            body: JSON.stringify(gameCommand),
-        });
+
+    setRole(value) {
         this.setState(
             {
-                currentRole: value
+                currentPlayer: value
             }
         )
     }
+
     render() {
-        const {roles} = this.props
-        let currentRole = 'Свободно'
-        if (this.state.currentRole !== '') {
-            currentRole = this.state.currentRole
+        const {availablePlayers} = this.state
+        let currentPlayer = '0'
+        if (this.state.currentPlayer !== '') {
+            currentPlayer = this.state.currentPlayer
 
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
-                <DropdownToggle className={"dropStyle"}  caret>
-                    {currentRole}
+                <DropdownToggle className={"dropStyle"} caret>
+                    {currentPlayer}
                 </DropdownToggle>
                 <DropdownMenu>
-                    {roles.map(item => {
-                        return <DropdownItem className={"dropStyle"}  onClick={()=>this.setRole(item)} key={generateGuid()}>{item}</DropdownItem>
+                    {availablePlayers.map(item => {
+                        return <DropdownItem className={"dropStyle"} onClick={() => this.setRole(item)}
+                                             key={generateGuid()}>{item}</DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>
