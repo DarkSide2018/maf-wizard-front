@@ -475,11 +475,25 @@ class GameTicketFast extends React.Component {
                         </Table>
                     </Card.Body>
                 </Card>
-                <div style={{height: '250px'}}>
-                    <Stopwatch/>
+                <div style={{
+                    textAlign:"center",
+                    height: '150px',
+                    marginTop:"60px",
+                    marginBottom:"60px"
+                }}>
+                    <div className={"bg-dark text-white"} style={{
+                        width:"30%",
+                        marginLeft:"30px",
+                        paddingTop:"30px",
+                        borderRadius:"50px",
+                        textAlign:"center"}}>
+                        <Stopwatch className={"text-white"}/>
+                    </div>
                 </div>
                 <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
+
                     <Card.Body>
+
                         <Table bordered variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>

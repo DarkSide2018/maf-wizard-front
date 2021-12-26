@@ -21,11 +21,14 @@ export class Stopwatch extends React.Component {
     handleStartClick() {
         if(this.state.incrementer !== null) return
         this.setState({
-            incrementer: setInterval(() =>
+            incrementer: setInterval(() =>{
+                    let seconds = this.state.secondsElapsed
+
                     this.setState({
-                        secondsElapsed: this.state.secondsElapsed + 1
+                        secondsElapsed: seconds + 1
+
                     })
-                , 1000)
+            }, 1000)
         });
     }
 
@@ -50,12 +53,12 @@ export class Stopwatch extends React.Component {
                 <h1 className="stopwatch-timer">{formattedSeconds(this.state.secondsElapsed)}</h1>
 
                 {(this.state.secondsElapsed === 0
-                        ? <Button className="start-btn" onClick={this.handleStartClick.bind(this)
+                        ? <Button className="start-btn text-white" onClick={this.handleStartClick.bind(this)
                         }>start</Button>
-                        : <Button className="stop-btn" onClick={this.handleStopClick.bind(this)}>stop</Button>
+                        : <StopButton className="stop-btn text-white" onClick={this.handleStopClick.bind(this)}>stop</StopButton>
                 )}
                 {(this.state.secondsElapsed !== 0
-                        ? <Button onClick={this.handleResetClick.bind(this)}>reset</Button>
+                        ? <Button className={"text-white"} onClick={this.handleResetClick.bind(this)}>reset</Button>
                         : null
                 )}
             </div>
@@ -64,9 +67,9 @@ export class Stopwatch extends React.Component {
 }
 
 const Button = (props) => {
-    const [playOn] = useSound(
-        sound,
-        {volume: 0.25}
-    );
-    return <button type="button" onMouseUp={() => {playOn()}} {...props} className={"btn " + props.className}/>;
+    return <button type="button"  {...props} className={"btn " + props.className}/>;
+}
+const StopButton = (props) => {
+
+    return <button type="button" {...props} className={"btn " + props.className}/>;
 }
