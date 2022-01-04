@@ -96,34 +96,7 @@ class GameTicketFast extends React.Component {
     }
 
     getCurrentGameAfterMount() {
-        fetch('/game/active', {
-            method: 'GET',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getToken()
-            }
-        }).then(response => {
-                if(response.status === 200){
-                    let data = response.json()
-                    console.log("gameActive => " + JSON.stringify(data))
-                    let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
-                    this.setState({
-                            elections: data.elections,
-                            currentVictory: data.victory,
-                            gameNumber: data.gameNumber,
-                            gameUuid: data.gameUuid,
-                            nights: data.nights,
-                            gamePlayers: responsePlayers,
-                            playersForElection: responsePlayers,
-                            gameName: data.name,
-                            playerToSlot: data.playerToCardNumber
-                        }
-                    )
-                }else if(response.status === 404){
-                    this.newTable()
-                }
-            });
+        this.newTable()
     }
     newTable() {
         let queryItem = {
@@ -556,7 +529,7 @@ class GameTicketFast extends React.Component {
                        </RolesTable>
                     ):(
                         <div>
-                      
+
                         </div>
                 )}
             </Container>
