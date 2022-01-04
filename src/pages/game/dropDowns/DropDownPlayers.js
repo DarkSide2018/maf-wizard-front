@@ -83,6 +83,7 @@ class DropDownPlayers extends Component {
             body: JSON.stringify(gameCommand),
         });
     }
+
     render() {
         return <div>
 
@@ -98,13 +99,17 @@ function Search() {
     const [searchTerm, setSearchTerm] = React.useState("");
     const [searchResults, setSearchResults] = React.useState([""]);
     const [currentName, setCurrentName] = React.useState("");
+    const [createdPlayer, setCreatedPlayer] = React.useState("");
     const [isOpen, toggle] = React.useState(false);
     const handleChange = event => {
         setSearchTerm(event.target.value);
     };
+    const handlePlayerChange = event => {
+        setCreatedPlayer(event.target.value);
+    };
 
     React.useEffect(() => {
-        let players=["empty search term"]
+        let players = ["Новый Игрок"]
         fetch('/player/like/all/' + searchTerm, {
             method: 'GET',
             headers: {
@@ -116,7 +121,7 @@ function Search() {
             if (response.ok) {
                 response.json().then(data => {
                         data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
-                        players = data.players.map(it=> it.nickName);
+                        players = data.players.map(it => it.nickName);
                         console.log("players like => " + JSON.stringify(players))
                         setSearchResults(players);
                     }
@@ -125,11 +130,16 @@ function Search() {
         })
         setSearchResults(players);
     }, [searchTerm]);
+
+    React.useEffect(() => {
+     console.log("createdPlayer => " + createdPlayer)
+
+    }, [setCreatedPlayer]);
     return (
         <div className="App">
-            <Dropdown isOpen={isOpen} toggle={()=>toggle(!isOpen)}>
+            <Dropdown isOpen={isOpen} toggle={() => toggle(!isOpen)}>
                 <DropdownToggle className={"dropStyle"} caret>
-                    {currentName ===  "" ? (
+                    {currentName === "" ? (
                         <input
                             type="text"
                             placeholder="Search Player"
@@ -137,8 +147,8 @@ function Search() {
                             onChange={handleChange}
                         />
                     ) : null}
-                        {currentName}
-                    {currentName !==  "" ? (
+                    {currentName}
+                    {currentName !== "" ? (
                         <Button
                             size="sm"
                             variant="outline-danger"
@@ -150,7 +160,7 @@ function Search() {
                 </DropdownToggle>
                 <DropdownMenu>
                     {searchResults.map(item => (
-                        <DropdownItem className={"dropStyle"} onClick={()=>setCurrentName(item)} key={generateGuid()}>
+                        <DropdownItem className={"dropStyle"} onClick={() => setCurrentName(item)} key={generateGuid()}>
                             {item}
                             <Button
                                 size="sm"
@@ -162,6 +172,22 @@ function Search() {
                         </DropdownItem>
                     ))}
                 </DropdownMenu>
+                {currentName === "Новый Игрок" ? (
+                    <div style={{marginTop:"10px"}}>
+                        <input
+                            type="text"
+                            placeholder="Создать нового игрока"
+                            value={createdPlayer}
+                            onChange={handlePlayerChange}
+                        /> <Button
+                        size="sm"
+                        variant="outline-danger"
+                        style={{marginTop: "10px"}}
+                        onClick={() => assignPlayer(createdPlayer)}>
+                        Создать
+                    </Button>
+                    </div>
+                ) : null}
             </Dropdown>
         </div>
     );
