@@ -2,7 +2,6 @@ import React from "react";
 import {Card} from "react-bootstrap";
 import {Table} from "reactstrap";
 import {generateGuid} from "../GameTicketFast";
-import Drop from "../dropDowns/Drop";
 import DropDownRole from "../dropDowns/DropDownRole";
 
 export class RolesTable extends React.Component {
@@ -22,7 +21,6 @@ export class RolesTable extends React.Component {
                         <Table bordered variant="dark">
                             <thead className={"text-white"}>
                             <tr key={generateGuid()}>
-                                <th>Роль</th>
                                 <th>Шериф</th>
                                 <th>Дон</th>
                                 <th>Мафиози-1</th>
@@ -31,11 +29,6 @@ export class RolesTable extends React.Component {
                             </thead>
                             <tbody className={"text-white"}>
                             <tr>
-                                <td key={generateGuid()}>
-                                    <DropDownRole>
-
-                                    </DropDownRole>
-                                </td>
                                 <td key={generateGuid()}>
                                     <DropDownRole>
 

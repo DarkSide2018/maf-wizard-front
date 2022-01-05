@@ -107,6 +107,21 @@ function Search() {
     const handlePlayerChange = event => {
         setCreatedPlayer(event.target.value);
     };
+    const handleClickCreate = value => {
+        let queryItem = {
+            nickName: value
+        }
+        fetch('/player', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(queryItem),
+        });
+        setCurrentName(value)
+    };
 
     React.useEffect(() => {
         let players = ["Новый Игрок"]
@@ -132,7 +147,7 @@ function Search() {
     }, [searchTerm]);
 
     React.useEffect(() => {
-     console.log("createdPlayer => " + createdPlayer)
+        console.log("createdPlayer => " + createdPlayer)
 
     }, [setCreatedPlayer]);
     return (
@@ -173,7 +188,7 @@ function Search() {
                     ))}
                 </DropdownMenu>
                 {currentName === "Новый Игрок" ? (
-                    <div style={{marginTop:"10px"}}>
+                    <div style={{marginTop: "10px"}}>
                         <input
                             type="text"
                             placeholder="Создать нового игрока"
@@ -183,7 +198,7 @@ function Search() {
                         size="sm"
                         variant="outline-danger"
                         style={{marginTop: "10px"}}
-                        onClick={() => assignPlayer(createdPlayer)}>
+                        onClick={() => handleClickCreate(createdPlayer)}>
                         Создать
                     </Button>
                     </div>
@@ -191,6 +206,11 @@ function Search() {
             </Dropdown>
         </div>
     );
+}
+
+function createPlayer(value) {
+
+
 }
 
 function assignPlayer(value) {
