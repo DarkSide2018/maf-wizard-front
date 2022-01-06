@@ -4,7 +4,6 @@ import {Card} from "react-bootstrap";
 import {getToken} from "../../api/authenticationService";
 import Drop from "./dropDowns/Drop";
 import AppNavbar from "../AppNavbar";
-import DropDownPlayers from "./dropDowns/DropDownPlayers";
 import DropDownVictory from "./dropDowns/DropDownVictory";
 import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
 import AdditionalPoints from "./dropDowns/AdditionalPoints";
@@ -14,6 +13,7 @@ import './style-general.css';
 import {Checkbox} from "./elements/CheckBox";
 import {Stopwatch} from "./elements/StopWatch";
 import {RolesTable} from "./elements/RolesTable";
+import {Search} from "./dropDowns/DropDownSearch";
 
 class GameTicketFast extends React.Component {
     constructor(props) {
@@ -500,10 +500,7 @@ class GameTicketFast extends React.Component {
                                         {index + 1}
                                     </td>
                                     <td key={generateGuid()}>
-                                        <DropDownPlayers playersToSlot={playerToSlot} slot={index + 1}
-                                                         key={generateGuid()} players={gamePlayers}>
-
-                                        </DropDownPlayers>
+                                        <Search slot={index + 1}/>
                                     </td>
                                     <td key={generateGuid()}>
                                         <Checkbox/>
