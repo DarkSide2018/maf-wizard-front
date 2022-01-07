@@ -19,6 +19,36 @@ export function Search(props) {
     const handlePlayerChange = event => {
         setCreatedPlayer(event.target.value);
     };
+    React.useEffect(() => {
+
+        let player = props.pls.filter(it => it.slot === props.slot)
+        console.log("filtered = > " + JSON.stringify(player))
+        console.log("without json = > " +  player)
+        if(player.length === 0) return
+        setCurrentName(player[0].playerNickName)
+
+    }, []);
+    const setPlayerToGame = value => {
+        if (value === "") return
+        console.log("playerToCardNumber - > " + JSON.stringify(props.pls))
+        let gameCommand = {
+            gameUuid: getCurrentGame(),
+            nickName: value,
+            slot: props.slot
+        }
+        console.log("gameCommand -> " + JSON.stringify(gameCommand))
+        fetch('/game/player', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(gameCommand),
+        });
+        setCurrentName(value)
+    }
+
     const handleClickCreate = value => {
         let queryItem = {
             nickName: value
@@ -32,7 +62,7 @@ export function Search(props) {
             },
             body: JSON.stringify(queryItem),
         }).then(r => {
-            if(r.status === 400){
+            if (r.status === 400) {
                 alert("Такой игрок уже существует")
             }
         });
@@ -61,25 +91,6 @@ export function Search(props) {
         })
         setSearchResults(players);
     }, [searchTerm]);
-
-    React.useEffect(() => {
-
-        let gameCommand = {
-            gameUuid: getCurrentGame(),
-            status: 'ACTIVE',
-            messageType: 'UpdateGameRequest',
-            playerToCardNumber: ["pls"]
-        }
-        fetch('/game', {
-            method: 'PUT',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + getToken()
-            },
-            body: JSON.stringify(gameCommand),
-        });
-    }, [setCurrentName]);
     return (
         <div className="App">
             <Dropdown isOpen={isOpen} toggle={() => toggle(!isOpen)}>
@@ -105,7 +116,8 @@ export function Search(props) {
                 </DropdownToggle>
                 <DropdownMenu>
                     {searchResults.map(item => (
-                        <DropdownItem className={"dropStyle"} onClick={() => setCurrentName(item)} key={generateGuid()}>
+                        <DropdownItem className={"dropStyle"} onClick={() => setPlayerToGame(item)}
+                                      key={generateGuid()}>
                             {item}
                         </DropdownItem>
                     ))}

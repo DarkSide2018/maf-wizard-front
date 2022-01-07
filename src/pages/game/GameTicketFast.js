@@ -30,6 +30,7 @@ class GameTicketFast extends React.Component {
             playerToSlot:[],
             gamePlayers: [],
             pushedPlayers: [],
+            availableSlots: [],
             edit: false,
             availableRoles: [
                 'Шериф',
@@ -47,24 +48,8 @@ class GameTicketFast extends React.Component {
         if (id === "new") {
             this.getCurrentGameAfterMount()
         } else {
-            this.setState({
-                edit: true
-            })
-            setGameUuid(id)
-            this.getOldGame(id)
-        }
 
-        this.setState({
-            election: <tr key={generateGuid()}>
-                <td> Голосование </td>
-                <td colSpan={"7"}>
-                    <Button style={{width: "100%"}}
-                            color="secondary"
-                            onClick={() => this.startElection()}
-                    >Начать голосование</Button>
-                </td>
-            </tr>
-        })
+        }
     }
 
     getOldGame(id) {
@@ -75,10 +60,15 @@ class GameTicketFast extends React.Component {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + getToken()
             }
-        })
-            .then(response => response.json())
-            .then(data => {
+        }).then(response => {
+            return response.json()
+            }).then(data => {
+                console.log("old game response -> " + JSON.stringify(data))
                     let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
+                    data.playerToCardNumber.forEach(value=>{
+                        value.nickName = responsePlayers.filter(it => it.playerUuid === value.playerUuid).nickName
+                    })
+                console.log("pls-> " + JSON.stringify(data.playerToCardNumber))
                     this.setState({
                             currentVictory: data.victory,
                             gameNumber: data.gameNumber,
@@ -87,6 +77,7 @@ class GameTicketFast extends React.Component {
                             elections: data.elections,
                             election:'',
                             gamePlayers: responsePlayers,
+                            availableSlots: [1,2,3,4,5,6,7,8,9,10],
                             gameName: data.name,
                             playerToSlot: data.playerToCardNumber
                         }
@@ -96,7 +87,13 @@ class GameTicketFast extends React.Component {
     }
 
     getCurrentGameAfterMount() {
-        this.newTable()
+        let currentGame = getCurrentGame();
+        if(currentGame === null){
+            this.newTable()
+        }else{
+            this.getOldGame(currentGame)
+        }
+
     }
     newTable() {
         let queryItem = {
@@ -120,7 +117,7 @@ class GameTicketFast extends React.Component {
                 setGameUuid(data.entityUuid)
                 this.setState(
                     {
-                        gamePlayers: [1,2,3,4,5,6,7,8,9,10],
+                        availableSlots: [1,2,3,4,5,6,7,8,9,10],
                     }
                 )
             });
@@ -329,6 +326,7 @@ class GameTicketFast extends React.Component {
             gamePlayers,
             playerToSlot,
             isLoading,
+            availableSlots,
             selectPlayers,
             election,
             edit
@@ -415,7 +413,7 @@ class GameTicketFast extends React.Component {
         return <div className={"bg-general"}>
             <Container style={{width:"50%"}}>
                 <AppNavbar/>
-                <Card className={"bg-dark text-white"} style={{width: '103%', opacity: '0.8'}}>
+                <Card className={"bg-dark text-white"} style={{width: '100%', opacity: '0.8'}}>
                     <Card.Header>
                         {playerSelectionButton}
                     </Card.Header>
@@ -494,13 +492,13 @@ class GameTicketFast extends React.Component {
                             </tr>
                             </thead>
                             <tbody className={"text-white"}>
-                            {gamePlayers.map((item, index) => {
+                            {availableSlots.map((item, index) => {
                                 return <tr key={generateGuid()}>
                                     <td key={generateGuid()}>
                                         {index + 1}
                                     </td>
                                     <td key={generateGuid()}>
-                                        <Search slot={index + 1}/>
+                                        <Search slot={index + 1} pls={playerToSlot}/>
                                     </td>
                                     <td key={generateGuid()}>
                                         <Checkbox/>
