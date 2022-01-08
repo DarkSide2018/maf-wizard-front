@@ -22,8 +22,6 @@ export function Search(props) {
     React.useEffect(() => {
 
         let player = props.pls.filter(it => it.slot === props.slot)
-        console.log("filtered = > " + JSON.stringify(player))
-        console.log("without json = > " +  player)
         if(player.length === 0) return
         setCurrentName(player[0].playerNickName)
 
