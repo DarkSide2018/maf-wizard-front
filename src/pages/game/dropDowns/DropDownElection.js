@@ -1,15 +1,17 @@
 import React, {Component} from "react";
-import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
+import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import {generateGuid} from "../GameTicket";
 import './Drop.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMinus} from "@fortawesome/free-solid-svg-icons";
 
 class DropDownElection extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            playerVote:'',
-            currentPlayer: this.props.pushedPlayer,
-            availableVotes:[1,2,3,4,5,6,7,8,9],
+            playerVote: '',
+            currentSlot: this.props.pushedPlayer,
+            availableVotes: [1, 2, 3, 4, 5, 6, 7, 8, 9],
             isOpen: false
         };
         this.toggle = this.toggle.bind(this);
@@ -28,41 +30,38 @@ class DropDownElection extends Component {
             }
         )
     }
-    setVote(value){
+
+    setVote(value) {
         this.setState(
             {
                 playerVote: value
             }
         )
-        let thatObject = this.props.thatObject;
-        let player = this.props.pushedPlayer;
-        let state = thatObject.state.currentElection;
-        state.dropdowns.filter(item => item.playerUuid === player.playerUuid)[0].numberOfVotes = value
-        thatObject.setState(
-            {
-                currentElection: state,
-            }
-        )
     }
+
     render() {
-        const {availableVotes,currentPlayer} = this.state
-        let currentVote=0
+        const {availableVotes, currentSlot} = this.state
+        let currentVote = 0
         if (this.state.playerVote !== '') {
             currentVote = this.state.playerVote
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"} caret>
-                    | Cлот : {currentPlayer.slot} | {currentPlayer.nickName} | Голоса : {currentVote}
+                    | Cлот : {currentSlot} | Голоса : {currentVote}
                 </DropdownToggle>
                 <DropdownMenu>
                     {availableVotes.map(item => {
-                        return <DropdownItem className={"dropStyle"} onClick={()=>this.setVote(item)} key={generateGuid()}>  {item}  </DropdownItem>
+                        return <DropdownItem className={"dropStyle"} onClick={() => this.setVote(item)}
+                                             key={generateGuid()}>  {item}  </DropdownItem>
                     })}
                 </DropdownMenu>
             </Dropdown>
+
         </div>
     }
+
+
 }
 
 export default DropDownElection;

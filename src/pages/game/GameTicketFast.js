@@ -14,12 +14,14 @@ import {Checkbox} from "./elements/CheckBox";
 import {Stopwatch} from "./elements/StopWatch";
 import {RolesTable} from "./elements/RolesTable";
 import {Search} from "./dropDowns/DropDownSearch";
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faMinus} from "@fortawesome/free-solid-svg-icons";
 
 class GameTicketFast extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            showRoles:false,
+            showRoles: false,
             currentElection: '',
             players: [],
             election: '',
@@ -27,9 +29,9 @@ class GameTicketFast extends React.Component {
             playersForElection: '',
             nights: [],
             gameUuid: null,
-            playerToSlot:[],
+            playerToSlot: [],
             gamePlayers: [],
-            pushedPlayers: [],
+            pushedSlots: [],
             availableSlots: [],
             edit: false,
             availableRoles: [
@@ -62,39 +64,51 @@ class GameTicketFast extends React.Component {
             }
         }).then(response => {
             return response.json()
-            }).then(data => {
+        }).then(data => {
                 console.log("old game response -> " + JSON.stringify(data))
-                    let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
-                    data.playerToCardNumber.forEach(value=>{
-                        value.nickName = responsePlayers.filter(it => it.playerUuid === value.playerUuid).nickName
-                    })
+                let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
+                data.playerToCardNumber.forEach(value => {
+                    value.nickName = responsePlayers.filter(it => it.playerUuid === value.playerUuid).nickName
+                })
                 console.log("pls-> " + JSON.stringify(data.playerToCardNumber))
-                    this.setState({
-                            currentVictory: data.victory,
-                            gameNumber: data.gameNumber,
-                            gameUuid: data.gameUuid,
-                            nights: data.nights,
-                            elections: data.elections,
-                            election:'',
-                            gamePlayers: responsePlayers,
-                            availableSlots: [1,2,3,4,5,6,7,8,9,10],
-                            gameName: data.name,
-                            playerToSlot: data.playerToCardNumber
-                        }
-                    )
-                }
-            );
+                this.setState({
+                        currentVictory: data.victory,
+                        gameNumber: data.gameNumber,
+                        gameUuid: data.gameUuid,
+                        nights: data.nights,
+                        elections: data.elections,
+                        gamePlayers: responsePlayers,
+                        availableSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        gameName: data.name,
+                        playerToSlot: data.playerToCardNumber,
+                        pushedSlots: [],
+                        currentElection: '',
+                        election: <tr key={generateGuid()}>
+                            <td>Голосование</td>
+                            <td colSpan={"7"}>
+                                <Button style={{width: "100%"}}
+                                        color="secondary"
+                                        onClick={() => this.startElection()}
+                                >Начать голосование</Button>
+                            </td>
+                        </tr>,
+                        selectPlayers: ''
+                    }
+                )
+            }
+        );
     }
 
     getCurrentGameAfterMount() {
         let currentGame = getCurrentGame();
-        if(currentGame === null){
+        if (currentGame === null) {
             this.newTable()
-        }else{
+        } else {
             this.getOldGame(currentGame)
         }
 
     }
+
     newTable() {
         let queryItem = {
             messageType: 'CreateGameRequest',
@@ -117,17 +131,17 @@ class GameTicketFast extends React.Component {
                 setGameUuid(data.entityUuid)
                 this.setState(
                     {
-                        availableSlots: [1,2,3,4,5,6,7,8,9,10],
+                        availableSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                     }
                 )
             });
     }
 
-    showRoles(){
+    showRoles() {
         let roles = this.state.showRoles;
         this.setState(
             {
-                showRoles:!roles
+                showRoles: !roles
             }
         )
     }
@@ -182,56 +196,78 @@ class GameTicketFast extends React.Component {
         });
     }
 
-    pushPlayerToElection(player) {
-        let pushPlayers = this.state.pushedPlayers
-        let filteredPlayersForElection = this.state.playersForElection.filter(item => item.playerUuid !== player.playerUuid)
-        let pls = this.state.playerToSlot.filter(item => item.playerUuid === player.playerUuid)
-        player.slot = pls[0].slot
-        pushPlayers.push(player)
+    deleteSlotFromElection(slot) {
+        console.log("slot for delete -> " + slot)
+        let filter = this.state.pushedSlots.filter(it => it !== slot);
+        this.setState({
+                pushedSlots: filter,
+                election: this.generateElection(filter)
+            }
+        )
+    }
+
+    pushPlayerToElection(slot) {
+        let pushedSlots = this.state.pushedSlots
+        pushedSlots.push(slot)
         let currentElectionUpdated = this.state.currentElection;
-        currentElectionUpdated.dropdowns = pushPlayers
+        currentElectionUpdated.dropdowns = pushedSlots
 
-        let pushPlayersList = pushPlayers.map(player => {
-
-            return <div>
-                <DropDownElection style={{marginRight: "10px", marginTop: '10px'}}
-                                  size="sm" thatObject={this}
-                                  pushedPlayer={player}
-                                  key={generateGuid()}
-                                  variant="outline-danger">
-                </DropDownElection>
-
-            </div>
-
-        });
-        let gamePlayersList = this.generateAvailablePlayersForElection(filteredPlayersForElection)
+        let availableSlotsList = this.generateAvailablePlayersForElection(this.state.availableSlots)
         this.setState({
             currentElection: currentElectionUpdated,
-            playersForElection: filteredPlayersForElection,
             selectPlayers: <tr key={generateGuid()}>
                 <td>Выбор игроков</td>
                 <td colSpan={"7"}>
-                    {gamePlayersList}
+                    {availableSlotsList}
                 </td>
             </tr>,
-            pushedPlayers: pushPlayers,
-            election: <tr key={generateGuid()}>
-                <td>Голосование</td>
-                <td colSpan={"7"}>
-                    {pushPlayersList}
-                    <Button style={{marginRight: "10px", marginTop: '10px'}}
-                            size="sm"
-                            onClick={() => this.endElection()}
-                            key={generateGuid()}
-                            variant="outline-danger"> Закончить голосование
-                    </Button>
-                </td>
-            </tr>
+            pushedSlots: pushedSlots,
+            election: this.generateElection(pushedSlots)
         })
 
     }
 
-    endElection(){
+    generateElection(pushedSlots) {
+        let slotDropDownList = pushedSlots.map(slot => {
+            return <div>
+                <DropDownElection style={{marginRight: "10px", marginTop: '10px'}}
+                                  size="sm" thatObject={this}
+                                  pushedPlayer={slot}
+                                  key={generateGuid()}
+                                  variant="outline-danger">
+                </DropDownElection>
+            </div>
+        });
+        let minusSlotList = pushedSlots.map(slot => {
+            return <div>
+                <Button
+                    size="sm"
+                    style={{marginTop: "5px"}}
+                    variant="outline-danger"
+                    onClick={() => this.deleteSlotFromElection(slot)}
+                >
+                    <FontAwesomeIcon icon={faMinus}/>
+                </Button>
+            </div>
+        });
+        return <tr key={generateGuid()}>
+            <td>Голосование</td>
+            <td colSpan={"6"}>
+                {slotDropDownList}
+                <Button style={{marginRight: "10px", marginTop: '10px'}}
+                        size="sm"
+                        onClick={() => this.endElection()}
+                        key={generateGuid()}
+                        variant="outline-danger"> Закончить голосование
+                </Button>
+            </td>
+            <td>
+                {minusSlotList}
+            </td>
+        </tr>
+    }
+
+    endElection() {
         fetch('/game/election', {
             method: 'POST',
             headers: {
@@ -242,7 +278,7 @@ class GameTicketFast extends React.Component {
             body: JSON.stringify(this.state.currentElection),
         }).then(response => {
             this.setState({
-                pushedPlayers:[],
+                pushedPlayers: [],
                 currentElection: '',
                 election: <tr key={generateGuid()}>
                     <td>Голосование</td>
@@ -253,30 +289,25 @@ class GameTicketFast extends React.Component {
                         >Начать голосование</Button>
                     </td>
                 </tr>,
-                selectPlayers:''
+                selectPlayers: ''
             })
             this.getCurrentGameAfterMount()
         })
     }
 
-    generateAvailablePlayersForElection(players) {
-        return players.map(player => {
-            let pls = this.state.playerToSlot.filter(item => item.playerUuid === player.playerUuid)
+    generateAvailablePlayersForElection(slots) {
+        return slots.map(slot => {
             return <Button style={{marginRight: "10px", marginTop: '10px'}}
                            size="sm"
                            key={generateGuid()}
-                           onClick={() => this.pushPlayerToElection(player)}
-                           variant="outline-danger"> | Cлот : {pls[0].slot} | {player.nickName} |
+                           onClick={() => this.pushPlayerToElection(slot)}
+                           variant="outline-danger"> | Cлот : {slot} |
             </Button>
         });
     }
 
     startElection() {
-        if(this.state.playersForElection.length !== this.state.playerToSlot.length){
-            alert("Игроки не на своих местах")
-            return
-        }
-        let gamePlayersList = this.generateAvailablePlayersForElection(this.state.playersForElection)
+        let gamePlayersList = this.generateAvailablePlayersForElection(this.state.availableSlots)
         let electionDto = {
             electionId: generateGuid(),
             gameUuid: getCurrentGame(),
@@ -287,7 +318,7 @@ class GameTicketFast extends React.Component {
             election: <tr key={generateGuid()}>
                 <td>Голосование</td>
                 <td colSpan={"7"}>
-                    Выбранные игроки :
+                    Выбранные слоты :
                 </td>
             </tr>,
             selectPlayers: <tr key={generateGuid()}>
@@ -337,19 +368,20 @@ class GameTicketFast extends React.Component {
         let availablePlayersForDonList = ''
         let availableForLeftGameList = ''
         let oldElections = ''
-        if(elections !== [] && elections !== undefined){
-            oldElections = elections.sort((a, b) => a.sortOrder > (b.sortOrder)).map(item=>{
+        if (elections !== [] && elections !== undefined) {
+            oldElections = elections.sort((a, b) => a.sortOrder > (b.sortOrder)).map(item => {
                 let key = generateGuid();
-                let sortElection = item.sortOrder+1;
-                let gamblers = item.dropdowns.map(drop=>{
-                 return  <Button color="secondary"> {drop.nickName} | {drop.numberOfVotes}</Button>})
+                let sortElection = item.sortOrder + 1;
+                let gamblers = item.dropdowns.map(drop => {
+                    return <Button color="secondary"> {drop.nickName} | {drop.numberOfVotes}</Button>
+                })
                 return <tr key={key}>
-                        <td>
-                            Голосование {sortElection}
-                        </td>
-                          <td colSpan={"7"}>
-                              {gamblers}
-                          </td>
+                    <td>
+                        Голосование {sortElection}
+                    </td>
+                    <td colSpan={"7"}>
+                        {gamblers}
+                    </td>
                 </tr>
             })
         }
@@ -411,7 +443,7 @@ class GameTicketFast extends React.Component {
         }
 
         return <div className={"bg-general"}>
-            <Container style={{width:"50%"}}>
+            <Container style={{width: "50%"}}>
                 <AppNavbar/>
                 <Card className={"bg-dark text-white"} style={{width: '100%', opacity: '0.8'}}>
                     <Card.Header>
@@ -459,23 +491,25 @@ class GameTicketFast extends React.Component {
                                     </DropDownVictory>
                                 </td>
                             </tr>
+
                             </tbody>
                         </Table>
                     </Card.Body>
                 </Card>
 
                 <div style={{
-                    textAlign:"center",
+                    textAlign: "center",
                     height: '150px',
-                    marginTop:"60px",
-                    marginBottom:"60px"
+                    marginTop: "60px",
+                    marginBottom: "60px"
                 }}>
                     <div className={"bg-dark text-white"} style={{
-                        width:"30%",
-                        marginLeft:"30px",
-                        paddingTop:"30px",
-                        borderRadius:"50px",
-                        textAlign:"center"}}>
+                        width: "30%",
+                        marginLeft: "30px",
+                        paddingTop: "30px",
+                        borderRadius: "50px",
+                        textAlign: "center"
+                    }}>
                         <Stopwatch className={"text-white"}/>
                     </div>
                 </div>
@@ -519,13 +553,13 @@ class GameTicketFast extends React.Component {
 
                 </Card>
                 {this.state.showRoles === true ? (
-                       <RolesTable>
+                    <RolesTable>
 
-                       </RolesTable>
-                    ):(
-                        <div>
+                    </RolesTable>
+                ) : (
+                    <div>
 
-                        </div>
+                    </div>
                 )}
             </Container>
         </div>
