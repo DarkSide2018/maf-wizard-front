@@ -207,8 +207,14 @@ class GameTicketFast extends React.Component {
     }
 
     pushPlayerToElection(slot) {
+        let modSlot = {
+            slot: slot,
+            numberOfVotes:0
+        }
         let pushedSlots = this.state.pushedSlots
-        pushedSlots.push(slot)
+
+        pushedSlots.push(modSlot)
+        console.log("pushedSlots => " + JSON.stringify(pushedSlots))
         let currentElectionUpdated = this.state.currentElection;
         currentElectionUpdated.dropdowns = pushedSlots
 
@@ -268,6 +274,8 @@ class GameTicketFast extends React.Component {
     }
 
     endElection() {
+        let body = JSON.stringify(this.state.currentElection);
+        console.log("end election body request => " + body)
         fetch('/game/election', {
             method: 'POST',
             headers: {
@@ -275,7 +283,7 @@ class GameTicketFast extends React.Component {
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + getToken()
             },
-            body: JSON.stringify(this.state.currentElection),
+            body: body,
         }).then(response => {
             this.setState({
                 pushedPlayers: [],

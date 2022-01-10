@@ -69,6 +69,7 @@ export function Search(props) {
 
     React.useEffect(() => {
         let players = ["Новый Игрок"]
+        if(searchTerm === "") return
         fetch('/player/like/all/' + searchTerm, {
             method: 'GET',
             headers: {

@@ -2,8 +2,6 @@ import React, {Component} from "react";
 import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import {generateGuid} from "../GameTicket";
 import './Drop.css';
-import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
-import {faMinus} from "@fortawesome/free-solid-svg-icons";
 
 class DropDownElection extends Component {
     constructor(props) {
@@ -37,6 +35,15 @@ class DropDownElection extends Component {
                 playerVote: value
             }
         )
+        let thatObject = this.props.thatObject;
+        let pushedSlots = thatObject.state.pushedSlots;
+        console.log("slots filtering => " + JSON.stringify(pushedSlots))
+        let element = pushedSlots.filter(it => it.slot === this.state.currentSlot.slot)[0];
+        console.log("element => " + JSON.stringify(element))
+        element.numberOfVotes = value
+        thatObject.setState({
+            pushedSlots: pushedSlots
+        })
     }
 
     render() {
@@ -48,7 +55,7 @@ class DropDownElection extends Component {
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"} caret>
-                    | Cлот : {currentSlot} | Голоса : {currentVote}
+                    | Cлот : {currentSlot.slot} | Голоса : {currentVote}
                 </DropdownToggle>
                 <DropdownMenu>
                     {availableVotes.map(item => {
