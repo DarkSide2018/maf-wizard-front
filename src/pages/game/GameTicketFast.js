@@ -27,6 +27,7 @@ class GameTicketFast extends React.Component {
             election: '',
             selectPlayers: '',
             playersForElection: '',
+            elections: [],
             nights: [],
             gameUuid: null,
             playerToSlot: [],
@@ -77,6 +78,7 @@ class GameTicketFast extends React.Component {
                         gameUuid: data.gameUuid,
                         nights: data.nights,
                         elections: data.elections,
+                        oldElections: this.generateOldElections(data.elections),
                         gamePlayers: responsePlayers,
                         availableSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
                         gameName: data.name,
@@ -97,6 +99,28 @@ class GameTicketFast extends React.Component {
                 )
             }
         );
+    }
+
+    generateOldElections(elections) {
+        if (elections !== [] && elections !== undefined) {
+            return elections.sort((a, b) => a.sortOrder > (b.sortOrder)).map(item => {
+                let key = generateGuid();
+                let sortElection = item.sortOrder + 1;
+                let gamblers = item.dropdowns.map(drop => {
+                    return <Button color="secondary">Cлот: {drop.slot} | Голоса: {drop.numberOfVotes}</Button>
+                })
+                return <tr key={key}>
+                    <td>
+                        Голосование {sortElection}
+                    </td>
+                    <td colSpan={"7"}>
+                        {gamblers} <Button style={{marginLeft: "10px"}}
+                                           onClick={() => this.deleteElectionDropDown(item)}
+                                           color="secondary"><FontAwesomeIcon icon={faMinus}/></Button>
+                    </td>
+                </tr>
+            })
+        }
     }
 
     getCurrentGameAfterMount() {
@@ -144,6 +168,26 @@ class GameTicketFast extends React.Component {
                 showRoles: !roles
             }
         )
+    }
+
+    deleteElectionDropDown(value) {
+        let electionId = value.electionId;
+
+        let filtered = this.state.elections.filter(it => it.electionId !== electionId);
+        console.log("electionId => " + JSON.stringify(filtered))
+        fetch('/game/election/' + getCurrentGame() + '/' + electionId, {
+            method: 'DELETE',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            }
+        });
+        this.setState(
+            {
+                elections: filtered,
+                oldElections: this.generateOldElections(filtered)
+            })
     }
 
     endGame(players) {
@@ -209,7 +253,7 @@ class GameTicketFast extends React.Component {
     pushPlayerToElection(slot) {
         let modSlot = {
             slot: slot,
-            numberOfVotes:0
+            numberOfVotes: 0
         }
         let pushedSlots = this.state.pushedSlots
 
@@ -360,7 +404,6 @@ class GameTicketFast extends React.Component {
     render() {
         const {
             nights,
-            elections,
             currentVictory,
             gamePlayers,
             playerToSlot,
@@ -375,24 +418,6 @@ class GameTicketFast extends React.Component {
         let availablePlayersForSheriffList = ''
         let availablePlayersForDonList = ''
         let availableForLeftGameList = ''
-        let oldElections = ''
-        if (elections !== [] && elections !== undefined) {
-            oldElections = elections.sort((a, b) => a.sortOrder > (b.sortOrder)).map(item => {
-                let key = generateGuid();
-                let sortElection = item.sortOrder + 1;
-                let gamblers = item.dropdowns.map(drop => {
-                    return <Button color="secondary"> {drop.nickName} | {drop.numberOfVotes}</Button>
-                })
-                return <tr key={key}>
-                    <td>
-                        Голосование {sortElection}
-                    </td>
-                    <td colSpan={"7"}>
-                        {gamblers}
-                    </td>
-                </tr>
-            })
-        }
         if (gamePlayers !== [] && gamePlayers !== undefined) {
             availablePlayersForMurderList = makeArray(7, "").map((item, index) => {
                 let key = generateGuid();
@@ -488,7 +513,7 @@ class GameTicketFast extends React.Component {
                                 <td>Покинул игру</td>
                                 {availableForLeftGameList}
                             </tr>
-                            {oldElections}
+                            {this.state.oldElections}
                             {election}
                             {selectPlayers}
                             <tr key={generateGuid()}>
