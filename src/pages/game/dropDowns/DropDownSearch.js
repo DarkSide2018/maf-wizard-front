@@ -7,10 +7,11 @@ import {faMinus} from "@fortawesome/free-solid-svg-icons";
 import {generateGuid} from "../GameTicket";
 
 export function Search(props) {
+    const NEW_PLAYER = "Новый Игрок";
 
     const [searchTerm, setSearchTerm] = React.useState("");
     const [searchResults, setSearchResults] = React.useState([""]);
-    const [currentName, setCurrentName] = React.useState("");
+    const [currentName, setCurrentName] = React.useState(NEW_PLAYER);
     const [createdPlayer, setCreatedPlayer] = React.useState("");
     const [isOpen, toggle] = React.useState(false);
     const handleChange = event => {
@@ -23,7 +24,8 @@ export function Search(props) {
 
         let player = props.pls.filter(it => it.slot === props.slot)
         if(player.length === 0) return
-        setCurrentName(player[0].playerNickName)
+        let playerNickName = player[0].playerNickName;
+        setCurrentName(playerNickName)
 
     }, []);
     const setPlayerToGame = value => {
@@ -90,6 +92,7 @@ export function Search(props) {
         })
         setSearchResults(players);
     }, [searchTerm]);
+
     return (
         <div className="App">
             <Dropdown isOpen={isOpen} toggle={() => toggle(!isOpen)}>
@@ -114,6 +117,10 @@ export function Search(props) {
                     ) : null}
                 </DropdownToggle>
                 <DropdownMenu>
+                    <DropdownItem className={"dropStyle"} onClick={() => setPlayerToGame(NEW_PLAYER)}
+                                  key={generateGuid()}>
+                        Новый игрок
+                    </DropdownItem>
                     {searchResults.map(item => (
                         <DropdownItem className={"dropStyle"} onClick={() => setPlayerToGame(item)}
                                       key={generateGuid()}>
@@ -121,7 +128,8 @@ export function Search(props) {
                         </DropdownItem>
                     ))}
                 </DropdownMenu>
-                {currentName === "Новый Игрок" ? (
+
+                {currentName === NEW_PLAYER ? (
                     <div style={{marginTop: "10px"}}>
                         <input
                             type="text"

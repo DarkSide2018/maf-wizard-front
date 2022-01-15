@@ -568,7 +568,7 @@ class GameTicketFast extends React.Component {
                                         <Search slot={index + 1} pls={playerToSlot}/>
                                     </td>
                                     <td key={generateGuid()}>
-                                        <Checkbox/>
+                                        <Checkbox slot={index+1}/>
                                     </td>
                                     <td key={generateGuid()}>
                                         <AdditionalPoints playersToSlot={playerToSlot} slot={index + 1}
