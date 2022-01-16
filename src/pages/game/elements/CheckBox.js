@@ -3,11 +3,12 @@ import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 export function Checkbox(props) {
-    const [checked1, setChecked1] = React.useState(false);
-    const [checked2, setChecked2] = React.useState(false);
-    const [checked3, setChecked3] = React.useState(false);
-    const [checked4, setChecked4] = React.useState(false);
+    let [checked1, setChecked1] = React.useState(false);
+    let [checked2, setChecked2] = React.useState(false);
+    let [checked3, setChecked3] = React.useState(false);
+    let [checked4, setChecked4] = React.useState(false);
     let [noteSum, setNoteSum] = React.useState(0);
+
 
     const handleChange1 = event => {
         setChecked1(event)
@@ -36,7 +37,7 @@ export function Checkbox(props) {
         let gameCommand = {
             gameUuid: getCurrentGame(),
             slot: props.slot,
-            notes: value
+            notes: noteSum
         }
         fetch('/game/notes', {
             method: 'PUT',
@@ -48,28 +49,50 @@ export function Checkbox(props) {
             body: JSON.stringify(gameCommand),
         });
     }
+
+    let checks = props.checks;
+    let box1 = () => {
+        let value = false
+        if (checks !== undefined) value = checks.checked1
+        return <input type="checkbox"
+                      className={"styled-checkbox"}
+                      defaultChecked={value}
+                      onChange={() => handleChange1(!checked1)}/>
+    }
+    let box2 = () => {
+        let value = false
+        if (checks !== undefined) value = checks.checked2
+        return <input type="checkbox"
+                      className={"styled-checkbox"}
+                      defaultChecked={value}
+                      onChange={() => handleChange2(!checked2)}
+        />
+    }
+    let box3 = () => {
+        let value = false
+        if (checks !== undefined) value = checks.checked3
+        return <input type="checkbox"
+                      className={"styled-checkbox"}
+                      defaultChecked={value}
+                      onChange={() => handleChange3(!checked3)}
+        />
+    }
+    let box4 = () => {
+        let value = false
+        if (checks !== undefined) value = checks.checked4
+        return <input type="checkbox"
+                      className={"styled-checkbox"}
+                      defaultChecked={value}
+                      onChange={() => handleChange4(!checked4)}
+        />
+    }
+
     return (
         <label>
-            <input type="checkbox"
-                   className={"styled-checkbox"}
-                   defaultChecked={checked1}
-                   onChange={() => handleChange1(!checked1)}
-            />
-            <input type="checkbox"
-                   className={"styled-checkbox"}
-                   defaultChecked={checked2}
-                   onChange={() => handleChange2(!checked2)}
-            />
-            <input type="checkbox"
-                   className={"styled-checkbox"}
-                   defaultChecked={checked3}
-                   onChange={() => handleChange3(!checked3)}
-            />
-            <input type="checkbox"
-                   className={"styled-checkbox"}
-                   defaultChecked={checked4}
-                   onChange={() => handleChange4(!checked4)}
-            />
+            {box1()}
+            {box2()}
+            {box3()}
+            {box4()}
         </label>
     );
 }

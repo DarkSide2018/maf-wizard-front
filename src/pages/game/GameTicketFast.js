@@ -560,6 +560,8 @@ class GameTicketFast extends React.Component {
                             </thead>
                             <tbody className={"text-white"}>
                             {availableSlots.map((item, index) => {
+                                let checks = generateCheckBoxes(index + 1, playerToSlot);
+                                console.log("checks => " + JSON.stringify(checks))
                                 return <tr key={generateGuid()}>
                                     <td key={generateGuid()}>
                                         {index + 1}
@@ -568,7 +570,7 @@ class GameTicketFast extends React.Component {
                                         <Search slot={index + 1} pls={playerToSlot}/>
                                     </td>
                                     <td key={generateGuid()}>
-                                        <Checkbox slot={index+1}/>
+                                        <Checkbox slot={index + 1} pls={playerToSlot} checks={checks}/>
                                     </td>
                                     <td key={generateGuid()}>
                                         <AdditionalPoints playersToSlot={playerToSlot} slot={index + 1}
@@ -596,6 +598,27 @@ class GameTicketFast extends React.Component {
                 )}
             </Container>
         </div>
+    }
+}
+
+function generateCheckBoxes(slot, playerToCardNumber) {
+    let pls = playerToCardNumber.filter(it => it.slot === slot)[0]
+    if (pls === undefined) return
+    let value1 = false
+    let value2 = false
+    let value3 = false
+    let value4 = false
+    for (let i = 0; i < pls.note; i++) {
+        if (i === 0) value1 = true
+        if (i === 1) value2 = true
+        if (i === 2) value3 = true
+        if (i === 3) value4 = true
+    }
+    return {
+        checked1: value1,
+        checked2: value2,
+        checked3: value3,
+        checked4: value4
     }
 }
 
