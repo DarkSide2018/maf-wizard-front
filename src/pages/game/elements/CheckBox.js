@@ -88,11 +88,15 @@ export function Checkbox(props) {
     }
 
     return (
-        <label>
-            {box1()}
-            {box2()}
-            {box3()}
-            {box4()}
-        </label>
+        <div>
+            <div>
+                {box1()}
+                {box2()}
+            </div>
+            <div>
+                {box3()}
+                {box4()}
+            </div>
+        </div>
     );
 }

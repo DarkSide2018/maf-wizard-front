@@ -125,9 +125,11 @@ class GameTicketFast extends React.Component {
 
     getCurrentGameAfterMount() {
         let currentGame = getCurrentGame();
-        if (currentGame === null) {
+        if (currentGame === null || currentGame === undefined || currentGame === 'undefined') {
+            console.log("undefined game or null")
             this.newTable()
         } else {
+            console.log("getOldGame")
             this.getOldGame(currentGame)
         }
 
@@ -152,6 +154,7 @@ class GameTicketFast extends React.Component {
         })
             .then(response => response.json())
             .then((data) => {
+                console.log("created game response => " + JSON.stringify(data))
                 setGameUuid(data.entityUuid)
                 this.setState(
                     {

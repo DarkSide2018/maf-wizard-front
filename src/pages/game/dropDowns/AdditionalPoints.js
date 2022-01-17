@@ -1,26 +1,26 @@
 import React, {Component} from "react";
-import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
+import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import {generateGuid} from "../GameTicket";
 import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
 
-class AdditionalPoints extends Component {
+
+const regexp = /\d+\.\d{1,2}/;
+export class AdditionalPoints extends Component {
     constructor(props) {
         super(props);
         this.state = {
             playerName: '',
-            currentNote:'',
+            currentNote: 0.0,
             players: props.players,
             isOpen: false,
-            availablePoints:[0.1,0.2,0.3,0.4,0.5,0.6,0.7,0.8,0.9]
+            availablePoints: [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9]
         };
-        this.toggle = this.toggle.bind(this);
-        this.setNote = this.setNote.bind(this);
     }
 
     componentDidMount() {
-        const {playersToSlot,slot} = this.props
+        const {playersToSlot, slot} = this.props
         let filteredSlot = playersToSlot.filter(item => item.slot === slot)
         let currentNote
         if (filteredSlot !== undefined && filteredSlot.length > 0) {
@@ -38,20 +38,11 @@ class AdditionalPoints extends Component {
         }
     }
 
-    toggle() {
-        let currentState = this.state.isOpen
-        this.setState(
-            {
-                isOpen: !currentState
-            }
-        )
-    }
-
     setNote(value) {
         const {slot} = this.props
         let pls = {
-            slot:slot,
-            addPoints:value
+            slot: slot,
+            addPoints: value
         }
         this.setState(
             {
@@ -75,24 +66,38 @@ class AdditionalPoints extends Component {
         });
     }
 
+    handlePointsChange = event => {
+        this.setState({
+            currentNote: event.target.value
+        })
+    }
+
+    handleClickAdd(value) {
+        let match = regexp.test(value);
+        if(match){
+
+        }else{
+            alert("Данные нужно ввести в формате 0.00")
+        }
+        console.log("value for update => " + match)
+    }
 
     render() {
-        const {availablePoints} = this.state
-        let dropDownToggle = '0'
-        if (this.state.currentNote !== '') {
-            dropDownToggle = this.state.currentNote
-        }
-        return <div>
-            <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
-                <DropdownToggle className={"dropStyle"}  caret>
-                    {dropDownToggle}
-                </DropdownToggle>
-                <DropdownMenu>
-                    {availablePoints.map(item => {
-                        return <DropdownItem className={"dropStyle"} onClick={() => this.setNote(item)} key={generateGuid()}>{item}</DropdownItem>
-                    })}
-                </DropdownMenu>
-            </Dropdown>
+        const {currentNote} = this.state
+
+        return <div style={{ width:"50%"}}>
+            <input
+                type="text"
+                style={{width:"50%"}}
+                placeholder="0.0"
+                value={currentNote}
+                onChange={this.handlePointsChange}
+            /> <Button
+            size="sm"
+            variant="outline-danger"
+            onClick={() => this.handleClickAdd(currentNote)}>
+            ^
+        </Button>
         </div>
     }
 }
