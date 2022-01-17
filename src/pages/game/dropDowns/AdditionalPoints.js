@@ -74,12 +74,36 @@ export class AdditionalPoints extends Component {
 
     handleClickAdd(value) {
         let match = regexp.test(value);
-        if(match){
-
+        if(match && value.length < 5){
+            const {slot} = this.props
+            let pls = {
+                slot: slot,
+                addPoints: value
+            }
+            this.setState(
+                {
+                    currentNote: value
+                }
+            )
+            let gameCommand = {
+                gameUuid: getCurrentGame(),
+                status: 'ACTIVE',
+                messageType: 'UpdateGameRequest',
+                playerToCardNumber: [pls]
+            }
+            fetch('/game', {
+                method: 'PUT',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + getToken()
+                },
+                body: JSON.stringify(gameCommand),
+            });
         }else{
             alert("Данные нужно ввести в формате 0.00")
         }
-        console.log("value for update => " + match)
+
     }
 
     render() {
