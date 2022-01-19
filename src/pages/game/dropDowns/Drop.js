@@ -11,43 +11,33 @@ class Drop extends Component {
         super(props);
         this.state = {
             availableSlots:[0,1,2,3,4,5,6,7,8,9,10],
-            playerName: '',
+            playerSlot: 0,
             players: props.players,
             isOpen: false
         };
         this.toggle = this.toggle.bind(this);
-        this.setPlayerName = this.setPlayerName.bind(this);
+        this.setPlayerSlot = this.setPlayerSlot.bind(this);
     }
 
     componentDidMount() {
-        const {type, nightNumber, players, nights} = this.props
+        const {type, nightNumber, nights} = this.props
+        console.log("nights object => " + JSON.stringify(nights))
         let filteredNight = nights.filter(item => item.nightNumber === nightNumber)
-        let playerUuid
-        let playerName = ''
-        let filteredPLayers
+        let slot = 0
         if (filteredNight !== undefined && filteredNight.length > 0) {
             if (type === 'killedPlayer' && filteredNight[0].killedPlayer !== undefined) {
-                playerUuid = filteredNight[0].killedPlayer
+                slot = filteredNight[0].killedPlayer
             } else if (type === 'sheriffChecked' && filteredNight[0].sheriffChecked !== undefined) {
-                playerUuid = filteredNight[0].sheriffChecked
+                slot = filteredNight[0].sheriffChecked
             } else if (type === 'donChecked' && filteredNight[0].donChecked !== undefined) {
-                playerUuid = filteredNight[0].donChecked
+                slot = filteredNight[0].donChecked
             } else if (type === 'leftGame' && filteredNight[0].playerLeftGame !== undefined) {
-                playerUuid = filteredNight[0].playerLeftGame
+                slot = filteredNight[0].playerLeftGame
             }
-        }
-
-        if (playerUuid !== undefined) {
-            filteredPLayers = players.filter(item => item.playerUuid === playerUuid)
-        }
-
-        if (filteredPLayers !== undefined && filteredPLayers.length > 0) {
-            playerName = filteredPLayers[0].nickName
         }
         this.setState(
             {
-                playerName: playerName,
-                players: players
+                playerSlot: slot
             }
         )
     }
@@ -61,19 +51,19 @@ class Drop extends Component {
         )
     }
 
-    setPlayerName(value) {
+    setPlayerSlot(value) {
         const {type, nightNumber} = this.props
         let night = {
             nightNumber: nightNumber
         }
         if (type === 'killedPlayer') {
-            night.killedPlayer = value.playerUuid
+            night.killedPlayer = value
         } else if (type === 'sheriffChecked') {
-            night.sheriffChecked = value.playerUuid
+            night.sheriffChecked = value
         } else if (type === 'donChecked') {
-            night.donChecked = value.playerUuid
+            night.donChecked = value
         } else if (type === 'leftGame') {
-            night.playerLeftGame = value.playerUuid
+            night.playerLeftGame = value
         }
         let gameCommand = {
             gameUuid: getCurrentGame(),
@@ -92,7 +82,7 @@ class Drop extends Component {
         });
         this.setState(
             {
-                playerName: value
+                playerSlot: value
             }
         )
 
@@ -101,18 +91,14 @@ class Drop extends Component {
 
     render() {
         let slots = this.state.availableSlots
-        let dropDownTogglePlayerName = '0'
-        if (this.state.playerName !== '') {
-            dropDownTogglePlayerName = this.state.playerName
-        }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"} caret>
-                    {dropDownTogglePlayerName}
+                    {this.state.playerSlot}
                 </DropdownToggle>
                 <DropdownMenu>
                     {slots.map(item => {
-                        return <DropdownItem className={"dropStyle"} onClick={() => this.setPlayerName(item)}
+                        return <DropdownItem className={"dropStyle"} onClick={() => this.setPlayerSlot(item)}
                                              key={generateGuid()}>{item}</DropdownItem>
                     })}
                 </DropdownMenu>
