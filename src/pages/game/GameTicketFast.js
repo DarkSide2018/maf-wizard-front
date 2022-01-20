@@ -64,7 +64,12 @@ class GameTicketFast extends React.Component {
                 'Authorization': 'Bearer ' + getToken()
             }
         }).then(response => {
-            return response.json()
+            if(response.status === 404){
+                this.newTable()
+            }else{
+                return response.json()
+            }
+
         }).then(data => {
                 console.log("old game response -> " + JSON.stringify(data))
                 let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
