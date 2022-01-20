@@ -3,6 +3,8 @@ import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import {generateGuid} from "../GameTicket";
 
 import './Drop.css';
+import {getCurrentGame} from "../../player/AvailablePlayers";
+import {getToken} from "../../../api/authenticationService";
 
 export class DropDownRole extends Component {
     constructor(props) {
@@ -36,6 +38,22 @@ export class DropDownRole extends Component {
     }
 
     setRole(value) {
+
+        let gameCommand = {
+            gameUuid: getCurrentGame(),
+            role:  this.props.role,
+            slot: value
+        }
+        console.log("gameCommand -> " + JSON.stringify(gameCommand))
+        fetch('/game/role', {
+            method: 'PUT',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            },
+            body: JSON.stringify(gameCommand),
+        });
         this.setState(
             {
                 currentPlayer: value

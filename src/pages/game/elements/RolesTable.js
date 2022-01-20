@@ -30,22 +30,22 @@ export class RolesTable extends React.Component {
                             <tbody className={"text-white"}>
                             <tr>
                                 <td key={generateGuid()}>
-                                    <DropDownRole>
+                                    <DropDownRole role={'Sheriff'}>
 
                                     </DropDownRole>
                                 </td>
                                 <td key={generateGuid()}>
-                                    <DropDownRole>
+                                    <DropDownRole role={'Don'}>
 
                                     </DropDownRole>
                                 </td>
                                 <td key={generateGuid()}>
-                                    <DropDownRole>
+                                    <DropDownRole role={'Maf-1'}>
 
                                     </DropDownRole>
                                 </td>
                                 <td key={generateGuid()}>
-                                    <DropDownRole>
+                                    <DropDownRole role={'Maf-2'}>
 
                                     </DropDownRole>
                                 </td>
