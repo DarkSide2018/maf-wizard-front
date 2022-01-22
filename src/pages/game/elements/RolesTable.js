@@ -14,6 +14,12 @@ export class RolesTable extends React.Component {
     }
 
     render() {
+        let pls = this.props.playersToSlot;
+        let sheriffCurrentSlot = pls.filter(it => it.role === 'Sheriff')[0].slot
+        let donCurrentSlot = pls.filter(it => it.role === 'Don')[0].slot
+        let maf1CurrentSlot = pls.filter(it => it.role === 'Maf-1')[0].slot
+        let maf2CurrentSlot = pls.filter(it => it.role === 'Maf-2')[0].slot
+
         return (
             <div>
                 <Card className={"bg-dark text-white"}>
@@ -30,22 +36,22 @@ export class RolesTable extends React.Component {
                             <tbody className={"text-white"}>
                             <tr>
                                 <td key={generateGuid()}>
-                                    <DropDownRole role={'Sheriff'}>
+                                    <DropDownRole role={'Sheriff'} currentSlot={sheriffCurrentSlot}>
 
                                     </DropDownRole>
                                 </td>
                                 <td key={generateGuid()}>
-                                    <DropDownRole role={'Don'}>
+                                    <DropDownRole role={'Don'} currentSlot={donCurrentSlot}>
 
                                     </DropDownRole>
                                 </td>
                                 <td key={generateGuid()}>
-                                    <DropDownRole role={'Maf-1'}>
+                                    <DropDownRole role={'Maf-1'} currentSlot={maf1CurrentSlot}>
 
                                     </DropDownRole>
                                 </td>
                                 <td key={generateGuid()}>
-                                    <DropDownRole role={'Maf-2'}>
+                                    <DropDownRole role={'Maf-2'} currentSlot={maf2CurrentSlot}>
 
                                     </DropDownRole>
                                 </td>

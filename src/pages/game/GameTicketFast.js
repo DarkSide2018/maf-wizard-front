@@ -596,7 +596,7 @@ class GameTicketFast extends React.Component {
 
                 </Card>
                 {this.state.showRoles === true ? (
-                    <RolesTable>
+                    <RolesTable playersToSlot={playerToSlot}>
 
                     </RolesTable>
                 ) : (
