@@ -30,13 +30,11 @@ export function Search(props) {
     }, []);
     const setPlayerToGame = value => {
         if (value === "") return
-        console.log("playerToCardNumber - > " + JSON.stringify(props.pls))
         let gameCommand = {
             gameUuid: getCurrentGame(),
             nickName: value,
             slot: props.slot
         }
-        console.log("gameCommand -> " + JSON.stringify(gameCommand))
         fetch('/game/player', {
             method: 'POST',
             headers: {
@@ -64,9 +62,10 @@ export function Search(props) {
         }).then(r => {
             if (r.status === 400) {
                 alert("Такой игрок уже существует")
+            }else{
+                setPlayerToGame(value)
             }
         });
-        setCurrentName(value)
     };
 
     React.useEffect(() => {

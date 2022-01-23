@@ -112,7 +112,7 @@ export class AdditionalPoints extends Component {
         return <div style={{ width:"50%"}}>
             <input
                 type="text"
-                style={{width:"50%"}}
+                style={{width:"100%"}}
                 placeholder="0.0"
                 value={currentNote}
                 onChange={this.handlePointsChange}
@@ -120,7 +120,7 @@ export class AdditionalPoints extends Component {
             size="sm"
             variant="outline-danger"
             onClick={() => this.handleClickAdd(currentNote)}>
-            ^
+            Сохранить
         </Button>
         </div>
     }

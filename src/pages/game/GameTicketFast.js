@@ -382,6 +382,10 @@ class GameTicketFast extends React.Component {
             </tr>
         })
     }
+    exportCsv(){
+
+    }
+
 
     toPlayersSelection(players) {
         let gameCommand = {
@@ -579,6 +583,13 @@ class GameTicketFast extends React.Component {
                             </tbody>
                         </Table>
                         {endGameButton}
+                        <Button
+                            type="button"
+                            style={{marginLeft:"15px"}}
+                            variant="outline-info"
+                            onClick={() => this.exportCsv()}>
+                            ExportCsv
+                        </Button>
                         {showRolesButton}
                     </Card.Body>
                 </Card>
@@ -588,6 +599,7 @@ class GameTicketFast extends React.Component {
                     </RolesTable>
                 ) : (
                     <div>
+
                     </div>
                 )}
             </Container>
