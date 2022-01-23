@@ -136,7 +136,8 @@ export function Search(props) {
                             placeholder="Создать нового игрока"
                             value={createdPlayer}
                             onChange={handlePlayerChange}
-                        /> <Button
+                        />
+                        <Button
                         size="sm"
                         variant="outline-danger"
                         style={{marginTop: "10px"}}

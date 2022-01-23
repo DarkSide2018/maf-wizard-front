@@ -22,11 +22,11 @@ class GameTicketFast extends React.Component {
         super(props);
         this.state = {
             showRoles: false,
-            currentElection: '',
+            currentElection: [],
             players: [],
-            election: '',
-            selectPlayers: '',
-            playersForElection: '',
+            election: [],
+            selectPlayers: [],
+            playersForElection: [],
             elections: [],
             nights: [],
             gameUuid: null,
@@ -71,12 +71,10 @@ class GameTicketFast extends React.Component {
             }
 
         }).then(data => {
-                console.log("old game response -> " + JSON.stringify(data))
                 let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                 data.playerToCardNumber.forEach(value => {
                     value.nickName = responsePlayers.filter(it => it.playerUuid === value.playerUuid).nickName
                 })
-                console.log("pls-> " + JSON.stringify(data.playerToCardNumber))
                 this.setState({
                         currentVictory: data.victory,
                         gameNumber: data.gameNumber,
@@ -89,17 +87,17 @@ class GameTicketFast extends React.Component {
                         gameName: data.name,
                         playerToSlot: data.playerToCardNumber,
                         pushedSlots: [],
-                        currentElection: '',
+                        currentElection: [],
                         election: <tr key={generateGuid()}>
-                            <td>Голосование</td>
-                            <td colSpan={"7"}>
-                                <Button style={{width: "100%"}}
+                            <td key={generateGuid()}>Голосование</td>
+                            <td key={generateGuid()} colSpan={"7"}>
+                                <Button key={generateGuid()} style={{width: "100%"}}
                                         color="secondary"
                                         onClick={() => this.startElection()}
                                 >Начать голосование</Button>
                             </td>
                         </tr>,
-                        selectPlayers: ''
+                        selectPlayers: []
                     }
                 )
             }
@@ -112,13 +110,13 @@ class GameTicketFast extends React.Component {
                 let key = generateGuid();
                 let sortElection = item.sortOrder + 1;
                 let gamblers = item.dropdowns.map(drop => {
-                    return <Button color="secondary">Cлот: {drop.slot} | Голоса: {drop.numberOfVotes}</Button>
+                    return <Button key={generateGuid()} color="secondary">Cлот: {drop.slot} | Голоса: {drop.numberOfVotes}</Button>
                 })
-                return <tr key={key}>
-                    <td>
+                return <tr key={generateGuid()}>
+                    <td key={key}>
                         Голосование {sortElection}
                     </td>
-                    <td colSpan={"7"}>
+                    <td key={generateGuid()} colSpan={"7"}>
                         {gamblers} <Button style={{marginLeft: "10px"}}
                                            onClick={() => this.deleteElectionDropDown(item)}
                                            color="secondary"><FontAwesomeIcon icon={faMinus}/></Button>
@@ -180,9 +178,7 @@ class GameTicketFast extends React.Component {
 
     deleteElectionDropDown(value) {
         let electionId = value.electionId;
-
         let filtered = this.state.elections.filter(it => it.electionId !== electionId);
-        console.log("electionId => " + JSON.stringify(filtered))
         fetch('/game/election/' + getCurrentGame() + '/' + electionId, {
             method: 'DELETE',
             headers: {
@@ -249,7 +245,6 @@ class GameTicketFast extends React.Component {
     }
 
     deleteSlotFromElection(slot) {
-        console.log("slot for delete -> " + slot)
         let filter = this.state.pushedSlots.filter(it => it !== slot);
         this.setState({
                 pushedSlots: filter,
@@ -264,9 +259,7 @@ class GameTicketFast extends React.Component {
             numberOfVotes: 0
         }
         let pushedSlots = this.state.pushedSlots
-
         pushedSlots.push(modSlot)
-        console.log("pushedSlots => " + JSON.stringify(pushedSlots))
         let currentElectionUpdated = this.state.currentElection;
         currentElectionUpdated.dropdowns = pushedSlots
 
@@ -339,7 +332,7 @@ class GameTicketFast extends React.Component {
         }).then(response => {
             this.setState({
                 pushedPlayers: [],
-                currentElection: '',
+                currentElection: [],
                 election: <tr key={generateGuid()}>
                     <td>Голосование</td>
                     <td colSpan={"7"}>
@@ -349,7 +342,7 @@ class GameTicketFast extends React.Component {
                         >Начать голосование</Button>
                     </td>
                 </tr>,
-                selectPlayers: ''
+                selectPlayers: []
             })
             this.getCurrentGameAfterMount()
         })
@@ -479,8 +472,8 @@ class GameTicketFast extends React.Component {
             Показать/Скрыть роли
         </Button>
         if (edit) {
-            playerSelectionButton = ""
-            endGameButton = ""
+            playerSelectionButton = []
+            endGameButton = []
         }
 
         return <div className={"bg-general"}>
@@ -532,12 +525,10 @@ class GameTicketFast extends React.Component {
                                     </DropDownVictory>
                                 </td>
                             </tr>
-
                             </tbody>
                         </Table>
                     </Card.Body>
                 </Card>
-
                 <div style={{
                     textAlign: "center",
                     height: '150px',
@@ -554,7 +545,6 @@ class GameTicketFast extends React.Component {
                         <Stopwatch className={"text-white"}/>
                     </div>
                 </div>
-
                 <Card className={"bg-dark text-white"} style={{opacity: '0.8'}}>
                     <Card.Body>
                         <Table bordered variant="dark">
@@ -569,7 +559,6 @@ class GameTicketFast extends React.Component {
                             <tbody className={"text-white"}>
                             {availableSlots.map((item, index) => {
                                 let checks = generateCheckBoxes(index + 1, playerToSlot);
-                                console.log("checks => " + JSON.stringify(checks))
                                 return <tr key={generateGuid()}>
                                     <td key={generateGuid()}>
                                         {index + 1}
@@ -583,7 +572,6 @@ class GameTicketFast extends React.Component {
                                     <td key={generateGuid()}>
                                         <AdditionalPoints playersToSlot={playerToSlot} slot={index + 1}
                                                           key={generateGuid()}>
-
                                         </AdditionalPoints>
                                     </td>
                                 </tr>
@@ -593,7 +581,6 @@ class GameTicketFast extends React.Component {
                         {endGameButton}
                         {showRolesButton}
                     </Card.Body>
-
                 </Card>
                 {this.state.showRoles === true ? (
                     <RolesTable playersToSlot={playerToSlot}>
@@ -601,7 +588,6 @@ class GameTicketFast extends React.Component {
                     </RolesTable>
                 ) : (
                     <div>
-
                     </div>
                 )}
             </Container>
