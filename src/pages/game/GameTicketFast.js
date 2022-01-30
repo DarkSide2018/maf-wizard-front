@@ -383,7 +383,7 @@ class GameTicketFast extends React.Component {
         })
     }
     exportCsv(){
-
+        console.log("exportXml")
     }
 
 
@@ -588,7 +588,7 @@ class GameTicketFast extends React.Component {
                             style={{marginLeft:"15px"}}
                             variant="outline-info"
                             onClick={() => this.exportCsv()}>
-                            ExportCsv
+                            ExportXml
                         </Button>
                         {showRolesButton}
                     </Card.Body>
