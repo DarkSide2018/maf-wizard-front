@@ -64,9 +64,9 @@ class GameTicketFast extends React.Component {
                 'Authorization': 'Bearer ' + getToken()
             }
         }).then(response => {
-            if(response.status === 404){
+            if (response.status === 404) {
                 this.newTable()
-            }else{
+            } else {
                 return response.json()
             }
 
@@ -110,7 +110,8 @@ class GameTicketFast extends React.Component {
                 let key = generateGuid();
                 let sortElection = item.sortOrder + 1;
                 let gamblers = item.dropdowns.map(drop => {
-                    return <Button key={generateGuid()} color="secondary">Cлот: {drop.slot} | Голоса: {drop.numberOfVotes}</Button>
+                    return <Button key={generateGuid()} color="secondary">Cлот: {drop.slot} |
+                        Голоса: {drop.numberOfVotes}</Button>
                 })
                 return <tr key={generateGuid()}>
                     <td key={key}>
@@ -382,8 +383,25 @@ class GameTicketFast extends React.Component {
             </tr>
         })
     }
-    exportCsv(){
-        console.log("exportXml")
+
+    exportCsv() {
+        fetch('/game/export/'+getCurrentGame(), {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/xml',
+                'Authorization': 'Bearer ' + getToken()
+            }
+        }).then(res => {
+            return res.blob();
+        }).then(blob => {
+            const href = window.URL.createObjectURL(blob);
+            const a = this.linkRef.current;
+            a.download = 'report.xml';
+            a.href = href;
+            a.click();
+            a.href = '';
+        }).catch(err => console.error(err));
     }
 
 
@@ -405,6 +423,8 @@ class GameTicketFast extends React.Component {
         });
         this.props.history.push('/new/table');
     }
+
+    linkRef = React.createRef();
 
     render() {
         const {
@@ -585,11 +605,12 @@ class GameTicketFast extends React.Component {
                         {endGameButton}
                         <Button
                             type="button"
-                            style={{marginLeft:"15px"}}
+                            style={{marginLeft: "15px"}}
                             variant="outline-info"
                             onClick={() => this.exportCsv()}>
                             ExportXml
                         </Button>
+                        <a ref={this.linkRef}/>
                         {showRolesButton}
                     </Card.Body>
                 </Card>
