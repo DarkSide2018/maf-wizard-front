@@ -18,6 +18,7 @@ class DropDownVictory extends Component {
     }
 
     componentDidMount() {
+        console.log("current victory => " + JSON.stringify(this.props.victory))
         this.setState(
                 {
                     currentVictory: this.props.victory
@@ -60,8 +61,8 @@ class DropDownVictory extends Component {
         let currentVictory = 'Неизвестно'
         if (this.state.currentVictory !== '' && this.state.currentVictory !== undefined) {
             currentVictory = this.state.currentVictory
-
         }
+
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"}  caret>

@@ -18,8 +18,8 @@ export const Dashboard = (props) => {
     const [data, setData] = useState({});
 
     useEffect(() => {
+        localStorage.removeItem('GAME_UUID');
         fetchUserData().then((response) => {
-            console.log("response -> " + JSON.stringify(response.data))
             setData(response.data);
         }).catch((e) => {
             localStorage.clear();
