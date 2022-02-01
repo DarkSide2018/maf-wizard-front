@@ -64,8 +64,16 @@ export class DropDownRole extends Component {
     render() {
         const {availablePlayers} = this.state
         let currentPlayer = '0'
-        if (this.state.currentPlayer !== '') {
-            currentPlayer = this.props.currentSlot
+
+        let currentSlot = this.props.currentSlot;
+        console.log("currentSlot=> " + JSON.stringify(currentSlot))
+        if (currentSlot !== 0) {
+            currentPlayer = currentSlot
+        }
+        let statePlayer = this.state.currentPlayer;
+        console.log("statePlayer=> " + JSON.stringify(statePlayer))
+        if (statePlayer !== 0) {
+            currentPlayer = statePlayer
         }
         return <div>
             <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>

@@ -15,11 +15,28 @@ export class RolesTable extends React.Component {
 
     render() {
         let pls = this.props.playersToSlot;
-        let sheriffCurrentSlot = pls.filter(it => it.role === 'Sheriff')[0].slot
-        let donCurrentSlot = pls.filter(it => it.role === 'Don')[0].slot
-        let maf1CurrentSlot = pls.filter(it => it.role === 'Maf-1')[0].slot
-        let maf2CurrentSlot = pls.filter(it => it.role === 'Maf-2')[0].slot
-
+        console.log("pls=>" + JSON.stringify(pls))
+        let shElement = pls.filter(it => it.role === 'Sheriff');
+        let sheriffCurrentSlot = 0
+        if (shElement.length > 0) {
+            console.log("shElement=>" + JSON.stringify(shElement))
+            sheriffCurrentSlot = shElement[0].slot
+        }
+        let donCurrentSlot = 0
+        let donElem = pls.filter(it => it.role === 'Don');
+        if (donElem.length > 0) {
+            donCurrentSlot = donElem[0].slot
+        }
+        let maf1CurrentSlot = 0
+        let maf1Elem = pls.filter(it => it.role === 'Maf-1');
+        if (maf1Elem.length > 0) {
+            maf1CurrentSlot = maf1Elem[0].slot
+        }
+        let maf2CurrentSlot = 0
+        let maf2Elem = pls.filter(it => it.role === 'Maf-2');
+        if (maf2Elem.length > 0) {
+            maf2CurrentSlot = maf2Elem[0].slot
+        }
         return (
             <div>
                 <Card className={"bg-dark text-white"}>
