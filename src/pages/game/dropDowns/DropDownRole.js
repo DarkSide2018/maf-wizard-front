@@ -46,7 +46,7 @@ export class DropDownRole extends Component {
         }
         console.log("gameCommand -> " + JSON.stringify(gameCommand))
         fetch('/game/role', {
-            method: 'PUT',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
