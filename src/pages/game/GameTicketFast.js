@@ -16,6 +16,7 @@ import {RolesTable} from "./elements/RolesTable";
 import {Search} from "./dropDowns/DropDownSearch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus} from "@fortawesome/free-solid-svg-icons";
+import {withRouter} from "react-router-dom";
 
 class GameTicketFast extends React.Component {
     constructor(props) {
@@ -667,7 +668,7 @@ function makeArray(count, content) {
     return result;
 }
 
-export default GameTicketFast;
+export default withRouter(GameTicketFast);
 
 export function generateGuid() {
     let result, i, j;

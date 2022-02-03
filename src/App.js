@@ -32,8 +32,8 @@ function App() {
           <Route  path='/game/history' component={GameHistory}/>
           <Route  path='/game/component/:id' component={GameEdit}/>
           <Route  path='/game/confirm' component={GameWithConfirmedPlayers}/>
-          <Route  path='/game/ticket/:id' component={GameTicketFast}/>
-          <Route  path='/game/fast/:id' component={GameTicketFast}/>
+          <Route  path='/ticket/:id' component={GameTicketFast}/>
+          <Route  path='/fast/:id' component={GameTicketFast}/>
         </Switch>
       </BrowserRouter>
   );

@@ -47,7 +47,7 @@ export const Dashboard = (props) => {
                         <Row>
                             <ButtonGroup>
                                 <Button className={"bg-dark border-white"} style={{marginTop: '5px'}} tag={Link}
-                                        to="/game/fast/new">Быстрая игра</Button>
+                                        to="/fast/new">Быстрая игра</Button>
                             </ButtonGroup>
                         </Row>
                         <Row>
