@@ -132,6 +132,7 @@ class GameTicketFast extends React.Component {
 
     getCurrentGameAfterMount() {
         let currentGame = getCurrentGame();
+        console.log("currentGameUuid => " + currentGame)
         if (currentGame === null || currentGame === undefined || currentGame === 'undefined') {
             this.newTable()
         } else {
