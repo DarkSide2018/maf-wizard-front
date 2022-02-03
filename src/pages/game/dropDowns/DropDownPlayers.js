@@ -1,6 +1,5 @@
 import React, {Component} from "react";
 import './Drop.css';
-import {Search} from "./DropDownSearch";
 
 class DropDownPlayers extends Component {
     constructor(props) {

@@ -1,16 +1,17 @@
 import React, {Component} from "react";
-import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {generateGuid} from "../GameTicket";
+import {Button} from "reactstrap";
 import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
 
 
 const regexp = /\d+\.\d{1,2}/;
+
 export class AdditionalPoints extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            edit: false,
             playerName: '',
             currentNote: 0.0,
             players: props.players,
@@ -20,7 +21,7 @@ export class AdditionalPoints extends Component {
     }
 
     componentDidMount() {
-        const {playersToSlot, slot} = this.props
+        const {playersToSlot, editProp, slot} = this.props
         let filteredSlot = playersToSlot.filter(item => item.slot === slot)
         let currentNote
         if (filteredSlot !== undefined && filteredSlot.length > 0) {
@@ -32,6 +33,7 @@ export class AdditionalPoints extends Component {
         if (currentNote !== undefined) {
             this.setState(
                 {
+                    edit: editProp,
                     currentNote: currentNote
                 }
             )
@@ -74,7 +76,7 @@ export class AdditionalPoints extends Component {
 
     handleClickAdd(value) {
         let match = regexp.test(value);
-        if(match && value.length < 5){
+        if (match && value.length < 5) {
             const {slot} = this.props
             let pls = {
                 slot: slot,
@@ -100,28 +102,32 @@ export class AdditionalPoints extends Component {
                 },
                 body: JSON.stringify(gameCommand),
             });
-        }else{
+        } else {
             alert("Данные нужно ввести в формате 0.00")
         }
 
     }
 
     render() {
-        const {currentNote} = this.state
-
-        return <div style={{ width:"50%"}}>
-            <input
-                type="text"
-                style={{width:"100%"}}
-                placeholder="0.0"
-                value={currentNote}
-                onChange={this.handlePointsChange}
-            /> <Button
+        const {currentNote, edit} = this.state
+        let saveButton = <Button
             size="sm"
             variant="outline-danger"
             onClick={() => this.handleClickAdd(currentNote)}>
             Сохранить
         </Button>
+        if (edit) {
+            saveButton = ''
+        }
+        return <div style={{width: "50%"}}>
+            <input
+                type="text"
+                style={{width: "100%"}}
+                placeholder="0.0"
+                value={currentNote}
+                onChange={this.handlePointsChange}
+            />
+            {saveButton}
         </div>
     }
 }

@@ -33,7 +33,7 @@ class GameTicketFast extends React.Component {
             playerToSlot: [],
             gamePlayers: [],
             pushedSlots: [],
-            availableSlots: [],
+            availableSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
             edit: false,
             availableRoles: [
                 'Шериф',
@@ -51,7 +51,10 @@ class GameTicketFast extends React.Component {
         if (id === "new") {
             this.getCurrentGameAfterMount()
         } else {
-
+            this.getOldGame(id)
+            this.setState({
+                edit:true
+            })
         }
     }
 
@@ -130,10 +133,8 @@ class GameTicketFast extends React.Component {
     getCurrentGameAfterMount() {
         let currentGame = getCurrentGame();
         if (currentGame === null || currentGame === undefined || currentGame === 'undefined') {
-            console.log("undefined game or null")
             this.newTable()
         } else {
-            console.log("getOldGame")
             this.getOldGame(currentGame)
         }
 
@@ -498,6 +499,7 @@ class GameTicketFast extends React.Component {
         if (edit) {
             playerSelectionButton = []
             endGameButton = []
+
         }
 
         return <div className={"bg-general"}>
@@ -595,6 +597,7 @@ class GameTicketFast extends React.Component {
                                     </td>
                                     <td key={generateGuid()}>
                                         <AdditionalPoints playersToSlot={playerToSlot} slot={index + 1}
+                                                          editProp={edit}
                                                           key={generateGuid()}>
                                         </AdditionalPoints>
                                     </td>

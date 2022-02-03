@@ -4,7 +4,7 @@ import {getCurrentGame} from "../../player/AvailablePlayers";
 import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus} from "@fortawesome/free-solid-svg-icons";
-import {generateGuid} from "../GameTicket";
+import {generateGuid} from "../GameTicketFast";
 
 export function Search(props) {
     const NEW_PLAYER = "Новый Игрок";
