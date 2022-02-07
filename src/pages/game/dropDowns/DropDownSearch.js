@@ -116,10 +116,6 @@ export function Search(props) {
                     ) : null}
                 </DropdownToggle>
                 <DropdownMenu>
-                    <DropdownItem className={"dropStyle"} onClick={() => setPlayerToGame(NEW_PLAYER)}
-                                  key={generateGuid()}>
-                        Новый игрок
-                    </DropdownItem>
                     {searchResults.map(item => (
                         <DropdownItem className={"dropStyle"} onClick={() => setPlayerToGame(item)}
                                       key={generateGuid()}>
@@ -127,24 +123,6 @@ export function Search(props) {
                         </DropdownItem>
                     ))}
                 </DropdownMenu>
-
-                {currentName === NEW_PLAYER ? (
-                    <div style={{marginTop: "10px"}}>
-                        <input
-                            type="text"
-                            placeholder="Создать нового игрока"
-                            value={createdPlayer}
-                            onChange={handlePlayerChange}
-                        />
-                        <Button
-                        size="sm"
-                        variant="outline-danger"
-                        style={{marginTop: "10px"}}
-                        onClick={() => handleClickCreate(createdPlayer)}>
-                        Создать
-                    </Button>
-                    </div>
-                ) : null}
             </Dropdown>
         </div>
     );

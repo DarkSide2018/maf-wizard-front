@@ -4,9 +4,8 @@ import {authenticate, authFailure, authSuccess} from '../redux/authActions';
 import './loginpage.css';
 import {userLogin} from '../api/authenticationService';
 import {Alert, Spinner} from 'react-bootstrap';
-import {Link} from "react-router-dom";
-import {Button} from "reactstrap";
 import './dashboard/DashBoard.css';
+
 const LoginPage=({loading,error,...props})=>{
 
 
