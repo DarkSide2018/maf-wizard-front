@@ -1,17 +1,15 @@
 import React from "react";
 import {getToken} from "../../../api/authenticationService";
 import {getCurrentGame} from "../../player/AvailablePlayers";
-import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
+import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus} from "@fortawesome/free-solid-svg-icons";
 import {generateGuid} from "../GameTicketFast";
 
 export function Search(props) {
-    const NEW_PLAYER = "Новый Игрок";
-
     const [searchTerm, setSearchTerm] = React.useState("");
     const [searchResults, setSearchResults] = React.useState([""]);
-    const [currentName, setCurrentName] = React.useState(NEW_PLAYER);
+    const [currentName, setCurrentName] = React.useState("");
     const [createdPlayer, setCreatedPlayer] = React.useState("");
     const [isOpen, toggle] = React.useState(false);
     const handleChange = event => {
@@ -46,10 +44,18 @@ export function Search(props) {
         });
         setCurrentName(value)
     }
+    const onKeyDown = (event) => {
+        // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            event.stopPropagation();
+            handleClickCreate();
+        }
+    }
 
-    const handleClickCreate = value => {
+    const handleClickCreate = () => {
         let queryItem = {
-            nickName: value
+            nickName: searchTerm
         }
         fetch('/player', {
             method: 'POST',
@@ -63,7 +69,7 @@ export function Search(props) {
             if (r.status === 400) {
                 alert("Такой игрок уже существует")
             }else{
-                setPlayerToGame(value)
+                setPlayerToGame(searchTerm)
             }
         });
     };
@@ -101,6 +107,7 @@ export function Search(props) {
                             type="text"
                             placeholder="Search Player"
                             value={searchTerm}
+                            onKeyDown={onKeyDown}
                             onChange={handleChange}
                         />
                     ) : null}

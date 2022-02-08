@@ -1,5 +1,4 @@
 import React, {Component} from "react";
-import {Button} from "reactstrap";
 import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
@@ -74,6 +73,15 @@ export class AdditionalPoints extends Component {
         })
     }
 
+    onKeyDown = (event) => {
+        // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
+        if (event.key === 'Enter') {
+            event.preventDefault();
+            event.stopPropagation();
+            this.handleClickAdd(this.state.currentNote);
+        }
+    }
+
     handleClickAdd(value) {
         let match = regexp.test(value);
         if (match && value.length < 5) {
@@ -109,16 +117,7 @@ export class AdditionalPoints extends Component {
     }
 
     render() {
-        const {currentNote, edit} = this.state
-        let saveButton = <Button
-            size="sm"
-            variant="outline-danger"
-            onClick={() => this.handleClickAdd(currentNote)}>
-            Сохранить
-        </Button>
-        if (edit) {
-            saveButton = ''
-        }
+        const {currentNote} = this.state
         return <div style={{width: "50%"}}>
             <input
                 type="text"
@@ -126,8 +125,8 @@ export class AdditionalPoints extends Component {
                 placeholder="0.0"
                 value={currentNote}
                 onChange={this.handlePointsChange}
+                onKeyDown={this.onKeyDown}
             />
-            {saveButton}
         </div>
     }
 }
