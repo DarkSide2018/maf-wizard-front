@@ -73,7 +73,6 @@ export class RolesTable extends React.Component {
                                     </DropDownRole>
                                 </td>
                             </tr>
-
                             </tbody>
                         </Table>
                     </Card.Body>

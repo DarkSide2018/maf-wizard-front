@@ -48,7 +48,7 @@ class GameTicketFast extends React.Component {
 
     componentDidMount() {
         let id = this.props.match.params.id;
-        console.log("id -> " + id)
+        console.log("start mount GameTicketFast")
         if (id === "new") {
             this.getCurrentGameAfterMount()
         } else {
@@ -73,12 +73,12 @@ class GameTicketFast extends React.Component {
             } else {
                 return response.json()
             }
-
         }).then(data => {
                 let responsePlayers = data.players.sort((a, b) => a.nickName.localeCompare(b.nickName));
                 data.playerToCardNumber.forEach(value => {
                     value.nickName = responsePlayers.filter(it => it.playerUuid === value.playerUuid).nickName
                 })
+
                 this.setState({
                         currentVictory: data.victory,
                         gameNumber: data.gameNumber,
@@ -178,6 +178,7 @@ class GameTicketFast extends React.Component {
                 showRoles: !roles
             }
         )
+        this.getOldGame(getCurrentGame())
     }
 
     deleteElectionDropDown(value) {
@@ -430,6 +431,7 @@ class GameTicketFast extends React.Component {
     linkRef = React.createRef();
 
     render() {
+        console.log("render start")
         const {
             nights,
             currentVictory,
