@@ -28,7 +28,6 @@ class PlayerList extends Component {
             sortBy: "nickName",
             sortDir: "asc",
         };
-        this.remove = this.remove.bind(this);
     }
 
     componentDidMount() {
@@ -64,8 +63,7 @@ class PlayerList extends Component {
                     sortDir: this.state.sortDir
                 }
             )
-        })
-            .then(response => response.json())
+        }).then(response => response.json())
             .then(data => this.setState({
                 players: data.players.sort(function (a, b) {
                     if (a.rating < b.rating) {
@@ -81,20 +79,6 @@ class PlayerList extends Component {
                 pageNumber: data.pageNumber + 1
             }));
     }
-
-    async remove(id) {
-        await fetch(`/player/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(() => {
-            let updatedPlayers = [...this.state.players].filter(i => i.playerUuid !== id);
-            this.setState({players: updatedPlayers});
-        });
-    }
-
 
     changePage = (event) => {
         console.log("event->" + event.target.value)

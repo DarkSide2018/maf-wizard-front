@@ -4,40 +4,54 @@ import {Button, ButtonGroup, Container, Table} from "reactstrap";
 import AppNavbar from "../AppNavbar";
 import {getToken} from "../../api/authenticationService";
 import '../dashboard/DashBoard.css';
+import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
+import {faStepBackward, faStepForward} from "@fortawesome/free-solid-svg-icons";
 
 class GameHistory extends Component {
 
     constructor(props) {
         super(props);
-        this.state = {games: []};
-        this.remove = this.remove.bind(this);
+        this.state = {
+            games: [],
+            pageNumber: 0,
+            pageSize: 10
+        };
     }
 
     componentDidMount() {
+        this.findGames(this.state.pageNumber)
+    }
+
+    findGames = (pageNumber) => {
+        let req = {
+            pageNumber: pageNumber,
+            pageSize: 10
+        }
         fetch('/game/all', {
-            method: 'GET',
+            method: 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
                 'Authorization': 'Bearer ' + getToken()
-            }
+            },
+            body: JSON.stringify(req)
         })
             .then(response => response.json())
-            .then(data => this.setState({games: data.games}));
+            .then(data => this.setState({
+                games: data.games,
+                pageNumber: data.pageNumber
+            }));
     }
 
-    async remove(id) {
-        await fetch(`/game/${id}`, {
-            method: 'DELETE',
-            headers: {
-                'Accept': 'application/json',
-                'Content-Type': 'application/json'
-            }
-        }).then(() => {
-            let updatedGames = [...this.state.games].filter(i => i.gameUuid !== id);
-            this.setState({games: updatedGames});
-        });
-    }
+    prevPage = () => {
+        let pageNumber = this.state.pageNumber;
+        if (pageNumber === 0) return
+        this.findGames(pageNumber - 1);
+
+    };
+    nextPage = () => {
+        this.findGames(this.state.pageNumber + 1);
+    };
 
     render() {
         const {games, isLoading} = this.state;
@@ -73,6 +87,18 @@ class GameHistory extends Component {
                         {gameList}
                         </tbody>
                     </Table>
+                    <Button
+                        type="button"
+                        variant="outline-info"
+                        onClick={this.prevPage}>
+                        <FontAwesomeIcon icon={faStepBackward}/> Prev
+                    </Button>
+                    <Button
+                        type="button"
+                        variant="outline-info"
+                        onClick={this.nextPage}>
+                        <FontAwesomeIcon icon={faStepForward}/> Next
+                    </Button>
                 </Container>
             </div>
         );

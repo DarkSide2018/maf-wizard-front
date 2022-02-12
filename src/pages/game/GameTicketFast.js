@@ -146,7 +146,7 @@ class GameTicketFast extends React.Component {
         let queryItem = {
             messageType: 'CreateGameRequest',
             gameUuid: null,
-            name: 'Новая игра от ' + currentTime(),
+            name: 'Игра : ' + currentTime(),
             gameNumber: '',
             players: []
         }
@@ -583,7 +583,7 @@ class GameTicketFast extends React.Component {
                                 <th>Номер слота</th>
                                 <th>Имя игрока</th>
                                 <th>Замечание</th>
-                                <th>Доп.Баллы</th>
+                                <th>Баллы</th>
                             </tr>
                             </thead>
                             <tbody className={"text-white"}>
