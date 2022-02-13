@@ -1,166 +1,127 @@
 import React, {useState} from 'react';
-import {connect} from 'react-redux';
-import {authenticate, authFailure, authSuccess} from '../redux/authActions';
 import './loginpage.css';
-import {userLogin} from '../api/authenticationService';
-import {Alert, Spinner} from 'react-bootstrap';
 import './dashboard/DashBoard.css';
+import {AUTH_FAILURE, AUTH_REQ, AUTH_SUCCESS} from "../redux/types";
 
-const LoginPage=({loading,error,...props})=>{
-
-
+export function LoginPage({loading, error, ...props}) {
+    const userLogin = (authRequest) => {
+        return fetch('/api/v1/auth/login', {
+            method: 'POST',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(authRequest),
+        }).then(response => {
+            return response.json()
+        }).then(response =>{
+                console.log("json-> " + JSON.stringify(response))
+                authSuccess(response);
+                props.history.push('/dashboard');
+        })
+    }
     const [values, setValues] = useState({
         userName: '',
         password: ''
-        });
+    });
 
-    const handleSubmit=(evt)=>{
+    const handleSubmit = (evt) => {
         evt.preventDefault();
-        props.authenticate();
-
-        userLogin(values).then((response)=>{
-
-            console.log("response",response);
-            if(response.status===200){
-                props.setUser(response.data);
-                props.history.push('/dashboard');
-            }
-            else{
-               props.loginFailure('Something Wrong!Please Try Again'); 
-            }
+        authenticate();
+        userLogin(values)
+    }
+    const authenticate = () => {
+        return {
+            type: AUTH_REQ
+        }
+    }
 
 
-        }).catch((err)=>{
+    const authSuccess = (content) => {
+        localStorage.setItem('USER_KEY', content.token);
+        return {
+            type: AUTH_SUCCESS,
+            payload: content
+        }
+    }
 
-            if(err && err.response){
-            
-            switch(err.response.status){
-                case 401:
-                    console.log("401 status");
-                    props.loginFailure("Authentication Failed.Bad Credentials");
-                    break;
-                default:
-                    props.loginFailure('Something Wrong!Please Try Again'); 
-
-            }
-
-            }
-            else{
-                props.loginFailure('Something Wrong!Please Try Again');
-            }
-
-        });
+    const authFailure = (error) => {
+        return {
+            type: AUTH_FAILURE,
+            payload: error
+        }
     }
 
     const handleChange = (e) => {
         e.persist();
-        setValues(values => ({
-        ...values,
-        [e.target.name]: e.target.value
-        }));
+        setValues(values => ({...values, [e.target.name]: e.target.value}));
     };
 
-    console.log("Loading ",loading);
-
     return (
-        <div  className={"login-page bg-mafia text-white"}>
-        <section className="h-100">
-        <div className="container h-100">
-       
-            <div className="row justify-content-md-left h-100" style={{opacity:0.8}}>
-                <div className="card-wrapper">
-                    <div style={{height:"100px"}}>
+        <div className={"login-page bg-mafia text-white"}>
+            <section className="h-100">
+                <div className="container h-100">
 
-                    </div>
+                    <div className="row justify-content-md-left h-100" style={{opacity: 0.8}}>
+                        <div className="card-wrapper">
+                            <div style={{height: "100px"}}>
 
-                    <div className="text-white">
-                        <div className="card-body bg-dark text-white">
-                            <h4 className="card-title">Login</h4>
-                            
-                            <form className="my-login-validation" onSubmit={handleSubmit} noValidate={false}>
-                                <div className="form-group">
-                                    <label htmlFor="email">User Name</label>
-                                    <input id="username" type="text" className="form-control" minLength={5} value={values.userName} onChange={handleChange} name="userName" required />
-                                    
-                                        <div className="invalid-feedback">
-                                            UserId is invalid
+                            </div>
+
+                            <div className="text-white">
+                                <div className="card-body bg-dark text-white">
+                                    <h4 className="card-title">Login</h4>
+
+                                    <form className="my-login-validation" onSubmit={handleSubmit} noValidate={false}>
+                                        <div className="form-group">
+                                            <label htmlFor="email">User Name</label>
+                                            <input id="username" type="text" className="form-control" minLength={5}
+                                                   value={values.userName} onChange={handleChange} name="userName"
+                                                   required/>
+
+                                            <div className="invalid-feedback">
+                                                UserId is invalid
+                                            </div>
                                         </div>
-                                    
-                                    
-                                    
-                                </div>
-
-                                <div className="form-group">
-                                    <input id="password" type="password" className="form-control" minLength={8} value={values.password} onChange={handleChange} name="password" required/>
-                                    <div className="invalid-feedback">
-                                        Password is required
-                                    </div>
-                                </div>
-
-                                <div className="form-group">
-                                    <div className="custom-control custom-checkbox">
-                                        <input type="checkbox" className="custom-control-input" id="customCheck1" />
-                                        <label className="custom-control-label" htmlFor="customCheck1">Remember me</label>
-                                     </div>
-                                </div>
-                                <div className="row">
-                                    <div className="col-md-3">
-                                        <div className="form-group m-0">
-                                            <button type="submit" className="btn border-white text-white bg-dark">
-                                                Login
-                                                {loading && (
-                                                    <Spinner
-                                                        as="span"
-                                                        animation="border"
-                                                        size="sm"
-                                                        role="status"
-                                                        aria-hidden="true"
-                                                    />
-                                                )}
-
-                                            </button>
+                                        <div className="form-group">
+                                            <input id="password" type="password" className="form-control" minLength={8}
+                                                   value={values.password} onChange={handleChange} name="password"
+                                                   required/>
+                                            <div className="invalid-feedback">
+                                                Password is required
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div className="col-md-6">
 
-                                    </div>
+                                        <div className="form-group">
+                                            <div className="custom-control custom-checkbox">
+                                                <input type="checkbox" className="custom-control-input"
+                                                       id="customCheck1"/>
+                                                <label className="custom-control-label" htmlFor="customCheck1">Remember
+                                                    me</label>
+                                            </div>
+                                        </div>
+                                        <div className="row">
+                                            <div className="col-md-3">
+                                                <div className="form-group m-0">
+                                                    <button type="submit"
+                                                            className="btn border-white text-white bg-dark">
+                                                        Login
+                                                    </button>
+                                                </div>
+                                            </div>
+                                            <div className="col-md-6">
+
+                                            </div>
+                                        </div>
+                                    </form>
                                 </div>
-                            </form>
-                            { error &&
-                            <Alert style={{marginTop:'20px'}} variant="danger">
-                                    {error}
-                                </Alert>
-
-                            }
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-        </div>
-    </section>
+            </section>
         </div>
     )
-
-
-    
 }
 
-const mapStateToProps=({auth})=>{
-    console.log("state ",auth)
-    return {
-        loading:auth.loading,
-        error:auth.error
-}}
-
-
-const mapDispatchToProps=(dispatch)=>{
-
-    return {
-        authenticate :()=> dispatch(authenticate()),
-        setUser:(data)=> dispatch(authSuccess(data)),
-        loginFailure:(message)=>dispatch(authFailure(message))
-    }
-}
-
-
-export default connect(mapStateToProps,mapDispatchToProps)(LoginPage);
+export default LoginPage;

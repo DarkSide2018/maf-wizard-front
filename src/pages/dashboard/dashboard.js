@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import {Container} from 'react-bootstrap';
 import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
-import {fetchUserData, getToken} from '../../api/authenticationService';
+import {getToken} from '../../api/authenticationService';
 import {Button, ButtonGroup, Row} from "reactstrap";
 import {Link} from "react-router-dom";
 import './DashBoard.css';
@@ -20,13 +20,23 @@ export const Dashboard = (props) => {
     useEffect(() => {
         localStorage.removeItem('GAME_UUID');
         fetchUserData().then((response) => {
-            setData(response.data);
+            setData(response);
         }).catch((e) => {
             localStorage.clear();
             props.history.push('/');
         })
     }, [])
-
+    const fetchUserData = () => {
+        let urlRequest = `/api/v1/auth/userinfo`
+        return fetch(urlRequest, {
+            method: 'GET',
+            headers: {
+                'Accept': 'application/json',
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + getToken()
+            }
+        }).then(response=>response.json())
+    }
     const logOut = () => {
         localStorage.clear();
         props.history.push('/');

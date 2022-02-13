@@ -58,7 +58,7 @@ class PlayerEdit extends Component {
         this.setState({item});
     }
 
-    async handleSubmit(event) {
+     handleSubmit(event) {
         event.preventDefault();
         let item = this.state;
         let queryItem = item.item;
@@ -67,12 +67,12 @@ class PlayerEdit extends Component {
         }else{
             queryItem.messageType =  'UpdatePlayerRequest'
         }
-        await fetch('/player', {
+        fetch('/player', {
             method: (queryItem.playerUuid) ? 'PUT' : 'POST',
             headers: {
                 'Accept': 'application/json',
                 'Content-Type': 'application/json',
-                'Authorization':'Bearer '+getToken()
+                'Authorization': 'Bearer ' + getToken()
             },
             body: JSON.stringify(queryItem),
         });
