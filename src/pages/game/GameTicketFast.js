@@ -17,6 +17,8 @@ import {Search} from "./dropDowns/DropDownSearch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus} from "@fortawesome/free-solid-svg-icons";
 import {withRouter} from "react-router-dom";
+import {faPlus} from "@fortawesome/free-solid-svg-icons/faPlus";
+import LeftGame from "./dropDowns/LeftGame";
 
 class GameTicketFast extends React.Component {
     constructor(props) {
@@ -54,7 +56,7 @@ class GameTicketFast extends React.Component {
         } else {
             this.getOldGame(id)
             this.setState({
-                edit:true
+                edit: true
             })
         }
     }
@@ -161,7 +163,6 @@ class GameTicketFast extends React.Component {
         })
             .then(response => response.json())
             .then((data) => {
-                console.log("created game response => " + JSON.stringify(data))
                 setGameUuid(data.entityUuid)
                 this.setState(
                     {
@@ -388,8 +389,36 @@ class GameTicketFast extends React.Component {
         })
     }
 
+    generateAvailableForLeftGameList() {
+
+        let players = this.state.gamePlayers;
+        let nights = this.state.nights;
+        return makeArray(7, "").map((item, index) => {
+            let key = generateGuid();
+            let nightIndex = nights.filter(el => el.nightNumber === index)[0]
+            console.log("nightIndex=> " + JSON.stringify(nightIndex))
+            let dropDownLeft = <LeftGame leftIndex={0} nightNumber={index} key={key + 'dr'} nights={nights}
+                                         players={players}/>
+            if (nightIndex !== undefined) {
+                let key2 = generateGuid();
+                let playerLeftGame = nightIndex.playerLeftGame;
+                if(playerLeftGame === undefined) return dropDownLeft
+                playerLeftGame.push(0)
+                dropDownLeft = playerLeftGame.map((item, index) => {
+                    return <LeftGame leftIndex={index} nightNumber={index} key={key2 + 'dr2'}
+                                     nights={nights}
+                                     players={players}/>
+                })
+            }
+
+            return <td key={key}>
+                {dropDownLeft}
+            </td>
+        })
+    }
+
     exportCsv() {
-        fetch('/game/export/'+getCurrentGame(), {
+        fetch('/game/export/' + getCurrentGame(), {
             method: 'GET',
             headers: {
                 'Accept': 'application/json',
@@ -456,6 +485,7 @@ class GameTicketFast extends React.Component {
                           players={gamePlayers}/>
                 </td>
             })
+
             availablePlayersForSheriffList = makeArray(7, "").map((item, index) => {
                 let key = generateGuid();
                 return <td key={key}>
@@ -469,12 +499,7 @@ class GameTicketFast extends React.Component {
                     <Drop nightNumber={index} type='donChecked' key={key + 'dr'} nights={nights} players={gamePlayers}/>
                 </td>
             })
-            availableForLeftGameList = makeArray(7, "").map((item, index) => {
-                let key = generateGuid();
-                return <td key={key}>
-                    <Drop nightNumber={index} type='leftGame' key={key + 'dr'} nights={nights} players={gamePlayers}/>
-                </td>
-            })
+            availableForLeftGameList = this.generateAvailableForLeftGameList()
         }
         if (isLoading) {
             return <p>Loading...</p>;
@@ -634,6 +659,7 @@ class GameTicketFast extends React.Component {
         </div>
     }
 }
+
 
 function generateCheckBoxes(slot, playerToCardNumber) {
     let pls = playerToCardNumber.filter(it => it.slot === slot)[0]
