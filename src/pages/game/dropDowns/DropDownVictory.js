@@ -4,7 +4,7 @@ import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
-import {generateGuid} from "../GameTicketFast";
+import {generateGuid} from "../../../common/Common";
 class DropDownVictory extends Component {
     constructor(props) {
         super(props);
@@ -18,7 +18,6 @@ class DropDownVictory extends Component {
     }
 
     componentDidMount() {
-        console.log("current victory => " + JSON.stringify(this.props.victory))
         this.setState(
                 {
                     currentVictory: this.props.victory
@@ -63,8 +62,7 @@ class DropDownVictory extends Component {
             currentVictory = this.state.currentVictory
         }
 
-        return <div>
-            <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
+        return <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"}  caret>
                     {currentVictory}
                 </DropdownToggle>
@@ -74,7 +72,6 @@ class DropDownVictory extends Component {
                     })}
                 </DropdownMenu>
             </Dropdown>
-        </div>
     }
 }
 

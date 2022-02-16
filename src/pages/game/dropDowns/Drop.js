@@ -4,7 +4,7 @@ import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
-import {generateGuid} from "../GameTicketFast";
+import {generateGuid} from "../../../common/Common";
 
 class Drop extends Component {
     constructor(props) {

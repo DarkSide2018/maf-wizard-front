@@ -9,8 +9,6 @@ import GameMasterEdit from "./pages/gameMaster/GameMasterEdit";
 import UserEdit from "./pages/user/UserEdit";
 import GameList from "./pages/game/GameList";
 import GameEdit from "./pages/game/GameEdit";
-
-import GameWithConfirmedPlayers from "./pages/game/GameWithConfirmedPlayers";
 import AvailablePlayers from "./pages/player/AvailablePlayers";
 import GameHistory from "./pages/game/GameHistory";
 import GameTicketFast from "./pages/game/GameTicketFast";
@@ -31,7 +29,6 @@ function App() {
           <Route  path='/game/all' component={GameList}/>
           <Route  path='/game/history' component={GameHistory}/>
           <Route  path='/game/component/:id' component={GameEdit}/>
-          <Route  path='/game/confirm' component={GameWithConfirmedPlayers}/>
           <Route  path='/ticket/:id' component={GameTicketFast}/>
           <Route  path='/fast/:id' component={GameTicketFast}/>
         </Switch>

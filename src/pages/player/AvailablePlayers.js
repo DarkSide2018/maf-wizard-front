@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
 import AppNavbar from "../AppNavbar";
-import {currentTime} from "../../common/Time";
+import {currentTime} from "../../common/Common";
 
 class AvailablePlayers extends React.Component {
 

@@ -8,7 +8,7 @@ import DropDownVictory from "./dropDowns/DropDownVictory";
 import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
 import AdditionalPoints from "./dropDowns/AdditionalPoints";
 import DropDownElection from "./dropDowns/DropDownElection";
-import {currentTime} from "../../common/Time";
+import {currentTime, generateGuid} from "../../common/Common";
 import './style-general.css';
 import {Checkbox} from "./elements/CheckBox";
 import {Stopwatch} from "./elements/StopWatch";
@@ -17,7 +17,6 @@ import {Search} from "./dropDowns/DropDownSearch";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus} from "@fortawesome/free-solid-svg-icons";
 import {withRouter} from "react-router-dom";
-import {faPlus} from "@fortawesome/free-solid-svg-icons/faPlus";
 import LeftGame from "./dropDowns/LeftGame";
 
 class GameTicketFast extends React.Component {
@@ -395,25 +394,36 @@ class GameTicketFast extends React.Component {
         let nights = this.state.nights;
         return makeArray(7, "").map((item, index) => {
             let key = generateGuid();
-            let nightIndex = nights.filter(el => el.nightNumber === index)[0]
-            console.log("nightIndex=> " + JSON.stringify(nightIndex))
-            let dropDownLeft = <LeftGame leftIndex={0} nightNumber={index} key={key + 'dr'} nights={nights}
+            let nightIndex = nights.filter(el => el.nightNumber === index)
+            let dropDownLeft = <LeftGame leftIndex={0}
+                                         nightNumber={index}
+                                         key={key + 'dr'}
+                                         nights={nights}
                                          players={players}/>
-            if (nightIndex !== undefined) {
-                let key2 = generateGuid();
+            if (nightIndex.length !== 0) {
+                console.log("nightIndex was defined =>" + JSON.stringify(nightIndex))
                 let playerLeftGame = nightIndex.playerLeftGame;
-                if(playerLeftGame === undefined) return dropDownLeft
-                playerLeftGame.push(0)
-                dropDownLeft = playerLeftGame.map((item, index) => {
-                    return <LeftGame leftIndex={index} nightNumber={index} key={key2 + 'dr2'}
-                                     nights={nights}
-                                     players={players}/>
-                })
+                if(playerLeftGame === undefined){
+                    nightIndex.playerLeftGame = [{
+                        leftIndex: 0,
+                        playerNumber: 0
+                    }]
+                }
+                dropDownLeft = this.generateDropDownLeft(nightIndex.playerLeftGame, index, nights)
             }
-
             return <td key={key}>
                 {dropDownLeft}
             </td>
+        })
+    }
+
+    generateDropDownLeft(playerLeftGame, nightIndex, nights) {
+
+        return playerLeftGame.map((item, index) => {
+            return <LeftGame leftIndex={index}
+                          nightNumber={nightIndex}
+                          key={generateGuid() + 'dr3' + index}
+                          nights={nights}/>
         })
     }
 
@@ -697,15 +707,3 @@ function makeArray(count, content) {
 }
 
 export default withRouter(GameTicketFast);
-
-export function generateGuid() {
-    let result, i, j;
-    result = '';
-    for (j = 0; j < 32; j++) {
-        if (j === 8 || j === 12 || j === 16 || j === 20)
-            result = result + '-';
-        i = Math.floor(Math.random() * 16).toString(16).toUpperCase();
-        result = result + i;
-    }
-    return result;
-}

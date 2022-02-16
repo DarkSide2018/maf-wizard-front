@@ -1,9 +1,9 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {generateGuid} from "../GameTicketFast";
 import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
+import {generateGuid} from "../../../common/Common";
 
 class Notes extends Component {
     constructor(props) {

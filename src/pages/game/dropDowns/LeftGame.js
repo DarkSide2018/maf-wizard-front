@@ -4,15 +4,14 @@ import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
-import {generateGuid} from "../GameTicketFast";
+import {generateAvailableSlots, generateGuid} from "../../../common/Common";
 
 class LeftGame extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            availableSlots: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            availableSlots: generateAvailableSlots(),
             playerSlot: 0,
-            players: props.players,
             isOpen: false
         };
         this.toggle = this.toggle.bind(this);
@@ -21,13 +20,11 @@ class LeftGame extends Component {
 
     componentDidMount() {
         const {nightNumber, leftIndex, nights} = this.props
-        console.log("nights object => " + JSON.stringify(nights))
-        console.log("leftIndex => " + leftIndex)
         let filteredNight = nights.filter(item => item.nightNumber === nightNumber)
         let slot = 0
+        console.log("nights in LeftGame=> " + JSON.stringify(nights))
         if (filteredNight !== undefined && filteredNight.length > 0) {
             if (filteredNight[0].playerLeftGame !== undefined) {
-                console.log("left game => " + JSON.stringify(filteredNight[0].playerLeftGame))
                 slot = filteredNight[0].playerLeftGame
             }
         }
@@ -86,10 +83,10 @@ class LeftGame extends Component {
     render() {
         let slots = this.state.availableSlots
         let leftIndex = this.props.leftIndex;
-        return <div>
-            <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
+
+        return <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
                 <DropdownToggle className={"dropStyle"} caret>
-                    {this.state.playerSlot[leftIndex]}
+                    {this.state.playerSlot}
                 </DropdownToggle>
                 <DropdownMenu>
                     {slots.map(item => {
@@ -98,8 +95,8 @@ class LeftGame extends Component {
                     })}
                 </DropdownMenu>
             </Dropdown>
-        </div>
     }
 }
 
 export default LeftGame;
+

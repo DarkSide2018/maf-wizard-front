@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
+import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import './Drop.css';
-import {generateGuid} from "../GameTicketFast";
+import {generateGuid} from "../../../common/Common";
 
 class DropDownElection extends Component {
     constructor(props) {

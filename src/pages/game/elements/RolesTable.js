@@ -1,8 +1,8 @@
 import React from "react";
 import {Card} from "react-bootstrap";
 import {Table} from "reactstrap";
-import {generateGuid} from "../GameTicketFast";
 import DropDownRole from "../dropDowns/DropDownRole";
+import {generateGuid} from "../../../common/Common";
 
 export class RolesTable extends React.Component {
     constructor(props) {

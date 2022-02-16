@@ -4,7 +4,7 @@ import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
 import './Drop.css';
 import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
-import {generateGuid} from "../GameTicketFast";
+import {generateGuid} from "../../../common/Common";
 
 export class DropDownRole extends Component {
     constructor(props) {
