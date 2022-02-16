@@ -4,13 +4,13 @@ import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
-import {generateGuid} from "../../../common/Common";
+import {generateAvailableSlots, generateGuid} from "../../../common/Common";
 
 class Drop extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            availableSlots:[0,1,2,3,4,5,6,7,8,9,10],
+            availableSlots:generateAvailableSlots(),
             playerSlot: 0,
             players: props.players,
             isOpen: false
@@ -21,8 +21,12 @@ class Drop extends Component {
 
     componentDidMount() {
         const {type, nightNumber, nights} = this.props
-        console.log("nights object => " + JSON.stringify(nights))
-        let filteredNight = nights.filter(item => item.nightNumber === nightNumber)
+        let filteredNight = []
+        for (let i = 0; i < nights.length; i++) {
+            if(nights[i].nightNumber === nightNumber){
+                filteredNight.push(nights[i])
+            }
+        }
         let slot = 0
         if (filteredNight !== undefined && filteredNight.length > 0) {
             if (type === 'killedPlayer' && filteredNight[0].killedPlayer !== undefined) {
@@ -31,9 +35,6 @@ class Drop extends Component {
                 slot = filteredNight[0].sheriffChecked
             } else if (type === 'donChecked' && filteredNight[0].donChecked !== undefined) {
                 slot = filteredNight[0].donChecked
-            } else if (type === 'leftGame' && filteredNight[0].playerLeftGame !== undefined) {
-                console.log("left game => " + JSON.stringify(filteredNight[0].playerLeftGame))
-                slot = filteredNight[0].playerLeftGame
             }
         }
         this.setState(
@@ -63,8 +64,6 @@ class Drop extends Component {
             night.sheriffChecked = value
         } else if (type === 'donChecked') {
             night.donChecked = value
-        } else if (type === 'leftGame') {
-            night.playerLeftGame = [value]
         }
         let gameCommand = {
             gameUuid: getCurrentGame(),

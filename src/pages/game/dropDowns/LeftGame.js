@@ -25,7 +25,7 @@ class LeftGame extends Component {
         console.log("nights in LeftGame=> " + JSON.stringify(nights))
         if (filteredNight !== undefined && filteredNight.length > 0) {
             if (filteredNight[0].playerLeftGame !== undefined) {
-                slot = filteredNight[0].playerLeftGame
+                slot = filteredNight[0].playerLeftGame[leftIndex].playerNumber
             }
         }
         this.setState(

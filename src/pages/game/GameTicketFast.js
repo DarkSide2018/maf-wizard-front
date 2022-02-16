@@ -8,7 +8,7 @@ import DropDownVictory from "./dropDowns/DropDownVictory";
 import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
 import AdditionalPoints from "./dropDowns/AdditionalPoints";
 import DropDownElection from "./dropDowns/DropDownElection";
-import {currentTime, generateGuid} from "../../common/Common";
+import {currentTime, generateAvailableSlots, generateGuid} from "../../common/Common";
 import './style-general.css';
 import {Checkbox} from "./elements/CheckBox";
 import {Stopwatch} from "./elements/StopWatch";
@@ -18,6 +18,7 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus} from "@fortawesome/free-solid-svg-icons";
 import {withRouter} from "react-router-dom";
 import LeftGame from "./dropDowns/LeftGame";
+import {parse} from "@fortawesome/fontawesome-svg-core";
 
 class GameTicketFast extends React.Component {
     constructor(props) {
@@ -30,12 +31,12 @@ class GameTicketFast extends React.Component {
             selectPlayers: [],
             playersForElection: [],
             elections: [],
-            nights: [],
+            nights: JSON.stringify(this.createDefaultNights()),
             gameUuid: null,
             playerToSlot: [],
             gamePlayers: [],
             pushedSlots: [],
-            availableSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+            availableSlots: generateAvailableSlots(),
             edit: false,
             availableRoles: [
                 'Шериф',
@@ -47,9 +48,22 @@ class GameTicketFast extends React.Component {
         this.endGame = this.endGame.bind(this);
     }
 
+    createDefaultNights() {
+        return [
+            {
+                nightNumber: 0,
+                playerLeftGame: [
+                    {
+                        leftIndex: 0,
+                        playerNumber: 7
+                    }
+                ]
+            }
+        ]
+    }
+
     componentDidMount() {
         let id = this.props.match.params.id;
-        console.log("start mount GameTicketFast")
         if (id === "new") {
             this.getCurrentGameAfterMount()
         } else {
@@ -84,11 +98,11 @@ class GameTicketFast extends React.Component {
                         currentVictory: data.victory,
                         gameNumber: data.gameNumber,
                         gameUuid: data.gameUuid,
-                        nights: data.nights,
+                        nights: JSON.stringify(data.nights),
                         elections: data.elections,
                         oldElections: this.generateOldElections(data.elections),
                         gamePlayers: responsePlayers,
-                        availableSlots: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10],
+                        availableSlots: generateAvailableSlots(),
                         gameName: data.name,
                         playerToSlot: data.playerToCardNumber,
                         pushedSlots: [],
@@ -134,7 +148,6 @@ class GameTicketFast extends React.Component {
 
     getCurrentGameAfterMount() {
         let currentGame = getCurrentGame();
-        console.log("currentGameUuid => " + currentGame)
         if (currentGame === null || currentGame === undefined || currentGame === 'undefined') {
             this.newTable()
         } else {
@@ -325,7 +338,6 @@ class GameTicketFast extends React.Component {
 
     endElection() {
         let body = JSON.stringify(this.state.currentElection);
-        console.log("end election body request => " + body)
         fetch('/game/election', {
             method: 'POST',
             headers: {
@@ -391,10 +403,16 @@ class GameTicketFast extends React.Component {
     generateAvailableForLeftGameList() {
 
         let players = this.state.gamePlayers;
-        let nights = this.state.nights;
+        let nights = JSON.parse(this.state.nights)
         return makeArray(7, "").map((item, index) => {
             let key = generateGuid();
-            let nightIndex = nights.filter(el => el.nightNumber === index)
+            let nightIndex = []
+            for (let i = 0; i < nights.length; i++) {
+                if(nights[i].nightNumber === index){
+                    nightIndex.push(nights[i])
+                }
+
+            }
             let dropDownLeft = <LeftGame leftIndex={0}
                                          nightNumber={index}
                                          key={key + 'dr'}
@@ -403,7 +421,7 @@ class GameTicketFast extends React.Component {
             if (nightIndex.length !== 0) {
                 console.log("nightIndex was defined =>" + JSON.stringify(nightIndex))
                 let playerLeftGame = nightIndex.playerLeftGame;
-                if(playerLeftGame === undefined){
+                if (playerLeftGame === undefined) {
                     nightIndex.playerLeftGame = [{
                         leftIndex: 0,
                         playerNumber: 0
@@ -421,9 +439,9 @@ class GameTicketFast extends React.Component {
 
         return playerLeftGame.map((item, index) => {
             return <LeftGame leftIndex={index}
-                          nightNumber={nightIndex}
-                          key={generateGuid() + 'dr3' + index}
-                          nights={nights}/>
+                             nightNumber={nightIndex}
+                             key={generateGuid() + 'dr3' + index}
+                             nights={nights}/>
         })
     }
 
@@ -470,7 +488,6 @@ class GameTicketFast extends React.Component {
     linkRef = React.createRef();
 
     render() {
-        console.log("render start")
         const {
             nights,
             currentVictory,
