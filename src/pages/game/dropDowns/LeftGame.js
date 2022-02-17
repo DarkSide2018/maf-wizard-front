@@ -84,7 +84,7 @@ class LeftGame extends Component {
         let slots = this.state.availableSlots
         let leftIndex = this.props.leftIndex;
 
-        return <Dropdown isOpen={this.state.isOpen} toggle={this.toggle}>
+        return <Dropdown isOpen={this.state.isOpen} toggle={this.toggle} style={{marginTop:"5px"}}>
                 <DropdownToggle className={"dropStyle"} caret>
                     {this.state.playerSlot}
                 </DropdownToggle>

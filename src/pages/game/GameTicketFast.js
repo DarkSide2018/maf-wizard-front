@@ -13,12 +13,11 @@ import './style-general.css';
 import {Checkbox} from "./elements/CheckBox";
 import {Stopwatch} from "./elements/StopWatch";
 import {RolesTable} from "./elements/RolesTable";
-import {Search} from "./dropDowns/DropDownSearch";
+import {Search} from "./dropDowns/Search";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus} from "@fortawesome/free-solid-svg-icons";
 import {withRouter} from "react-router-dom";
 import LeftGame from "./dropDowns/LeftGame";
-import {parse} from "@fortawesome/fontawesome-svg-core";
 
 class GameTicketFast extends React.Component {
     constructor(props) {
@@ -408,7 +407,7 @@ class GameTicketFast extends React.Component {
             let key = generateGuid();
             let nightIndex = []
             for (let i = 0; i < nights.length; i++) {
-                if(nights[i].nightNumber === index){
+                if (nights[i].nightNumber === index) {
                     nightIndex.push(nights[i])
                 }
 
@@ -418,16 +417,21 @@ class GameTicketFast extends React.Component {
                                          key={key + 'dr'}
                                          nights={nights}
                                          players={players}/>
-            if (nightIndex.length !== 0) {
-                console.log("nightIndex was defined =>" + JSON.stringify(nightIndex))
-                let playerLeftGame = nightIndex.playerLeftGame;
+            if (nightIndex.length > 0) {
+                let playerLeftGame = nightIndex[0].playerLeftGame;
                 if (playerLeftGame === undefined) {
                     nightIndex.playerLeftGame = [{
                         leftIndex: 0,
                         playerNumber: 0
                     }]
                 }
-                dropDownLeft = this.generateDropDownLeft(nightIndex.playerLeftGame, index, nights)
+                if(playerLeftGame.length < 5) {
+                    playerLeftGame.push({
+                        leftIndex: playerLeftGame.length,
+                        playerNumber: 0
+                    })
+                }
+                dropDownLeft = this.generateDropDownLeft(playerLeftGame, index, nights)
             }
             return <td key={key}>
                 {dropDownLeft}

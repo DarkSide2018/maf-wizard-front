@@ -10,21 +10,15 @@ export function Search(props) {
     const [searchTerm, setSearchTerm] = React.useState("");
     const [searchResults, setSearchResults] = React.useState([""]);
     const [currentName, setCurrentName] = React.useState("");
-    const [createdPlayer, setCreatedPlayer] = React.useState("");
     const [isOpen, toggle] = React.useState(false);
     const handleChange = event => {
         setSearchTerm(event.target.value);
     };
-    const handlePlayerChange = event => {
-        setCreatedPlayer(event.target.value);
-    };
     React.useEffect(() => {
-
         let player = props.pls.filter(it => it.slot === props.slot)
         if(player.length === 0) return
         let playerNickName = player[0].playerNickName;
         setCurrentName(playerNickName)
-
     }, []);
     const setPlayerToGame = value => {
         if (value === "") return
@@ -45,7 +39,6 @@ export function Search(props) {
         setCurrentName(value)
     }
     const onKeyDown = (event) => {
-        // 'keypress' event misbehaves on mobile so we track 'Enter' key via 'keydown' event
         if (event.key === 'Enter') {
             event.preventDefault();
             event.stopPropagation();
@@ -99,28 +92,20 @@ export function Search(props) {
     }, [searchTerm]);
 
     return (
-        <div className="App">
-            <Dropdown isOpen={isOpen} toggle={() => toggle(!isOpen)}>
+        <div>
+            <Dropdown isOpen={isOpen} toggle={() => toggle(!isOpen)} style={{width:"75%",display:"inline-block"}}>
                 <DropdownToggle className={"dropStyle"} caret>
                     {currentName === "" ? (
                         <input
+                            style={{width:"80%",display:"inline"}}
                             type="text"
-                            placeholder="Search Player"
+                            placeholder="Search"
                             value={searchTerm}
                             onKeyDown={onKeyDown}
                             onChange={handleChange}
                         />
                     ) : null}
                     {currentName}
-                    {currentName !== "" ? (
-                        <Button
-                            size="sm"
-                            variant="outline-danger"
-                            style={{marginLeft: "10px"}}
-                            onClick={() => setCurrentName("")}>
-                            <FontAwesomeIcon icon={faMinus}/>
-                        </Button>
-                    ) : null}
                 </DropdownToggle>
                 <DropdownMenu>
                     {searchResults.map(item => (
@@ -131,6 +116,15 @@ export function Search(props) {
                     ))}
                 </DropdownMenu>
             </Dropdown>
+            {currentName !== "" ? (
+                <Button
+                    size="sm"
+                    variant="outline-danger"
+                    style={{marginLeft: "10px",width:"15%",display:"inline-block"}}
+                    onClick={() => setCurrentName("")}>
+                    <FontAwesomeIcon icon={faMinus}/>
+                </Button>
+            ) : null}
         </div>
     );
 }
