@@ -420,12 +420,12 @@ class GameTicketFast extends React.Component {
             if (nightIndex.length > 0) {
                 let playerLeftGame = nightIndex[0].playerLeftGame;
                 if (playerLeftGame === undefined) {
-                    nightIndex.playerLeftGame = [{
+                    playerLeftGame = [{
                         leftIndex: 0,
                         playerNumber: 0
                     }]
                 }
-                if(playerLeftGame.length < 5) {
+                if (playerLeftGame.length < 5) {
                     playerLeftGame.push({
                         leftIndex: playerLeftGame.length,
                         playerNumber: 0
