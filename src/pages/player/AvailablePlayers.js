@@ -13,7 +13,7 @@ import {
 } from "@fortawesome/free-solid-svg-icons";
 import {getToken} from "../../api/authenticationService";
 import AppNavbar from "../AppNavbar";
-import {currentTime} from "../../common/Common";
+import {currentTime,getCurrentGame, setGameUuid} from "../../common/Common";
 
 class AvailablePlayers extends React.Component {
 
@@ -472,9 +472,3 @@ class AvailablePlayers extends React.Component {
 }
 
 export default AvailablePlayers;
-export const getCurrentGame = () => {
-    return localStorage.getItem('GAME_UUID');
-}
-export const setGameUuid = (content) => {
-    localStorage.setItem('GAME_UUID', content);
-}

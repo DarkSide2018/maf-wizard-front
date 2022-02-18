@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
-import {generateAvailableSlots, generateGuid} from "../../../common/Common";
+import {generateAvailableSlots, generateGuid, getCurrentGame} from "../../../common/Common";
 
 class LeftGame extends Component {
     constructor(props) {
@@ -12,6 +11,7 @@ class LeftGame extends Component {
         this.state = {
             availableSlots: generateAvailableSlots(),
             playerSlot: 0,
+            arrayIndex: 0,
             isOpen: false
         };
         this.toggle = this.toggle.bind(this);
@@ -22,7 +22,6 @@ class LeftGame extends Component {
         const {nightNumber, leftIndex, nights} = this.props
         let filteredNight = nights.filter(item => item.nightNumber === nightNumber)
         let slot = 0
-        console.log("nights in LeftGame=> " + JSON.stringify(nights))
         if (filteredNight !== undefined && filteredNight.length > 0) {
             if (filteredNight[0].playerLeftGame !== undefined) {
                 slot = filteredNight[0].playerLeftGame[leftIndex].playerNumber

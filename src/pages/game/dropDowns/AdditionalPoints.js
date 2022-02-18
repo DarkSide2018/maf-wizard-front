@@ -1,7 +1,7 @@
 import React, {Component} from "react";
-import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 import './Drop.css';
+import {getCurrentGame} from "../../../common/Common";
 
 
 const regexp = /\d+\.\d{1,2}/;

@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
-import {generateGuid} from "../../../common/Common";
+import {generateGuid, getCurrentGame} from "../../../common/Common";
 class DropDownVictory extends Component {
     constructor(props) {
         super(props);

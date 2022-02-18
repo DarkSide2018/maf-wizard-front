@@ -1,10 +1,9 @@
 import React from "react";
 import {getToken} from "../../../api/authenticationService";
-import {getCurrentGame} from "../../player/AvailablePlayers";
 import {Button, Dropdown, DropdownItem, DropdownMenu, DropdownToggle, Form} from "reactstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {faMinus} from "@fortawesome/free-solid-svg-icons";
-import {generateGuid} from "../../../common/Common";
+import {generateGuid, getCurrentGame} from "../../../common/Common";
 
 export function Search(props) {
     const [searchTerm, setSearchTerm] = React.useState("");

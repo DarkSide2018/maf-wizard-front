@@ -5,10 +5,14 @@ import {getToken} from "../../api/authenticationService";
 import Drop from "./dropDowns/Drop";
 import AppNavbar from "../AppNavbar";
 import DropDownVictory from "./dropDowns/DropDownVictory";
-import {getCurrentGame, setGameUuid} from "../player/AvailablePlayers";
+
 import AdditionalPoints from "./dropDowns/AdditionalPoints";
 import DropDownElection from "./dropDowns/DropDownElection";
-import {currentTime, generateAvailableSlots, generateGuid} from "../../common/Common";
+import {currentTime,
+    generateAvailableSlots,
+    generateGuid,
+    getCurrentGame,
+    setGameUuid} from "../../common/Common";
 import './style-general.css';
 import {Checkbox} from "./elements/CheckBox";
 import {Stopwatch} from "./elements/StopWatch";
@@ -54,7 +58,7 @@ class GameTicketFast extends React.Component {
                 playerLeftGame: [
                     {
                         leftIndex: 0,
-                        playerNumber: 7
+                        playerNumber: 0
                     }
                 ]
             }
@@ -405,13 +409,7 @@ class GameTicketFast extends React.Component {
         let nights = JSON.parse(this.state.nights)
         return makeArray(7, "").map((item, index) => {
             let key = generateGuid();
-            let nightIndex = []
-            for (let i = 0; i < nights.length; i++) {
-                if (nights[i].nightNumber === index) {
-                    nightIndex.push(nights[i])
-                }
-
-            }
+            let nightIndex = nights.filter(item => item.nightNumber === index)
             let dropDownLeft = <LeftGame leftIndex={0}
                                          nightNumber={index}
                                          key={key + 'dr'}

@@ -1,6 +1,6 @@
 import React from "react";
-import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
+import {getCurrentGame} from "../../../common/Common";
 
 export function Checkbox(props) {
     let [checked1, setChecked1] = React.useState(false);

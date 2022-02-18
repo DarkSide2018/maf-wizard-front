@@ -29,3 +29,10 @@ export function generateGuid() {
 export function generateAvailableSlots() {
     return [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10];
 }
+
+export const getCurrentGame = () => {
+    return localStorage.getItem('GAME_UUID');
+}
+export const setGameUuid = (content) => {
+    localStorage.setItem('GAME_UUID', content);
+}

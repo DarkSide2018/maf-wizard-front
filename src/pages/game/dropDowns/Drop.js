@@ -1,10 +1,9 @@
 import React, {Component} from "react";
 import {Dropdown, DropdownItem, DropdownMenu, DropdownToggle} from "reactstrap";
-import {getCurrentGame} from "../../player/AvailablePlayers";
 import {getToken} from "../../../api/authenticationService";
 
 import './Drop.css';
-import {generateAvailableSlots, generateGuid} from "../../../common/Common";
+import {generateAvailableSlots, generateGuid, getCurrentGame} from "../../../common/Common";
 
 class Drop extends Component {
     constructor(props) {
@@ -21,12 +20,8 @@ class Drop extends Component {
 
     componentDidMount() {
         const {type, nightNumber, nights} = this.props
-        let filteredNight = []
-        for (let i = 0; i < nights.length; i++) {
-            if(nights[i].nightNumber === nightNumber){
-                filteredNight.push(nights[i])
-            }
-        }
+        let parse = JSON.parse(nights);
+        let filteredNight = parse.filter(item => item.nightNumber === nightNumber)
         let slot = 0
         if (filteredNight !== undefined && filteredNight.length > 0) {
             if (type === 'killedPlayer' && filteredNight[0].killedPlayer !== undefined) {
